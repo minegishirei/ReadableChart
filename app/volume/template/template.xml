@@ -1,49 +1,66 @@
 <child>
     <kind>folder</kind>
     <title>application</title>
-    <description>このフォルダーはアプリケーションを格納するフォルダーです。</description>
 
     <child>
         <kind>file</kind>
         <title>testfile.java</title>
-        <description>このファイルは説明用のです。</description>
+        <comment>このファイルは説明用のです。</comment>
 
 
         <child>
-            <define_or_use>define</define_or_use>
             <kind>class</kind>
             <title>MainForm</title>
-            <description>これはプログラムのメイン画面です。MVCのV(View)に当たります</description>
+            <comment>これはプログラムのメイン画面です。MVCのV(View)に当たります</comment>
+            <call>
+                <title>DataModel</title>
+                <output>dataModel1</output>
+                <input>"filepath"</input>
+            </call>
             <child>
                 <kind>method</kind>
                 <title>initialize</title>
-                <description>
+                <comment>
                     このメソッドはコンストラクタです。
                     ClassAを初期化して次の三つのメソッドを呼び出します。
-                </description>
+                </comment>
+                <child>
+                    <title>data</title>
+                    <kind>var</kind>
+                </child>
                 <call>
-                    readValue
+                    <title>readValue</title>
+                    <location>dataModel1</location>
+                    <output>data</output>
                 </call>
                 <call>
-                    organaizeValue
+                    <title>organaizeValue</title>
+                    <input>data</input>
                 </call>
                 <call>
-                    showValue
+                    <title>showValue</title>
+                    <input>data</input>
                 </call>
+            </child>
+
+            <child>
+                <kind>method</kind>
+                <title>organaizeValue</title>
+                <comment>データを受け取って</comment>
             </child>
         </child>
 
         <child>
             <kind>class</kind>
             <title>DataModel</title>
-            <description>これはデータを読み込むクラスです。MCVのM(Model)に当たります</description>
+            <comment>これはデータを読み込むクラスです。MCVのM(Model)に当たります</comment>
             <child>
                 <kind>method</kind>
                 <title>initialize</title>
-                <description>
+                <comment>
                     このメソッドはコンストラクタです。
                     ClassAを初期化して次の三つのメソッドを呼び出します。
-                </description>
+                </comment>
             </child>
         </child>
     </child>
