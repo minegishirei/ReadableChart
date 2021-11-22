@@ -1,6 +1,13 @@
+import {Compiler} from './compiler';
 
+export class ReadableChart{
+    read(folderpath) {
 
-function main(){
+    }
+
+    compile(){
+        compiler = Compiler()
+    }
 
 }
 
