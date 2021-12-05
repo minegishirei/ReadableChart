@@ -1,0 +1,373 @@
+<?xml version="1.0"?>
+<child xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
+  <child>
+    <name>Class_Initialize</name>
+    <code_list>
+Private Sub Class_Initialize()
+    m_devConfiguration = -1
+End Sub
+</code_list>
+  </child>
+  <child>
+    <name>Class_Terminate</name>
+    <code_list>
+Private Sub Class_Terminate()
+    Set m_configurationSheet = Nothing
+    Set m_workbook = Nothing
+    Set m_refManager = Nothing
+End Sub
+</code_list>
+    <child>
+      <name>Workbook_AddinInstall2</name>
+      <code_list>
+    Private Sub Workbook_AddinInstall2()
+        VBAToolKit.vtkToolBars.vtkCreateToolbars
+    End Sub
+</code_list>
+    </child>
+    <child>
+      <name>Workbook_AddinInstall2</name>
+      <code_list>
+    Private Sub Workbook_AddinInstall2()
+        VBAToolKit.vtkToolBars.vtkCreateToolbars
+    End Sub
+</code_list>
+    </child>
+  </child>
+  <child>
+    <name>setConfigurationSheet</name>
+    <code_list>
+Private Sub setConfigurationSheet()
+    Dim ws As Worksheet
+    On Error Resume Next
+    Set ws = Workbook.Worksheets(sheetName)
+    On Error GoTo 0
+    If ws Is Nothing Then        ' If the Configuration doesn't exist, create one
+        Set ws = Workbook.Worksheets.Add(Type:=xlWorksheet)
+        ws.name = sheetName
+        '   Initialize the configuration sheet
+        initializeConfigurationSheet ws
+        End If
+    ' Verify that the configuration sheet is in last known version
+    If ws.Range("A1") &lt;&gt; currentVersion Then
+        If ws.Range("A1") &lt;&gt; version11 Then
+            If ws.Range("A1") &lt;&gt; version10 Then
+            ' Code to convert from previous version will be implemented here or in a specific method
+                Else
+                m_sheetVersion = version10
+                End If
+            Else
+            m_sheetVersion = version11
+            End If
+        Else
+        m_sheetVersion = currentVersion
+        End If
+    '   Set the initialized worksheet property
+    Set m_configurationSheet = ws
+End Sub
+</code_list>
+  </child>
+  <child>
+    <name>initializeConfigurationSheet</name>
+    <code_list>
+Private Sub initializeConfigurationSheet(ws As Worksheet)
+    ws.Range("A1") = currentVersion
+    ws.Range("A2") = "Path"
+    ws.Range("A3") = "Template"
+    ws.Range("A4") = "Name"
+    ws.Range("A5") = "Comment"
+    ws.Range("A6") = "Module Name \ Password"
+    ws.Columns("A").ColumnWidth = 22
+    ws.Range("A1").Font.Size = 8
+    ws.Range("A2").HorizontalAlignment = xlRight
+    ws.Range("A3").HorizontalAlignment = xlRight
+    ws.Range("A4").HorizontalAlignment = xlRight
+    ws.Range("A5").HorizontalAlignment = xlRight
+    ws.Range("A6").HorizontalAlignment = xlCenter
+    ws.Range("A6").Font.Bold = True
+    If Me.projectName &lt;&gt; "" Then
+        m_devConfiguration = 2
+        ws.Range("B1") = vtkProjectForName(projectName).projectName
+        ws.Range("B2") = vtkProjectForName(projectName).projectStandardRelativePath
+        ws.Range("C1") = vtkProjectForName(projectName).projectDEVName
+        ws.Range("C2") = vtkProjectForName(projectName).projectDEVStandardRelativePath
+        ws.Range("B1:C2").HorizontalAlignment = xlCenter
+        ws.Range("B1:C1").Font.Bold = True
+        ws.Columns("B:C").ColumnWidth = 22
+    End If
+End Sub
+</code_list>
+  </child>
+  <child>
+    <name>updateConfigurationSheetFormat</name>
+    <code_list>
+Public Sub updateConfigurationSheetFormat()
+    Dim ws As Worksheet
+    
+    If m_sheetVersion = version11 Then
+        Set ws = configurationSheet
+         
+        ws.Rows("6:6").EntireRow.Insert     ' Insert new lines for the new format
+        
+        ws.Range("A1") = currentVersion
+        ws.Range("A2") = "Path"
+        ws.Range("A3") = "Template"
+        ws.Range("A4") = "Name"
+        ws.Range("A5") = "Comment"
+        ws.Range("A6") = "Module Name \ Password"
+    
+        ws.Range("A2").Font.Bold = False
+        ws.Range("A3").Font.Bold = False
+        ws.Range("A2").HorizontalAlignment = xlRight
+        ws.Range("A3").HorizontalAlignment = xlRight
+        ws.Range("A4").HorizontalAlignment = xlRight
+        ws.Range("A5").HorizontalAlignment = xlRight
+        ws.Range("A6").HorizontalAlignment = xlCenter
+        ws.Range("A6").Font.Bold = True
+        
+        m_sheetVersion = currentVersion     ' Set the sheetVersion for correct behavior after conversion
+    End If
+
+    If m_sheetVersion = version10 Then
+        Set ws = configurationSheet
+         
+        ws.Rows("3:6").EntireRow.Insert     ' Insert new lines for the new format
+        
+        ws.Range("A1") = currentVersion
+        ws.Range("A2") = "Path"
+        ws.Range("A3") = "Template"
+        ws.Range("A4") = "Name"
+        ws.Range("A5") = "Comment"
+        ws.Range("A6") = "Module Name \ Password"
+    
+        ws.Range("A2").Font.Bold = False
+        ws.Range("A3").Font.Bold = False
+        ws.Range("A2").HorizontalAlignment = xlRight
+        ws.Range("A3").HorizontalAlignment = xlRight
+        ws.Range("A4").HorizontalAlignment = xlRight
+        ws.Range("A5").HorizontalAlignment = xlRight
+        ws.Range("A6").HorizontalAlignment = xlCenter
+        ws.Range("A6").Font.Bold = True
+        
+        m_sheetVersion = currentVersion     ' Set the sheetVersion for correct behavior after conversion
+    End If
+
+End Sub
+</code_list>
+  </child>
+  <child>
+    <name>setConfigurationPathWithNumber</name>
+    <code_list>
+Public Sub setConfigurationPathWithNumber(n As Integer, path As String)
+    If n &gt;= 1 And n &lt;= configurationCount Then
+        configurationSheet.Cells(pathLine, n + nbTitleColumns) = path
+    End If
+End Sub
+</code_list>
+  </child>
+  <child>
+    <name>vtkConfigurationManager_setConfigurationPathWithNumber</name>
+    <code_list>
+Public Sub vtkConfigurationManager_setConfigurationPathWithNumber(n As Integer, path As String)
+    setConfigurationPathWithNumber n, path
+End Sub
+</code_list>
+  </child>
+  <child>
+    <name>setConfigurationPath</name>
+    <code_list>
+Public Sub setConfigurationPath(configuration As String, path As String)
+    setConfigurationPathWithNumber n:=getConfigurationNumber(configuration), path:=path
+End Sub
+</code_list>
+  </child>
+  <child>
+    <name>vtkConfigurationManager_setConfigurationPath</name>
+    <code_list>
+Public Sub vtkConfigurationManager_setConfigurationPath(configuration As String, path As String)
+    setConfigurationPath configuration, path
+End Sub
+</code_list>
+  </child>
+  <child>
+    <name>setConfigurationProjectNameWithNumber</name>
+    <code_list>
+Public Sub setConfigurationProjectNameWithNumber(n As Integer, projectName As String)
+    If n &gt;= 1 And n &lt;= configurationCount Then
+        If m_sheetVersion = currentVersion Or m_sheetVersion = version11 Then
+            configurationSheet.Cells(projectNameLine, n + nbTitleColumns) = projectName
+           Else
+            Err.Raise VTK_OBSOLETE_CONFIGURATION_SHEET, "vtkConfigurationManagerExcel:setConfigurationProjectNameWithNumber", _
+            "Impossible to set a configuration projectName with this configuration sheet version (project=" &amp; m_projectName &amp; ", " &amp; m_sheetVersion &amp; ")"
+        End If
+    End If
+End Sub
+</code_list>
+  </child>
+  <child>
+    <name>vtkConfigurationManager_setConfigurationProjectNameWithNumber</name>
+    <code_list>
+Public Sub vtkConfigurationManager_setConfigurationProjectNameWithNumber(n As Integer, projectName As String)
+    setConfigurationProjectNameWithNumber n, projectName
+End Sub
+</code_list>
+  </child>
+  <child>
+    <name>setConfigurationCommentWithNumber</name>
+    <code_list>
+Public Sub setConfigurationCommentWithNumber(n As Integer, comment As String)
+    If n &gt;= 1 And n &lt;= configurationCount Then
+        If m_sheetVersion = currentVersion Or m_sheetVersion = version11 Then
+            configurationSheet.Cells(commentLine, n + nbTitleColumns) = comment
+           Else
+            Err.Raise VTK_OBSOLETE_CONFIGURATION_SHEET, "vtkConfigurationManagerExcel:setConfigurationCommentWithNumber", _
+            "Impossible to set a configuration comment with this configuration sheet version (project=" &amp; m_projectName &amp; ", " &amp; m_sheetVersion &amp; ")"
+        End If
+    End If
+End Sub
+</code_list>
+  </child>
+  <child>
+    <name>vtkConfigurationManager_setConfigurationCommentWithNumber</name>
+    <code_list>
+Public Sub vtkConfigurationManager_setConfigurationCommentWithNumber(n As Integer, comment As String)
+    setConfigurationCommentWithNumber n, comment
+End Sub
+</code_list>
+  </child>
+  <child>
+    <name>setConfigurationTemplateWithNumber</name>
+    <code_list>
+Public Sub setConfigurationTemplateWithNumber(n As Integer, template As String)
+    If n &gt;= 1 And n &lt;= configurationCount Then
+        If m_sheetVersion = currentVersion Or m_sheetVersion = version11 Then
+            configurationSheet.Cells(templateLine, n + nbTitleColumns) = template
+           Else
+            Err.Raise VTK_OBSOLETE_CONFIGURATION_SHEET, "vtkConfigurationManagerExcel:setConfigurationTemplateWithNumber", _
+            "Impossible to set a configuration template path with this configuration sheet version (project=" &amp; m_projectName &amp; ", " &amp; m_sheetVersion &amp; ")"
+        End If
+    End If
+End Sub
+</code_list>
+  </child>
+  <child>
+    <name>vtkConfigurationManager_setConfigurationTemplateWithNumber</name>
+    <code_list>
+Public Sub vtkConfigurationManager_setConfigurationTemplateWithNumber(n As Integer, template As String)
+    setConfigurationTemplateWithNumber n, template
+End Sub
+</code_list>
+  </child>
+  <child>
+    <name>setConfigurationPasswordWithNumber</name>
+    <code_list>
+Public Sub setConfigurationPasswordWithNumber(n As Integer, password As String)
+    If n &gt;= 1 And n &lt;= configurationCount Then
+        If m_sheetVersion = currentVersion Then
+            configurationSheet.Cells(passwordLine, n + nbTitleColumns) = password
+           Else
+            Err.Raise VTK_OBSOLETE_CONFIGURATION_SHEET, "vtkConfigurationManagerExcel:setConfigurationPasswordWithNumber", _
+            "Impossible to set a configuration code password with this configuration sheet version (project=" &amp; m_projectName &amp; ", " &amp; m_sheetVersion &amp; ")"
+        End If
+    End If
+End Sub
+</code_list>
+  </child>
+  <child>
+    <name>vtkConfigurationManager_setConfigurationPasswordWithNumber</name>
+    <code_list>
+Public Sub vtkConfigurationManager_setConfigurationPasswordWithNumber(n As Integer, password As String)
+    setConfigurationPasswordWithNumber n, password
+End Sub
+</code_list>
+  </child>
+  <child>
+    <name>setModulePathWithNumber</name>
+    <code_list>
+Public Sub setModulePathWithNumber(path As String, numModule As Integer, numConfiguration As Integer)
+    Dim s As String
+    If numModule &gt;= 1 And numModule &lt;= moduleCount And numConfiguration &gt;= 1 And numConfiguration &lt;= configurationCount Then
+        If path = "" Then
+            s = "-"
+           Else
+            s = path
+        End If
+        configurationSheet.Cells(numModule + nbTitleRows, numConfiguration + nbTitleColumns) = s
+    End If
+End Sub
+</code_list>
+  </child>
+  <child>
+    <name>vtkConfigurationManager_setModulePathWithNumber</name>
+    <code_list>
+Public Sub vtkConfigurationManager_setModulePathWithNumber(path As String, numModule As Integer, numConfiguration As Integer)
+    setModulePathWithNumber path, numModule, numConfiguration
+End Sub
+</code_list>
+  </child>
+  <child>
+    <name>initReferences</name>
+    <code_list>
+Public Sub initReferences(refs As Collection)
+    If m_refManager Is Nothing Then
+        Set m_refManager = New vtkReferenceManager
+        m_refManager.init Wb:=Workbook, confCount:=Me.configurationCount, nbTitleColumnsInConfSheet:=nbTitleColumns, devConf:=m_devConfiguration, references:=refs
+    End If
+End Sub
+</code_list>
+  </child>
+  <child>
+    <name>duplicate</name>
+    <code_list>
+Public Sub duplicate(Wb As Workbook, cm As vtkConfigurationManager)
+    ' Check that the instance is uninitialized (no workbook attached)
+    Dim ws As Worksheet, i As Integer, j As Integer, ref As vtkReference, refs As Collection, refn As Integer
+    If Not m_workbook Is Nothing Then _
+        Err.Raise Number:=VTK_ALREADY_INITIALIZED, Source:="vtkConfigurationManagerExcel:duplicate", Description:="The configuration manager to duplicate to is already initialized with an attached workbook."
+    ' Check that the wb is open (perhaps not if checked in following step)
+    If Wb Is Nothing Then _
+        Err.Raise Number:=VTK_WORKBOOK_NOTOPEN, Source:="vtkConfigurationManagerExcel:duplicate", Description:="The workbook in which to is not opened."
+    ' Check that the wb has no configuration sheet
+   On Error Resume Next
+    Set ws = Wb.Worksheets(sheetName)
+   On Error GoTo 0
+    If Not ws Is Nothing Then _
+        Err.Raise Number:=VTK_ALREADY_INITIALIZED, Source:="vtkConfigurationManagerExcel:duplicate", Description:="The Excel workbook already contains a configuration sheet."
+    
+    ' attach wb, initialized conf sheet
+    Set m_workbook = Wb     ' setConfigurationSheet needs a workbook
+    setConfigurationSheet   ' NOTE: must be called before projectName set to not create the two standard confs
+    ' init projectName and rootPath from cm
+    m_projectName = cm.projectName
+    m_rootPath = cm.rootPath
+    ' create all configuration from cm
+    For i = 1 To cm.configurationCount
+        Me.addConfiguration configuration:=cm.configuration(i), path:=cm.getConfigurationPathWithNumber(i), _
+            template:=cm.getConfigurationTemplateWithNumber(i), projectName:=cm.getConfigurationProjectNameWithNumber(i), _
+            comment:=cm.getConfigurationCommentWithNumber(i)
+    Next i
+    ' call initReferences with the references from cm
+    Me.initReferences cm.references
+    ' create all modules from cm
+    For i = 1 To cm.moduleCount
+        Me.addModule module:=cm.module(i)
+    Next i
+    ' init module pathes for each configuration
+    For i = 1 To cm.configurationCount
+        For j = 1 To cm.moduleCount
+            Me.setModulePathWithNumber cm.getModulePathWithNumber(j, i), j, i
+        Next j
+    Next i
+    ' init reference usage for each configuration
+    For i = 1 To cm.configurationCount
+        Set refs = cm.getConfigurationReferencesWithNumber(i)
+        For j = 1 To refs.Count
+            Set ref = refs(j)
+            refn = CInt(Right(ref.id, Len(ref.id) - 1))
+            referenceManager.setReferenceWihNumber True, refn, i
+        Next j
+    Next i
+End Sub
+</code_list>
+  </child>
+</child>
