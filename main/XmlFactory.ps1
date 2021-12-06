@@ -302,7 +302,7 @@ class Factory{
 
 
 $factory = New-Object Factory
-[void]$factory.run( "/Users/minegishirei/myworking/VBAToolKit/Source/ConfProd")
+[void]$factory.run( "/Users/minegishirei/myworking/VBAToolKit/Source/ConfProd/0vtkConfigurationManagerXML.cls")
 $Global:NAMESPACE = $Global:NAMESPACE | Select-Object -Unique 
 [void]$factory.buildXML("/Users/minegishirei/myworking/ReadableChart/main/src.xml")
 Set-Clipboard  $factory.buildPlantUML("/Users/minegishirei/myworking/ReadableChart/main/src.xml", "test.uml")

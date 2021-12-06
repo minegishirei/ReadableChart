@@ -1,0 +1,659 @@
+@startuml
+file 0vtkConfigurationManagerXML.cls {
+class Class_Terminate {
+- sub
+}
+note top
+
+Private Sub Class_Terminate()
+    Set m_DOMDocument = Nothing
+End Sub
+end note
+class init {
+- sub
+}
+note top
+
+Public Sub init(ByVal XMLFilePath As String)
+    Dim fso As New FileSystemObject, DDoc As MSXML2.DOMDocument
+    Dim projectName As String, rootPath As String
+    If fso.FileExists(XMLFilePath) Then
+        Set DDoc = New MSXML2.DOMDocument
+        DDoc.Load XMLFilePath
+        DDoc.setProperty "SelectionLanguage", "XPath"  ' for the use of the contains() function of XPath
+        If DDoc.parseError.ErrorCode <> 0 Then
+            Err.Raise Number:=VTK_INVALID_XML_FILE, Source:="init:vtkConfigurationManagerXML", Description:="Parse error of " & XMLFilePath & " : " & DDoc.parseError.reason
+        End If
+        If DDoc.SelectSingleNode("/vtkConf/info/vtkConfigurationsVersion").Text <> "2.0" Then
+            Err.Raise Number:=VTK_OBSOLETE_CONFIGURATION_SHEET, Source:="init:vtkConfigurationManagerXML", Description:="Bad version of XML File : 2.0 expected."
+        End If
+       On Error GoTo M_Error
+        projectName = DDoc.SelectSingleNode("/vtkConf/info/projectName").Text
+        rootPath = fso.GetParentFolderName(fso.GetParentFolderName(XMLFilePath))
+       On Error GoTo 0
+        Set m_DOMDocument = DDoc
+        m_projectName = projectName
+        m_rootPath = rootPath
+       Else
+        Err.Raise Number:=VTK_WRONG_FILE_PATH, Source:="init:vtkConfigurationManagerXML", Description:="The File " & XMLFilePath & " is unreachable."
+    End If
+    Exit Sub
+M_Error:
+    Err.Raise Number:=VTK_INVALID_XML_FILE, Source:="init:vtkConfigurationManagerXML", Description:="Parse error of " & XMLFilePath & " : " & DDoc.parseError.reason
+End Sub
+end note
+init -down-|> projectName
+init -down-|> projectName
+class configuration {
+- function
+}
+note top
+
+Public Function configuration(n As Integer) As String
+    If n > 0 And n <= configurationCount Then
+        configuration = m_DOMDocument.SelectSingleNode("/vtkConf/configuration[@cID=""c" & n & """]/name").Text
+       Else
+        configuration = ""
+    End If
+End Function
+end note
+configuration -down-|> configurationCount
+configuration -down-|> configuration
+configuration -down-|> configuration
+class vtkConfigurationManager_configuration {
+- function
+}
+note top
+
+Public Function vtkConfigurationManager_configuration(n As Integer) As String
+    vtkConfigurationManager_configuration = configuration(n)
+End Function
+end note
+vtkConfigurationManager_configuration -down-|> vtkConfigurationManager_configuration
+class raiseReadOnlyError {
+- sub
+}
+note top
+
+Private Sub raiseReadOnlyError(Source As String)
+    Err.Raise Number:=VTK_READONLY_FILE, Source:=Source, Description:="A XML Configuration File is considered Read-Only"
+End Sub
+end note
+class addConfiguration {
+- function
+}
+note top
+
+Public Function addConfiguration(configuration As String, Optional path As String = "", Optional template As String = "", Optional projectName As String = "", Optional comment As String = "") As Integer
+    raiseReadOnlyError Source:="addConfiguration:vtkConfigurationManagerXML"
+End Function
+end note
+addConfiguration -down-|> projectName
+addConfiguration -down-|> raiseReadOnlyError
+class vtkConfigurationManager_addConfiguration {
+- function
+}
+note top
+
+Public Function vtkConfigurationManager_addConfiguration(configuration As String, Optional path As String = "", Optional template As String = "", Optional projectName As String = "", Optional comment As String = "") As Integer
+    vtkConfigurationManager_addConfiguration = addConfiguration(configuration, path, template, projectName, comment)
+End Function
+end note
+vtkConfigurationManager_addConfiguration -down-|> projectName
+vtkConfigurationManager_addConfiguration -down-|> vtkConfigurationManager_addConfiguration
+class configurations {
+- function
+}
+note top
+
+Public Function configurations() As Collection
+    Dim col As New Collection, i As Integer, c As vtkConfiguration
+    For i = 1 To configurationCount
+        Set c = New vtkConfiguration
+        c.init confManager:=Me, confNumber:=i
+        col.Add Item:=c, Key:=configuration(i)
+    Next i
+    Set configurations = col
+End Function
+end note
+configurations -down-|> configurations
+class vtkConfigurationManager_configurations {
+- function
+}
+note top
+
+Public Function vtkConfigurationManager_configurations() As Collection
+    Set vtkConfigurationManager_configurations = configurations
+End Function
+end note
+vtkConfigurationManager_configurations -down-|> vtkConfigurationManager_configurations
+class getConfigurationNumber {
+- function
+}
+note top
+
+Public Function getConfigurationNumber(configuration As String) As Integer
+    Dim textValue As String
+   On Error Resume Next
+    textValue = m_DOMDocument.SelectSingleNode("/vtkConf/configuration[name=""" & configuration & """]/@cID").Text
+   On Error GoTo 0
+    If textValue = "" Then
+        getConfigurationNumber = 0
+       Else
+        getConfigurationNumber = CInt(Right$(textValue, Len(textValue) - 1))
+    End If
+End Function
+end note
+getConfigurationNumber -down-|> configuration
+getConfigurationNumber -down-|> getConfigurationNumber
+getConfigurationNumber -down-|> getConfigurationNumber
+class vtkConfigurationManager_getConfigurationNumber {
+- function
+}
+note top
+
+Public Function vtkConfigurationManager_getConfigurationNumber(configuration As String) As Integer
+    vtkConfigurationManager_getConfigurationNumber = getConfigurationNumber(configuration)
+End Function
+end note
+vtkConfigurationManager_getConfigurationNumber -down-|> vtkConfigurationManager_getConfigurationNumber
+class getConfigurationPathWithNumber {
+- function
+}
+note top
+
+Public Function getConfigurationPathWithNumber(n As Integer) As String
+    If n > 0 And n <= configurationCount Then
+        getConfigurationPathWithNumber = m_DOMDocument.SelectSingleNode("/vtkConf/configuration[@cID=""c" & n & """]/path").Text
+       Else
+        getConfigurationPathWithNumber = ""
+    End If
+End Function
+end note
+getConfigurationPathWithNumber -down-|> configurationCount
+getConfigurationPathWithNumber -down-|> getConfigurationPathWithNumber
+getConfigurationPathWithNumber -down-|> getConfigurationPathWithNumber
+class vtkConfigurationManager_getConfigurationPathWithNumber {
+- function
+}
+note top
+
+Public Function vtkConfigurationManager_getConfigurationPathWithNumber(n As Integer) As String
+    vtkConfigurationManager_getConfigurationPathWithNumber = getConfigurationPathWithNumber(n)
+End Function
+end note
+vtkConfigurationManager_getConfigurationPathWithNumber -down-|> vtkConfigurationManager_getConfigurationPathWithNumber
+class setConfigurationPathWithNumber {
+- sub
+}
+note top
+
+Public Sub setConfigurationPathWithNumber(n As Integer, path As String)
+    raiseReadOnlyError Source:="setConfigurationPathWithNumber:vtkConfigurationManagerXML"
+End Sub
+end note
+setConfigurationPathWithNumber -down-|> raiseReadOnlyError
+class vtkConfigurationManager_setConfigurationPathWithNumber {
+- sub
+}
+note top
+
+Public Sub vtkConfigurationManager_setConfigurationPathWithNumber(n As Integer, path As String)
+    setConfigurationPathWithNumber n, path
+End Sub
+end note
+vtkConfigurationManager_setConfigurationPathWithNumber -down-|> setConfigurationPathWithNumber
+class getConfigurationPath {
+- function
+}
+note top
+
+Public Function getConfigurationPath(configuration As String) As String
+    getConfigurationPath = getConfigurationPathWithNumber(getConfigurationNumber(configuration))
+End Function
+end note
+getConfigurationPath -down-|> getConfigurationPath
+class vtkConfigurationManager_getConfigurationPath {
+- function
+}
+note top
+
+Public Function vtkConfigurationManager_getConfigurationPath(configuration As String) As String
+    vtkConfigurationManager_getConfigurationPath = getConfigurationPath(configuration)
+End Function
+end note
+vtkConfigurationManager_getConfigurationPath -down-|> vtkConfigurationManager_getConfigurationPath
+class setConfigurationPath {
+- sub
+}
+note top
+
+Public Sub setConfigurationPath(configuration As String, path As String)
+    raiseReadOnlyError Source:="setConfigurationPath:vtkConfigurationManagerXML"
+End Sub
+end note
+setConfigurationPath -down-|> raiseReadOnlyError
+class vtkConfigurationManager_setConfigurationPath {
+- sub
+}
+note top
+
+Public Sub vtkConfigurationManager_setConfigurationPath(configuration As String, path As String)
+    setConfigurationPath configuration, path
+End Sub
+end note
+vtkConfigurationManager_setConfigurationPath -down-|> setConfigurationPath
+class getConfigurationProjectNameWithNumber {
+- function
+}
+note top
+
+Public Function getConfigurationProjectNameWithNumber(n As Integer) As String
+    If n > 0 And n <= configurationCount Then
+        getConfigurationProjectNameWithNumber = m_DOMDocument.SelectSingleNode("/vtkConf/configuration[@cID=""c" & n & """]/title").Text
+       Else
+        getConfigurationProjectNameWithNumber = ""
+    End If
+End Function
+end note
+getConfigurationProjectNameWithNumber -down-|> configurationCount
+getConfigurationProjectNameWithNumber -down-|> getConfigurationProjectNameWithNumber
+getConfigurationProjectNameWithNumber -down-|> getConfigurationProjectNameWithNumber
+class vtkConfigurationManager_getConfigurationProjectNameWithNumber {
+- function
+}
+note top
+
+Public Function vtkConfigurationManager_getConfigurationProjectNameWithNumber(n As Integer) As String
+    vtkConfigurationManager_getConfigurationProjectNameWithNumber = getConfigurationProjectNameWithNumber(n)
+End Function
+end note
+vtkConfigurationManager_getConfigurationProjectNameWithNumber -down-|> vtkConfigurationManager_getConfigurationProjectNameWithNumber
+class setConfigurationProjectNameWithNumber {
+- sub
+}
+note top
+
+Public Sub setConfigurationProjectNameWithNumber(n As Integer, projectName As String)
+    raiseReadOnlyError Source:="setConfigurationProjectNameWithNumber:vtkConfigurationManagerXML"
+End Sub
+end note
+setConfigurationProjectNameWithNumber -down-|> projectName
+setConfigurationProjectNameWithNumber -down-|> raiseReadOnlyError
+class vtkConfigurationManager_setConfigurationProjectNameWithNumber {
+- sub
+}
+note top
+
+Public Sub vtkConfigurationManager_setConfigurationProjectNameWithNumber(n As Integer, projectName As String)
+    setConfigurationProjectNameWithNumber n, projectName
+End Sub
+end note
+vtkConfigurationManager_setConfigurationProjectNameWithNumber -down-|> projectName
+vtkConfigurationManager_setConfigurationProjectNameWithNumber -down-|> setConfigurationProjectNameWithNumber
+class getConfigurationCommentWithNumber {
+- function
+}
+note top
+
+Public Function getConfigurationCommentWithNumber(n As Integer) As String
+    If n > 0 And n <= configurationCount Then
+        getConfigurationCommentWithNumber = m_DOMDocument.SelectSingleNode("/vtkConf/configuration[@cID=""c" & n & """]/comment").Text
+       Else
+        getConfigurationCommentWithNumber = ""
+    End If
+End Function
+end note
+getConfigurationCommentWithNumber -down-|> configurationCount
+getConfigurationCommentWithNumber -down-|> getConfigurationCommentWithNumber
+getConfigurationCommentWithNumber -down-|> getConfigurationCommentWithNumber
+class vtkConfigurationManager_getConfigurationCommentWithNumber {
+- function
+}
+note top
+
+Public Function vtkConfigurationManager_getConfigurationCommentWithNumber(n As Integer) As String
+    vtkConfigurationManager_getConfigurationCommentWithNumber = getConfigurationCommentWithNumber(n)
+End Function
+end note
+vtkConfigurationManager_getConfigurationCommentWithNumber -down-|> vtkConfigurationManager_getConfigurationCommentWithNumber
+class setConfigurationCommentWithNumber {
+- sub
+}
+note top
+
+Public Sub setConfigurationCommentWithNumber(n As Integer, comment As String)
+    raiseReadOnlyError Source:="setConfigurationCommentWithNumber:vtkConfigurationManagerXML"
+End Sub
+end note
+setConfigurationCommentWithNumber -down-|> raiseReadOnlyError
+class vtkConfigurationManager_setConfigurationCommentWithNumber {
+- sub
+}
+note top
+
+Public Sub vtkConfigurationManager_setConfigurationCommentWithNumber(n As Integer, comment As String)
+    setConfigurationCommentWithNumber n, comment
+End Sub
+end note
+vtkConfigurationManager_setConfigurationCommentWithNumber -down-|> setConfigurationCommentWithNumber
+class getConfigurationTemplateWithNumber {
+- function
+}
+note top
+
+Public Function getConfigurationTemplateWithNumber(n As Integer) As String
+    If n > 0 And n <= configurationCount Then
+       On Error Resume Next
+        getConfigurationTemplateWithNumber = m_DOMDocument.SelectSingleNode("/vtkConf/configuration[@cID=""c" & n & """]/templatePath").Text
+       On Error GoTo 0
+       Else
+        getConfigurationTemplateWithNumber = ""
+    End If
+End Function
+end note
+getConfigurationTemplateWithNumber -down-|> configurationCount
+getConfigurationTemplateWithNumber -down-|> getConfigurationTemplateWithNumber
+getConfigurationTemplateWithNumber -down-|> getConfigurationTemplateWithNumber
+class vtkConfigurationManager_getConfigurationTemplateWithNumber {
+- function
+}
+note top
+
+Public Function vtkConfigurationManager_getConfigurationTemplateWithNumber(n As Integer) As String
+    vtkConfigurationManager_getConfigurationTemplateWithNumber = getConfigurationTemplateWithNumber(n)
+End Function
+end note
+vtkConfigurationManager_getConfigurationTemplateWithNumber -down-|> vtkConfigurationManager_getConfigurationTemplateWithNumber
+class setConfigurationTemplateWithNumber {
+- sub
+}
+note top
+
+Public Sub setConfigurationTemplateWithNumber(n As Integer, template As String)
+    raiseReadOnlyError Source:="setConfigurationTemplateWithNumber:vtkConfigurationManagerXML"
+End Sub
+end note
+setConfigurationTemplateWithNumber -down-|> raiseReadOnlyError
+class vtkConfigurationManager_setConfigurationTemplateWithNumber {
+- sub
+}
+note top
+
+Public Sub vtkConfigurationManager_setConfigurationTemplateWithNumber(n As Integer, template As String)
+    setConfigurationTemplateWithNumber n, template
+End Sub
+end note
+vtkConfigurationManager_setConfigurationTemplateWithNumber -down-|> setConfigurationTemplateWithNumber
+class getConfigurationPasswordWithNumber {
+- function
+}
+note top
+
+Public Function getConfigurationPasswordWithNumber(n As Integer) As String
+    If n > 0 And n <= configurationCount Then
+       On Error Resume Next
+        getConfigurationPasswordWithNumber = m_DOMDocument.SelectSingleNode("/vtkConf/configuration[@cID=""c" & n & """]/password").Text
+       On Error GoTo 0
+       Else
+        getConfigurationPasswordWithNumber = ""
+    End If
+End Function
+end note
+getConfigurationPasswordWithNumber -down-|> configurationCount
+getConfigurationPasswordWithNumber -down-|> getConfigurationPasswordWithNumber
+getConfigurationPasswordWithNumber -down-|> getConfigurationPasswordWithNumber
+class vtkConfigurationManager_getConfigurationPasswordWithNumber {
+- function
+}
+note top
+
+Public Function vtkConfigurationManager_getConfigurationPasswordWithNumber(n As Integer) As String
+    vtkConfigurationManager_getConfigurationPasswordWithNumber = getConfigurationPasswordWithNumber(n)
+End Function
+end note
+vtkConfigurationManager_getConfigurationPasswordWithNumber -down-|> vtkConfigurationManager_getConfigurationPasswordWithNumber
+class setConfigurationPasswordWithNumber {
+- sub
+}
+note top
+
+Public Sub setConfigurationPasswordWithNumber(n As Integer, password As String)
+    raiseReadOnlyError Source:="setConfigurationPasswordWithNumber:vtkConfigurationManagerXML"
+End Sub
+end note
+setConfigurationPasswordWithNumber -down-|> raiseReadOnlyError
+class vtkConfigurationManager_setConfigurationPasswordWithNumber {
+- sub
+}
+note top
+
+Public Sub vtkConfigurationManager_setConfigurationPasswordWithNumber(n As Integer, password As String)
+    setConfigurationPasswordWithNumber n, password
+End Sub
+end note
+vtkConfigurationManager_setConfigurationPasswordWithNumber -down-|> setConfigurationPasswordWithNumber
+class vtkReferenceWithXML {
+- function
+}
+note top
+
+Private Function vtkReferenceWithXML(id As String) As vtkReference
+    Dim ref As New vtkReference
+    ref.id = id
+    ref.name = m_DOMDocument.SelectSingleNode("/vtkConf/reference[@refID=""" & id & """]/name").Text
+   On Error Resume Next
+    ref.GUID = m_DOMDocument.SelectSingleNode("/vtkConf/reference[@refID=""" & id & """]/guid").Text
+    If Err.Number <> 0 Then
+        Err.Number = 0
+        ref.fullPath = m_DOMDocument.SelectSingleNode("/vtkConf/reference[@refID=""" & id & """]/path").Text
+    End If
+   On Error GoTo 0
+    Set vtkReferenceWithXML = ref
+End Function
+end note
+vtkReferenceWithXML -down-|> vtkReferenceWithXML
+class getConfigurationReferencesWithNumber {
+- function
+}
+note top
+
+Public Function getConfigurationReferencesWithNumber(n As Integer) As Collection
+    Dim refIDs() As String, i As Integer, refs As New Collection
+   On Error GoTo M_Error
+    refIDs = Split(m_DOMDocument.SelectSingleNode("/vtkConf/configuration[@cID=""c" & n & """]").Attributes.getNamedItem("refIDs").Text)
+   On Error GoTo 0
+    For i = LBound(refIDs) To UBound(refIDs)
+        refs.Add vtkReferenceWithXML(refIDs(i)), Key:=refIDs(i)
+    Next i
+M_Error:    ' refIDs attribute is optional
+    Set getConfigurationReferencesWithNumber = refs
+End Function
+end note
+getConfigurationReferencesWithNumber -down-|> getConfigurationReferencesWithNumber
+class vtkConfigurationManager_getConfigurationReferencesWithNumber {
+- function
+}
+note top
+
+Public Function vtkConfigurationManager_getConfigurationReferencesWithNumber(n As Integer) As Collection
+    Set vtkConfigurationManager_getConfigurationReferencesWithNumber = getConfigurationReferencesWithNumber(n)
+End Function
+end note
+vtkConfigurationManager_getConfigurationReferencesWithNumber -down-|> vtkConfigurationManager_getConfigurationReferencesWithNumber
+class modules {
+- function
+}
+note top
+
+Public Function modules() As Collection
+    Dim col As New Collection, i As Integer, m As vtkModule
+    For i = 1 To moduleCount
+        Set m = New vtkModule
+        m.init confManager:=Me, modNumber:=i
+        col.Add Item:=m, Key:=module(i)
+    Next i
+    Set modules = col
+End Function
+end note
+modules -down-|> modules
+class vtkConfigurationManager_modules {
+- function
+}
+note top
+
+Public Function vtkConfigurationManager_modules() As Collection
+    Set vtkConfigurationManager_modules = modules
+End Function
+end note
+vtkConfigurationManager_modules -down-|> vtkConfigurationManager_modules
+class module {
+- function
+}
+note top
+
+Public Function module(n As Integer) As String
+    If n > 0 And n <= moduleCount Then
+        module = m_DOMDocument.SelectSingleNode("/vtkConf/module[@mID=""m" & n & """]/name").Text
+       Else
+        module = ""
+    End If
+End Function
+end note
+module -down-|> module
+module -down-|> module
+class vtkConfigurationManager_module {
+- function
+}
+note top
+
+Public Function vtkConfigurationManager_module(n As Integer) As String
+    vtkConfigurationManager_module = module(n)
+End Function
+end note
+vtkConfigurationManager_module -down-|> vtkConfigurationManager_module
+class getModuleNumber {
+- function
+}
+note top
+
+Public Function getModuleNumber(module As String) As Integer
+    Dim textValue As String
+   On Error Resume Next
+    textValue = m_DOMDocument.SelectSingleNode("/vtkConf/module[name=""" & module & """]/@mID").Text
+   On Error GoTo 0
+    If textValue = "" Then
+        getModuleNumber = 0
+       Else
+        getModuleNumber = CInt(Right$(textValue, Len(textValue) - 1))
+    End If
+End Function
+end note
+getModuleNumber -down-|> module
+getModuleNumber -down-|> getModuleNumber
+getModuleNumber -down-|> getModuleNumber
+class vtkConfigurationManager_getModuleNumber {
+- function
+}
+note top
+
+Public Function vtkConfigurationManager_getModuleNumber(module As String) As Integer
+    vtkConfigurationManager_getModuleNumber = getModuleNumber(module)
+End Function
+end note
+vtkConfigurationManager_getModuleNumber -down-|> vtkConfigurationManager_getModuleNumber
+class addModule {
+- function
+}
+note top
+
+Public Function addModule(module As String) As Integer
+    raiseReadOnlyError Source:="addModule:vtkConfigurationManagerXML"
+End Function
+end note
+addModule -down-|> raiseReadOnlyError
+class vtkConfigurationManager_addModule {
+- function
+}
+note top
+
+Public Function vtkConfigurationManager_addModule(module As String) As Integer
+    vtkConfigurationManager_addModule = addModule(module)
+End Function
+end note
+vtkConfigurationManager_addModule -down-|> vtkConfigurationManager_addModule
+class getModulePathWithNumber {
+- function
+}
+note top
+
+Public Function getModulePathWithNumber(numModule As Integer, numConfiguration As Integer) As String
+    If numModule > 0 And numModule <= moduleCount And numConfiguration > 0 And numConfiguration <= configurationCount Then
+       On Error Resume Next
+        getModulePathWithNumber = m_DOMDocument.SelectSingleNode("/vtkConf/module[@mID=""m" & numModule & """]/modulePath[@confId=""c" & numConfiguration & """]").Text
+       On Error GoTo 0
+       Else
+        getModulePathWithNumber = ""
+    End If
+End Function
+end note
+getModulePathWithNumber -down-|> configurationCount
+getModulePathWithNumber -down-|> getModulePathWithNumber
+getModulePathWithNumber -down-|> getModulePathWithNumber
+class vtkConfigurationManager_getModulePathWithNumber {
+- function
+}
+note top
+
+Public Function vtkConfigurationManager_getModulePathWithNumber(numModule As Integer, numConfiguration As Integer) As String
+    vtkConfigurationManager_getModulePathWithNumber = getModulePathWithNumber(numModule, numConfiguration)
+End Function
+end note
+vtkConfigurationManager_getModulePathWithNumber -down-|> vtkConfigurationManager_getModulePathWithNumber
+class setModulePathWithNumber {
+- sub
+}
+note top
+
+Public Sub setModulePathWithNumber(path As String, numModule As Integer, numConfiguration As Integer)
+    raiseReadOnlyError Source:="setModulePathWithNumber:vtkConfigurationManagerXML"
+End Sub
+end note
+setModulePathWithNumber -down-|> raiseReadOnlyError
+class vtkConfigurationManager_setModulePathWithNumber {
+- sub
+}
+note top
+
+Public Sub vtkConfigurationManager_setModulePathWithNumber(path As String, numModule As Integer, numConfiguration As Integer)
+    setModulePathWithNumber path, numModule, numConfiguration
+End Sub
+end note
+vtkConfigurationManager_setModulePathWithNumber -down-|> setModulePathWithNumber
+class references {
+- function
+}
+note top
+
+Public Function references() As Collection
+    Dim i As Integer, refs As New Collection, id As String
+    For i = 1 To m_DOMDocument.SelectNodes("/vtkConf/reference").Length
+        id = "r" & i
+        refs.Add vtkReferenceWithXML(id), Key:=id
+    Next i
+    Set references = refs
+End Function
+end note
+references -down-|> references
+class vtkConfigurationManager_references {
+- function
+}
+note top
+
+Public Function vtkConfigurationManager_references() As Collection
+    Set vtkConfigurationManager_references = references
+End Function
+end note
+vtkConfigurationManager_references -down-|> vtkConfigurationManager_references
+} 
+@enduml

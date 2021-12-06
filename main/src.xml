@@ -43,8 +43,6 @@ M_Error:
     Err.Raise Number:=VTK_INVALID_XML_FILE, Source:="init:vtkConfigurationManagerXML", Description:="Parse error of " &amp; XMLFilePath &amp; " : " &amp; DDoc.parseError.reason
 End Sub
 </code_list>
-    <call>projectName</call>
-    <call>projectName</call>
   </child>
   <child>
     <type>function</type>
@@ -58,7 +56,6 @@ Public Function configuration(n As Integer) As String
     End If
 End Function
 </code_list>
-    <call>configurationCount</call>
     <call>configuration</call>
     <call>configuration</call>
   </child>
@@ -89,7 +86,6 @@ Public Function addConfiguration(configuration As String, Optional path As Strin
     raiseReadOnlyError Source:="addConfiguration:vtkConfigurationManagerXML"
 End Function
 </code_list>
-    <call>projectName</call>
     <call>raiseReadOnlyError</call>
   </child>
   <child>
@@ -100,7 +96,6 @@ Public Function vtkConfigurationManager_addConfiguration(configuration As String
     vtkConfigurationManager_addConfiguration = addConfiguration(configuration, path, template, projectName, comment)
 End Function
 </code_list>
-    <call>projectName</call>
     <call>vtkConfigurationManager_addConfiguration</call>
   </child>
   <child>
@@ -171,7 +166,6 @@ Public Function getConfigurationPathWithNumber(n As Integer) As String
     End If
 End Function
 </code_list>
-    <call>configurationCount</call>
     <call>getConfigurationPathWithNumber</call>
     <call>getConfigurationPathWithNumber</call>
   </child>
@@ -257,7 +251,6 @@ Public Function getConfigurationProjectNameWithNumber(n As Integer) As String
     End If
 End Function
 </code_list>
-    <call>configurationCount</call>
     <call>getConfigurationProjectNameWithNumber</call>
     <call>getConfigurationProjectNameWithNumber</call>
   </child>
@@ -279,7 +272,6 @@ Public Sub setConfigurationProjectNameWithNumber(n As Integer, projectName As St
     raiseReadOnlyError Source:="setConfigurationProjectNameWithNumber:vtkConfigurationManagerXML"
 End Sub
 </code_list>
-    <call>projectName</call>
     <call>raiseReadOnlyError</call>
   </child>
   <child>
@@ -290,7 +282,6 @@ Public Sub vtkConfigurationManager_setConfigurationProjectNameWithNumber(n As In
     setConfigurationProjectNameWithNumber n, projectName
 End Sub
 </code_list>
-    <call>projectName</call>
     <call>setConfigurationProjectNameWithNumber</call>
   </child>
   <child>
@@ -305,7 +296,6 @@ Public Function getConfigurationCommentWithNumber(n As Integer) As String
     End If
 End Function
 </code_list>
-    <call>configurationCount</call>
     <call>getConfigurationCommentWithNumber</call>
     <call>getConfigurationCommentWithNumber</call>
   </child>
@@ -353,7 +343,6 @@ Public Function getConfigurationTemplateWithNumber(n As Integer) As String
     End If
 End Function
 </code_list>
-    <call>configurationCount</call>
     <call>getConfigurationTemplateWithNumber</call>
     <call>getConfigurationTemplateWithNumber</call>
   </child>
@@ -401,7 +390,6 @@ Public Function getConfigurationPasswordWithNumber(n As Integer) As String
     End If
 End Function
 </code_list>
-    <call>configurationCount</call>
     <call>getConfigurationPasswordWithNumber</call>
     <call>getConfigurationPasswordWithNumber</call>
   </child>
@@ -598,7 +586,6 @@ Public Function getModulePathWithNumber(numModule As Integer, numConfiguration A
     End If
 End Function
 </code_list>
-    <call>configurationCount</call>
     <call>getModulePathWithNumber</call>
     <call>getModulePathWithNumber</call>
   </child>

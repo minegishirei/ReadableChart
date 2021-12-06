@@ -214,13 +214,19 @@ class UMLFactory{
     $umltext = ""
     buildXMLloop([System.Xml.XmlElement]$XmlObj){
         ##definition
-        $this.umltext += ( "class " + $XmlObj.Name + " {}") +"`n"
+        $this.umltext += ( "class " + $XmlObj.Name + " {`n")
+            $this.umltext += ( "- " + $XmlObj.type +"`n")
+        $this.umltext += ("}`n") 
+        $this.umltext += "note top`n"
+            $src = $XmlObj.code_list -join "`n"
+            $this.umltext += ($src)
+        $this.umltext += "end note`n"
 
         foreach ($item in $XmlObj.ChildNodes) {
             if( ($item.LocalName -eq "child")){
                 $this.buildXMLloop($item)
             }elseif($item.LocalName -eq "call"){
-                $this.umltext += ( $XmlObj.Name + " --|> " + $item.InnerText ) +"`n"
+                $this.umltext += ( $XmlObj.Name + " -down-|> " + $item.InnerText ) +"`n"
             }
         }
     }
@@ -290,9 +296,14 @@ class Factory{
 
 
 $factory = New-Object Factory
-[void]$factory.run( "/Users/minegishirei/myworking/VBAToolKit/Source/ConfProd")
+
+$Path = Read-Host "Enter Path"
+
+[void]$factory.run( $Path)
 $Global:NAMESPACE = $Global:NAMESPACE | Select-Object -Unique 
 [void]$factory.buildXML("/Users/minegishirei/myworking/ReadableChart/main/src.xml")
 Set-Clipboard  $factory.buildPlantUML("/Users/minegishirei/myworking/ReadableChart/main/src.xml", "test.uml")
 
+
+$Age = Read-Host "Exit"
 
