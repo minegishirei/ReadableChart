@@ -1,3 +1,5 @@
+Param($Path)
+
 $Global:NAMESPACE = [System.Collections.ArrayList]::new();
 
 class Parts{
@@ -297,7 +299,7 @@ class Factory{
 
 $factory = New-Object Factory
 
-$Path = Read-Host "Enter Path"
+
 
 [void]$factory.run( $Path)
 $Global:NAMESPACE = $Global:NAMESPACE | Select-Object -Unique 
