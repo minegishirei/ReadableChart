@@ -1,7 +1,7 @@
 
 #Param($Path)
 
-
+$Global:XMLDOC = [System.Xml.XmlDocument]::new()
 
 
 
@@ -33,16 +33,16 @@ $Global:NAMESPACE = [System.Collections.ArrayList]::new();
 class ContextParts : Parts {
     $code_list = [System.Collections.ArrayList]::new()
 
-    [System.Xml.XmlDocument]AppendXmlChild($container, [System.Xml.XmlDocument]$doc){
+    [System.Xml.XmlDocument]AppendXmlChild($container){
         $xmlns = "urn:oasis:names:tc:opendocument:xmlns:container"
-        $child_xml = $doc.CreateNode("element", "child", $xmlns)
-            $type_xml = $doc.CreateNode("element", "type", $xmlns)
+        $child_xml = $Global:XMLDOC.CreateNode("element", "child", $xmlns)
+            $type_xml = $Global:XMLDOC.CreateNode("element", "type", $xmlns)
                 $type_xml.InnerText = $this.type
             $child_xml.AppendChild($type_xml)
-            $name_xml = $doc.CreateNode("element", "name", $xmlns)
+            $name_xml = $Global:XMLDOC.CreateNode("element", "name", $xmlns)
                 $name_xml.InnerText = $this.name
             $child_xml.AppendChild($name_xml)
-            $code_xml = $doc.CreateNode("element", "code_list", $xmlns)
+            $code_xml = $Global:XMLDOC.CreateNode("element", "code_list", $xmlns)
                 $code = "`n"
                 foreach ($item in $this.code_list) {
                     $code += ($item+"`n")
@@ -53,7 +53,7 @@ class ContextParts : Parts {
             foreach ($line in $this.code_list) {
                 foreach ($callablename in $Global:NAMESPACE) {
                     if($line.contains(" "+$callablename+" ")){
-                        $call_xml = $doc.CreateNode("element", "call", $xmlns)
+                        $call_xml = $Global:XMLDOC.CreateNode("element", "call", $xmlns)
                         $call_xml.InnerText = $callablename
                         $child_xml.AppendChild($call_xml)
                     }
@@ -65,9 +65,9 @@ class ContextParts : Parts {
             if($item.type -eq "comment"){
                 continue
             }
-            $item.AppendXmlChild($child_xml, $doc)
+            $item.AppendXmlChild($child_xml)
         }
-        return $doc
+        return $Global:XMLDOC
     }
 }
 
@@ -153,20 +153,20 @@ class CommentParts : ContextParts {
 
 class FileParts : Parts{
     $type = "file"
-    [System.Xml.XmlDocument]AppendXmlChild($container, [System.Xml.XmlDocument]$doc){
+    [System.Xml.XmlDocument]AppendXmlChild($container){
         $xmlns = "urn:oasis:names:tc:opendocument:xmlns:container"
-        $child_xml = $doc.CreateNode("element", "child", $xmlns)
-            $type_xml = $doc.CreateNode("element", "type", $xmlns)
+        $child_xml = $Global:XMLDOC.CreateNode("element", "child", $xmlns)
+            $type_xml = $Global:XMLDOC.CreateNode("element", "type", $xmlns)
                 $type_xml.InnerText = $this.type
             $child_xml.AppendChild($type_xml)
-            $name_xml = $doc.CreateNode("element", "name", $xmlns)
+            $name_xml = $Global:XMLDOC.CreateNode("element", "name", $xmlns)
                 $name_xml.InnerText = $this.name
             $child_xml.AppendChild($name_xml)
         $container.AppendChild($child_xml) | Out-Null
         foreach ($item in $this.children) {
-            $item.AppendXmlChild($child_xml, $doc)
+            $item.AppendXmlChild($child_xml)
         }
-        return $doc
+        return $Global:XMLDOC
     }
 
     [void] setName($filename){
@@ -301,18 +301,18 @@ class FoloderParts : Parts{
 
     [void]buildXML([string]$xmlFile){
         $xmlns = "urn:oasis:names:tc:opendocument:xmlns:container"
-        [System.Xml.XmlDocument]$doc = [System.Xml.XmlDocument]::new()
-        $dec = $doc.CreateXmlDeclaration("1.0", $null, $null)
-        $doc.AppendChild($dec) | Out-Null
-        $container = $doc.CreateNode("element", "container", $xmlns)
+        $dec = $Global:XMLDOC.CreateXmlDeclaration("1.0", $null, $null)
+        $Global:XMLDOC.AppendChild($dec) | Out-Null
+        
+        [System.Xml.XmlElement]$container = $Global:XMLDOC.CreateNode("element", "container", $xmlns)
         $container.SetAttribute("version", "1.0")
         ##ここから中身
         foreach($fileParts in $this.filepartslist){
-            $fileParts.AppendXmlChild($container, $doc)
+            $fileParts.AppendXmlChild($container)
         }
-        $doc.AppendChild($container)
+        $Global:XMLDOC.AppendChild($container)
         ##ここまで中身
-        $doc.Save($xmlFile) | Out-Null
+        $Global:XMLDOC.Save($xmlFile) | Out-Null
     }
 
     [string]buildPlantUML([string]$inputXmlFile, [string]$outputUmlFile){
