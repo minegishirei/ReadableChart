@@ -2,6 +2,17 @@
 
 $Global:NAMESPACE = [System.Collections.ArrayList]::new();
 
+
+function is_safe_string([string]$inspect_str){
+    $check_list = @(";", '"', " ", ",")
+    foreach ($item in $check_list) {
+        if($inspect_str.Contains($item)){
+            return $False
+        }
+    }
+    return $True
+}
+
 class Parts{
     ##param
     $children = [System.Collections.ArrayList]::new()
@@ -104,8 +115,11 @@ class FunctionParts : ContextParts {
             $right = $functionline.Split("Function")[1]
             $middle = $right.Split("(")[0]
             $this.name = $middle.Trim()
-            $Global:NAMESPACE.Add($this.name)
-            return $true
+            if(is_safe_string($this.name)){
+                $Global:NAMESPACE.Add($this.name)
+                return $True
+            }
+            return $false
         }catch{
             Write-Output "Something threw an exception or used Write-Error"
             Write-Output $_
@@ -132,8 +146,11 @@ class SubParts : ContextParts {
             $right = $functionline.Split("Sub")[1]
             $middle = $right.Split("(")[0]
             $this.name = $middle.Trim()
-            $Global:NAMESPACE.Add($this.name)
-            return $True
+            if(is_safe_string($this.name)){
+                $Global:NAMESPACE.Add($this.name)
+                return $True
+            }
+            return $false
         }catch{
             Write-Output "Something threw an exception or used Write-Error"
             Write-Output $_
@@ -324,7 +341,7 @@ $factory = New-Object Factory
 
 
 
-[void]$factory.run( "/Users/minegishirei/myworking/VBAToolKit/Source/ConfProd")
+[void]$factory.run( "/Users/minegishirei/myworking/VBAToolKit/Source/VbaUnit")
 $Global:NAMESPACE = $Global:NAMESPACE | Select-Object -Unique 
 [void]$factory.buildXML("/Users/minegishirei/myworking/ReadableChart/src.xml")
 Set-Clipboard  $factory.buildPlantUML("/Users/minegishirei/myworking/ReadableChart/src.xml", "test.uml")
