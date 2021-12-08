@@ -1,6 +1,8 @@
+
 #Param($Path)
 
-$Global:NAMESPACE = [System.Collections.ArrayList]::new();
+
+
 
 
 function is_safe_string([string]$inspect_str){
@@ -12,6 +14,7 @@ function is_safe_string([string]$inspect_str){
     }
     return $True
 }
+
 
 class Parts{
     ##param
@@ -25,37 +28,8 @@ class Parts{
     }
 }
 
-class FolderParts : Parts{}
 
-
-class FileParts : Parts{
-    $type = "file"
-    [System.Xml.XmlDocument]AppendXmlChild($container, [System.Xml.XmlDocument]$doc){
-        $xmlns = "urn:oasis:names:tc:opendocument:xmlns:container"
-        $child_xml = $doc.CreateNode("element", "child", $xmlns)
-            $type_xml = $doc.CreateNode("element", "type", $xmlns)
-                $type_xml.InnerText = $this.type
-            $child_xml.AppendChild($type_xml)
-            $name_xml = $doc.CreateNode("element", "name", $xmlns)
-                $name_xml.InnerText = $this.name
-            $child_xml.AppendChild($name_xml)
-        $container.AppendChild($child_xml) | Out-Null
-
-        ##子アイテム
-        foreach ($item in $this.children) {
-            $item.AppendXmlChild($child_xml, $doc)
-        }
-        return $doc
-
-    }
-
-    [void] setName($filename){
-        $this.name = $filename
-    }
-
-}
-
-
+$Global:NAMESPACE = [System.Collections.ArrayList]::new();
 class ContextParts : Parts {
     $code_list = [System.Collections.ArrayList]::new()
 
@@ -87,7 +61,6 @@ class ContextParts : Parts {
             }
         $container.AppendChild($child_xml) | Out-Null
         
-        ##子アイテム
         foreach ($item in $this.children) {
             if($item.type -eq "comment"){
                 continue
@@ -159,6 +132,7 @@ class SubParts : ContextParts {
     }
 }
 
+
 class CommentParts : ContextParts {
     [string]$type = "comment";
 
@@ -177,10 +151,33 @@ class CommentParts : ContextParts {
 
 
 
+class FileParts : Parts{
+    $type = "file"
+    [System.Xml.XmlDocument]AppendXmlChild($container, [System.Xml.XmlDocument]$doc){
+        $xmlns = "urn:oasis:names:tc:opendocument:xmlns:container"
+        $child_xml = $doc.CreateNode("element", "child", $xmlns)
+            $type_xml = $doc.CreateNode("element", "type", $xmlns)
+                $type_xml.InnerText = $this.type
+            $child_xml.AppendChild($type_xml)
+            $name_xml = $doc.CreateNode("element", "name", $xmlns)
+                $name_xml.InnerText = $this.name
+            $child_xml.AppendChild($name_xml)
+        $container.AppendChild($child_xml) | Out-Null
+        foreach ($item in $this.children) {
+            $item.AppendXmlChild($child_xml, $doc)
+        }
+        return $doc
+    }
+
+    [void] setName($filename){
+        $this.name = $filename
+    }
+}
+
+
 
 
 class ContextFactory : ContextParts{
-
     #method
     [bool]isend($line){
         return $false
@@ -191,7 +188,6 @@ class ContextFactory : ContextParts{
     [void]setName($name){
         $this.name = $name
     }
-
     ##mainmethod
     [System.Collections.ArrayList]run($filepath){
         $controller = $this;
@@ -217,7 +213,6 @@ class ContextFactory : ContextParts{
                 $subParts.mother = $controller
                 $controller = $subParts
             }
-
             
             $controller.code_list.Add($line)
             if($controller.isend($line)){
@@ -227,6 +222,7 @@ class ContextFactory : ContextParts{
         return $this.children
     }
 }
+
 
 
 
@@ -248,27 +244,22 @@ class UMLFactory{
             if( ($item.LocalName -eq "child")){
                 $this.buildXMLloop($item)
             }elseif($item.LocalName -eq "call"){
+                if($XmlObj.Name  -eq  $item.InnerText){
+                    continue
+                }
                 $this.src_text += ( $XmlObj.Name + " -down-|> " + $item.InnerText ) +"`n"
             }
         }
     }
 
     buildFileXMLloop([System.Xml.XmlElement]$XmlObj){
-        ###ファイル専用のxml捜査
-        ##definition
-
         #file単位
         foreach ($fileitem in $XmlObj.ChildNodes) {
-
             $this.src_text = ""
-            $filename = ""
+            $filename = $fileitem.name
             #xmlタグ単位
             foreach ($item in $fileitem) {
                 ##xmlがファイル名の時はfilename変数へ格納
-                if( ($item.LocalName -eq "name")){
-                    $filename = $item.InnerText
-                    continue
-                }
                 ###いよいよスタート!
                 if( ($item.LocalName -eq "child")){
                     $this.buildXMLloop($item)
@@ -286,8 +277,9 @@ class UMLFactory{
 
 
 
-class Factory{
+class FoloderParts : Parts{
     $filepartslist = [System.Collections.ArrayList]::new()
+
     [System.Collections.ArrayList]run([string]$rootpath){
         $rootpathItem = Get-ChildItem -Recurse $rootpath
         foreach($item in $rootpathItem){
@@ -307,7 +299,7 @@ class Factory{
         return $this.filepartslist
     }
 
-    buildXML([string]$xmlFile){
+    [void]buildXML([string]$xmlFile){
         $xmlns = "urn:oasis:names:tc:opendocument:xmlns:container"
         [System.Xml.XmlDocument]$doc = [System.Xml.XmlDocument]::new()
         $dec = $doc.CreateXmlDeclaration("1.0", $null, $null)
@@ -337,17 +329,13 @@ class Factory{
 
 
 
-$factory = New-Object Factory
-
-
-
-[void]$factory.run( "/Users/minegishirei/myworking/VBAToolKit/Source/VbaUnit")
+$factory = [FoloderParts]::new()
+[void]$factory.run( "/Users/minegishirei/myworking/VBAToolKit/Source/ConfProd")
 $Global:NAMESPACE = $Global:NAMESPACE | Select-Object -Unique 
 [void]$factory.buildXML("/Users/minegishirei/myworking/ReadableChart/src.xml")
 Set-Clipboard  $factory.buildPlantUML("/Users/minegishirei/myworking/ReadableChart/src.xml", "test.uml")
 
-
-$Age = Read-Host "Exit"
+Read-Host "Exit"
 
 
 

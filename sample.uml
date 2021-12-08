@@ -1,5 +1,5 @@
 @startuml
-file {
+file 0vtkConfigurationManagerXML.cls{
 class 0vtkConfigurationManagerXML.cls {
 - file
 }
@@ -15,12 +15,9 @@ class configuration {
 - function
 }
 configuration -down-|> configurationCount
-configuration -down-|> configuration
-configuration -down-|> configuration
 class vtkConfigurationManager_configuration {
 - function
 }
-vtkConfigurationManager_configuration -down-|> vtkConfigurationManager_configuration
 class raiseReadOnlyError {
 - sub
 }
@@ -33,35 +30,26 @@ class vtkConfigurationManager_addConfiguration {
 - function
 }
 vtkConfigurationManager_addConfiguration -down-|> projectName
-vtkConfigurationManager_addConfiguration -down-|> vtkConfigurationManager_addConfiguration
 class configurations {
 - function
 }
-configurations -down-|> configurations
 class vtkConfigurationManager_configurations {
 - function
 }
-vtkConfigurationManager_configurations -down-|> vtkConfigurationManager_configurations
 class getConfigurationNumber {
 - function
 }
 getConfigurationNumber -down-|> configuration
-getConfigurationNumber -down-|> getConfigurationNumber
-getConfigurationNumber -down-|> getConfigurationNumber
 class vtkConfigurationManager_getConfigurationNumber {
 - function
 }
-vtkConfigurationManager_getConfigurationNumber -down-|> vtkConfigurationManager_getConfigurationNumber
 class getConfigurationPathWithNumber {
 - function
 }
 getConfigurationPathWithNumber -down-|> configurationCount
-getConfigurationPathWithNumber -down-|> getConfigurationPathWithNumber
-getConfigurationPathWithNumber -down-|> getConfigurationPathWithNumber
 class vtkConfigurationManager_getConfigurationPathWithNumber {
 - function
 }
-vtkConfigurationManager_getConfigurationPathWithNumber -down-|> vtkConfigurationManager_getConfigurationPathWithNumber
 class setConfigurationPathWithNumber {
 - sub
 }
@@ -73,11 +61,9 @@ vtkConfigurationManager_setConfigurationPathWithNumber -down-|> setConfiguration
 class getConfigurationPath {
 - function
 }
-getConfigurationPath -down-|> getConfigurationPath
 class vtkConfigurationManager_getConfigurationPath {
 - function
 }
-vtkConfigurationManager_getConfigurationPath -down-|> vtkConfigurationManager_getConfigurationPath
 class setConfigurationPath {
 - sub
 }
@@ -90,12 +76,9 @@ class getConfigurationProjectNameWithNumber {
 - function
 }
 getConfigurationProjectNameWithNumber -down-|> configurationCount
-getConfigurationProjectNameWithNumber -down-|> getConfigurationProjectNameWithNumber
-getConfigurationProjectNameWithNumber -down-|> getConfigurationProjectNameWithNumber
 class vtkConfigurationManager_getConfigurationProjectNameWithNumber {
 - function
 }
-vtkConfigurationManager_getConfigurationProjectNameWithNumber -down-|> vtkConfigurationManager_getConfigurationProjectNameWithNumber
 class setConfigurationProjectNameWithNumber {
 - sub
 }
@@ -110,12 +93,9 @@ class getConfigurationCommentWithNumber {
 - function
 }
 getConfigurationCommentWithNumber -down-|> configurationCount
-getConfigurationCommentWithNumber -down-|> getConfigurationCommentWithNumber
-getConfigurationCommentWithNumber -down-|> getConfigurationCommentWithNumber
 class vtkConfigurationManager_getConfigurationCommentWithNumber {
 - function
 }
-vtkConfigurationManager_getConfigurationCommentWithNumber -down-|> vtkConfigurationManager_getConfigurationCommentWithNumber
 class setConfigurationCommentWithNumber {
 - sub
 }
@@ -128,12 +108,9 @@ class getConfigurationTemplateWithNumber {
 - function
 }
 getConfigurationTemplateWithNumber -down-|> configurationCount
-getConfigurationTemplateWithNumber -down-|> getConfigurationTemplateWithNumber
-getConfigurationTemplateWithNumber -down-|> getConfigurationTemplateWithNumber
 class vtkConfigurationManager_getConfigurationTemplateWithNumber {
 - function
 }
-vtkConfigurationManager_getConfigurationTemplateWithNumber -down-|> vtkConfigurationManager_getConfigurationTemplateWithNumber
 class setConfigurationTemplateWithNumber {
 - sub
 }
@@ -146,12 +123,9 @@ class getConfigurationPasswordWithNumber {
 - function
 }
 getConfigurationPasswordWithNumber -down-|> configurationCount
-getConfigurationPasswordWithNumber -down-|> getConfigurationPasswordWithNumber
-getConfigurationPasswordWithNumber -down-|> getConfigurationPasswordWithNumber
 class vtkConfigurationManager_getConfigurationPasswordWithNumber {
 - function
 }
-vtkConfigurationManager_getConfigurationPasswordWithNumber -down-|> vtkConfigurationManager_getConfigurationPasswordWithNumber
 class setConfigurationPasswordWithNumber {
 - sub
 }
@@ -163,42 +137,31 @@ vtkConfigurationManager_setConfigurationPasswordWithNumber -down-|> setConfigura
 class vtkReferenceWithXML {
 - function
 }
-vtkReferenceWithXML -down-|> vtkReferenceWithXML
 class getConfigurationReferencesWithNumber {
 - function
 }
-getConfigurationReferencesWithNumber -down-|> getConfigurationReferencesWithNumber
 class vtkConfigurationManager_getConfigurationReferencesWithNumber {
 - function
 }
-vtkConfigurationManager_getConfigurationReferencesWithNumber -down-|> vtkConfigurationManager_getConfigurationReferencesWithNumber
 class modules {
 - function
 }
-modules -down-|> modules
 class vtkConfigurationManager_modules {
 - function
 }
-vtkConfigurationManager_modules -down-|> vtkConfigurationManager_modules
 class module {
 - function
 }
-module -down-|> module
-module -down-|> module
 class vtkConfigurationManager_module {
 - function
 }
-vtkConfigurationManager_module -down-|> vtkConfigurationManager_module
 class getModuleNumber {
 - function
 }
 getModuleNumber -down-|> module
-getModuleNumber -down-|> getModuleNumber
-getModuleNumber -down-|> getModuleNumber
 class vtkConfigurationManager_getModuleNumber {
 - function
 }
-vtkConfigurationManager_getModuleNumber -down-|> vtkConfigurationManager_getModuleNumber
 class addModule {
 - function
 }
@@ -206,17 +169,13 @@ addModule -down-|> raiseReadOnlyError
 class vtkConfigurationManager_addModule {
 - function
 }
-vtkConfigurationManager_addModule -down-|> vtkConfigurationManager_addModule
 class getModulePathWithNumber {
 - function
 }
 getModulePathWithNumber -down-|> configurationCount
-getModulePathWithNumber -down-|> getModulePathWithNumber
-getModulePathWithNumber -down-|> getModulePathWithNumber
 class vtkConfigurationManager_getModulePathWithNumber {
 - function
 }
-vtkConfigurationManager_getModulePathWithNumber -down-|> vtkConfigurationManager_getModulePathWithNumber
 class setModulePathWithNumber {
 - sub
 }
@@ -228,13 +187,11 @@ vtkConfigurationManager_setModulePathWithNumber -down-|> setModulePathWithNumber
 class references {
 - function
 }
-references -down-|> references
 class vtkConfigurationManager_references {
 - function
 }
-vtkConfigurationManager_references -down-|> vtkConfigurationManager_references
 }
-file {
+file 0vtkNormalize.bas{
 class 0vtkNormalize.bas {
 - file
 }
@@ -244,26 +201,20 @@ class initializeList {
 class vtkListOfProperlyCasedIdentifiers {
 - function
 }
-vtkListOfProperlyCasedIdentifiers -down-|> vtkListOfProperlyCasedIdentifiers
 class vtkNormalizeToken {
 - function
 }
-vtkNormalizeToken -down-|> vtkNormalizeToken
-vtkNormalizeToken -down-|> vtkNormalizeToken
 vtkNormalizeToken -down-|> module
-vtkNormalizeToken -down-|> vtkNormalizeToken
 class vtkNormalizeString {
 - function
 }
 vtkNormalizeString -down-|> module
-vtkNormalizeString -down-|> vtkNormalizeString
 class vtkNormalizeFile {
 - sub
 }
 vtkNormalizeFile -down-|> module
-vtkNormalizeFile -down-|> vtkNormalizeFile
 }
-file {
+file 1vtkConfigurationManagerExcel.cls{
 class 1vtkConfigurationManagerExcel.cls {
 - file
 }
@@ -282,29 +233,21 @@ class Workbook_AddinInstall2 {
 class defaultProjectNameWithNumber {
 - function
 }
-defaultProjectNameWithNumber -down-|> defaultProjectNameWithNumber
 class defaultCommentWithNumber {
 - function
 }
-defaultCommentWithNumber -down-|> defaultCommentWithNumber
 class defaultTemplateWithNumber {
 - function
 }
-defaultTemplateWithNumber -down-|> defaultTemplateWithNumber
 class defaultPasswordWithNumber {
 - function
 }
-defaultPasswordWithNumber -down-|> defaultPasswordWithNumber
 class isConfigurationInitializedForWorkbook {
 - function
 }
-isConfigurationInitializedForWorkbook -down-|> isConfigurationInitializedForWorkbook
 class nbTitleRows {
 - function
 }
-nbTitleRows -down-|> nbTitleRows
-nbTitleRows -down-|> nbTitleRows
-nbTitleRows -down-|> nbTitleRows
 class setConfigurationSheet {
 - sub
 }
@@ -319,11 +262,9 @@ class configuration {
 - function
 }
 configuration -down-|> configurationCount
-configuration -down-|> configuration
 class vtkConfigurationManager_configuration {
 - function
 }
-vtkConfigurationManager_configuration -down-|> vtkConfigurationManager_configuration
 class addConfiguration {
 - function
 }
@@ -336,39 +277,29 @@ addConfiguration -down-|> configuration
 addConfiguration -down-|> configuration
 addConfiguration -down-|> projectName
 addConfiguration -down-|> configuration
-addConfiguration -down-|> addConfiguration
-addConfiguration -down-|> addConfiguration
 class vtkConfigurationManager_addConfiguration {
 - function
 }
 vtkConfigurationManager_addConfiguration -down-|> projectName
-vtkConfigurationManager_addConfiguration -down-|> vtkConfigurationManager_addConfiguration
 class configurations {
 - function
 }
-configurations -down-|> configurations
 class vtkConfigurationManager_configurations {
 - function
 }
-vtkConfigurationManager_configurations -down-|> vtkConfigurationManager_configurations
 class getConfigurationNumber {
 - function
 }
-getConfigurationNumber -down-|> getConfigurationNumber
-getConfigurationNumber -down-|> getConfigurationNumber
 class vtkConfigurationManager_getConfigurationNumber {
 - function
 }
-vtkConfigurationManager_getConfigurationNumber -down-|> vtkConfigurationManager_getConfigurationNumber
 class getConfigurationPathWithNumber {
 - function
 }
 getConfigurationPathWithNumber -down-|> configurationCount
-getConfigurationPathWithNumber -down-|> getConfigurationPathWithNumber
 class vtkConfigurationManager_getConfigurationPathWithNumber {
 - function
 }
-vtkConfigurationManager_getConfigurationPathWithNumber -down-|> vtkConfigurationManager_getConfigurationPathWithNumber
 class setConfigurationPathWithNumber {
 - sub
 }
@@ -380,11 +311,9 @@ vtkConfigurationManager_setConfigurationPathWithNumber -down-|> setConfiguration
 class getConfigurationPath {
 - function
 }
-getConfigurationPath -down-|> getConfigurationPath
 class vtkConfigurationManager_getConfigurationPath {
 - function
 }
-vtkConfigurationManager_getConfigurationPath -down-|> vtkConfigurationManager_getConfigurationPath
 class setConfigurationPath {
 - sub
 }
@@ -397,11 +326,9 @@ class getConfigurationProjectNameWithNumber {
 - function
 }
 getConfigurationProjectNameWithNumber -down-|> configurationCount
-getConfigurationProjectNameWithNumber -down-|> getConfigurationProjectNameWithNumber
 class vtkConfigurationManager_getConfigurationProjectNameWithNumber {
 - function
 }
-vtkConfigurationManager_getConfigurationProjectNameWithNumber -down-|> vtkConfigurationManager_getConfigurationProjectNameWithNumber
 class setConfigurationProjectNameWithNumber {
 - sub
 }
@@ -418,11 +345,9 @@ class getConfigurationCommentWithNumber {
 - function
 }
 getConfigurationCommentWithNumber -down-|> configurationCount
-getConfigurationCommentWithNumber -down-|> getConfigurationCommentWithNumber
 class vtkConfigurationManager_getConfigurationCommentWithNumber {
 - function
 }
-vtkConfigurationManager_getConfigurationCommentWithNumber -down-|> vtkConfigurationManager_getConfigurationCommentWithNumber
 class setConfigurationCommentWithNumber {
 - sub
 }
@@ -436,11 +361,9 @@ class getConfigurationTemplateWithNumber {
 - function
 }
 getConfigurationTemplateWithNumber -down-|> configurationCount
-getConfigurationTemplateWithNumber -down-|> getConfigurationTemplateWithNumber
 class vtkConfigurationManager_getConfigurationTemplateWithNumber {
 - function
 }
-vtkConfigurationManager_getConfigurationTemplateWithNumber -down-|> vtkConfigurationManager_getConfigurationTemplateWithNumber
 class setConfigurationTemplateWithNumber {
 - sub
 }
@@ -454,11 +377,9 @@ class getConfigurationPasswordWithNumber {
 - function
 }
 getConfigurationPasswordWithNumber -down-|> configurationCount
-getConfigurationPasswordWithNumber -down-|> getConfigurationPasswordWithNumber
 class vtkConfigurationManager_getConfigurationPasswordWithNumber {
 - function
 }
-vtkConfigurationManager_getConfigurationPasswordWithNumber -down-|> vtkConfigurationManager_getConfigurationPasswordWithNumber
 class setConfigurationPasswordWithNumber {
 - sub
 }
@@ -471,57 +392,43 @@ vtkConfigurationManager_setConfigurationPasswordWithNumber -down-|> setConfigura
 class getConfigurationReferencesWithNumber {
 - function
 }
-getConfigurationReferencesWithNumber -down-|> getConfigurationReferencesWithNumber
 class vtkConfigurationManager_getConfigurationReferencesWithNumber {
 - function
 }
-vtkConfigurationManager_getConfigurationReferencesWithNumber -down-|> vtkConfigurationManager_getConfigurationReferencesWithNumber
 class modules {
 - function
 }
-modules -down-|> modules
 class vtkConfigurationManager_modules {
 - function
 }
-vtkConfigurationManager_modules -down-|> vtkConfigurationManager_modules
 class module {
 - function
 }
-module -down-|> module
 class vtkConfigurationManager_module {
 - function
 }
-vtkConfigurationManager_module -down-|> vtkConfigurationManager_module
 class getModuleNumber {
 - function
 }
-getModuleNumber -down-|> getModuleNumber
-getModuleNumber -down-|> getModuleNumber
 class vtkConfigurationManager_getModuleNumber {
 - function
 }
-vtkConfigurationManager_getModuleNumber -down-|> vtkConfigurationManager_getModuleNumber
 class addModule {
 - function
 }
 addModule -down-|> module
 addModule -down-|> module
 addModule -down-|> configurationCount
-addModule -down-|> addModule
-addModule -down-|> addModule
 class vtkConfigurationManager_addModule {
 - function
 }
-vtkConfigurationManager_addModule -down-|> vtkConfigurationManager_addModule
 class getModulePathWithNumber {
 - function
 }
 getModulePathWithNumber -down-|> configurationCount
-getModulePathWithNumber -down-|> getModulePathWithNumber
 class vtkConfigurationManager_getModulePathWithNumber {
 - function
 }
-vtkConfigurationManager_getModulePathWithNumber -down-|> vtkConfigurationManager_getModulePathWithNumber
 class setModulePathWithNumber {
 - sub
 }
@@ -534,15 +441,12 @@ class referenceManager {
 - function
 }
 referenceManager -down-|> initReferences
-referenceManager -down-|> referenceManager
 class references {
 - function
 }
-references -down-|> references
 class vtkConfigurationManager_references {
 - function
 }
-vtkConfigurationManager_references -down-|> vtkConfigurationManager_references
 class initReferences {
 - sub
 }
@@ -550,14 +454,13 @@ class duplicate {
 - sub
 }
 duplicate -down-|> configuration
-duplicate -down-|> duplicate
 duplicate -down-|> initialized
 duplicate -down-|> configuration
 duplicate -down-|> setConfigurationSheet
 duplicate -down-|> setConfigurationSheet
 duplicate -down-|> projectName
 }
-file {
+file 1vtkConfigurationManagers.bas{
 class 1vtkConfigurationManagers.bas {
 - file
 }
@@ -566,7 +469,6 @@ class vtkConfigurationManagerForProject {
 }
 vtkConfigurationManagerForProject -down-|> projectName
 vtkConfigurationManagerForProject -down-|> projectName
-vtkConfigurationManagerForProject -down-|> vtkConfigurationManagerForProject
 class vtkResetConfigurationManagers {
 - sub
 }
@@ -597,7 +499,7 @@ vtkVerifyConfigurations -down-|> vtkDeleteFolder
 vtkVerifyConfigurations -down-|> configuration
 vtkVerifyConfigurations -down-|> configuration
 }
-file {
+file ThisWorkbook.cls{
 class ThisWorkbook.cls {
 - file
 }
@@ -620,7 +522,7 @@ class Workbook_Open {
 - sub
 }
 }
-file {
+file vtkConfiguration.cls{
 class vtkConfiguration.cls {
 - file
 }
@@ -631,7 +533,7 @@ class addReferencesToWorkbook {
 - sub
 }
 }
-file {
+file vtkConfigurationManager.cls{
 class vtkConfigurationManager.cls {
 - file
 }
@@ -710,12 +612,12 @@ class getConfigurationReferencesWithNumber {
 - function
 }
 }
-file {
+file vtkConstants.bas{
 class vtkConstants.bas {
 - file
 }
 }
-file {
+file vtkCreateProjectForm.frm{
 class vtkCreateProjectForm.frm {
 - file
 }
@@ -741,12 +643,12 @@ class enableCreateButton {
 - sub
 }
 }
-file {
+file vtkCreateProjectForm.frx{
 class vtkCreateProjectForm.frx {
 - file
 }
 }
-file {
+file vtkEventHandler.cls{
 class vtkEventHandler.cls {
 - file
 }
@@ -754,119 +656,85 @@ class cbe_Click {
 - sub
 }
 }
-file {
+file vtkExcelUtilities.bas{
 class vtkExcelUtilities.bas {
 - file
 }
 class vtkCreateExcelWorkbook {
 - function
 }
-vtkCreateExcelWorkbook -down-|> vtkCreateExcelWorkbook
 class vtkCreateExcelWorkbookForTestWithProjectName {
 - function
 }
-vtkCreateExcelWorkbookForTestWithProjectName -down-|> vtkCreateExcelWorkbookForTestWithProjectName
 class vtkCreateExcelWorkbookWithPathAndName {
 - function
 }
-vtkCreateExcelWorkbookWithPathAndName -down-|> vtkCreateExcelWorkbookWithPathAndName
 class vtkCloseAndKillWorkbook {
 - sub
 }
 class VtkWorkbookIsOpen {
 - function
 }
-VtkWorkbookIsOpen -down-|> VtkWorkbookIsOpen
 class vtkDefaultExcelExtension {
 - function
 }
 vtkDefaultExcelExtension -down-|> vtkExcelVersion
-vtkDefaultExcelExtension -down-|> vtkDefaultExcelExtension
-vtkDefaultExcelExtension -down-|> vtkDefaultExcelExtension
 class vtkDefaultExcelAddInExtension {
 - function
 }
 vtkDefaultExcelAddInExtension -down-|> vtkExcelVersion
-vtkDefaultExcelAddInExtension -down-|> vtkDefaultExcelAddInExtension
-vtkDefaultExcelAddInExtension -down-|> vtkDefaultExcelAddInExtension
 class vtkExcelVersion {
 - function
 }
-vtkExcelVersion -down-|> vtkExcelVersion
-vtkExcelVersion -down-|> vtkExcelVersion
 class vtkDefaultIsAddIn {
 - function
 }
-vtkDefaultIsAddIn -down-|> vtkDefaultIsAddIn
 class vtkReferencesInWorkbook {
 - function
 }
-vtkReferencesInWorkbook -down-|> vtkReferencesInWorkbook
 class vtkProtectProject {
 - sub
 }
 }
-file {
+file vtkExcelUtilities2003.bas{
 class vtkExcelUtilities2003.bas {
 - file
 }
 class vtkDefaultFileFormat {
 - function
 }
-vtkDefaultFileFormat -down-|> vtkDefaultFileFormat
-vtkDefaultFileFormat -down-|> vtkDefaultFileFormat
-vtkDefaultFileFormat -down-|> vtkDefaultFileFormat
 }
-file {
+file vtkExcelUtilities2007.bas{
 class vtkExcelUtilities2007.bas {
 - file
 }
 class vtkDefaultFileFormat {
 - function
 }
-vtkDefaultFileFormat -down-|> vtkDefaultFileFormat
-vtkDefaultFileFormat -down-|> vtkDefaultFileFormat
-vtkDefaultFileFormat -down-|> vtkDefaultFileFormat
-vtkDefaultFileFormat -down-|> vtkDefaultFileFormat
-vtkDefaultFileFormat -down-|> vtkDefaultFileFormat
-vtkDefaultFileFormat -down-|> vtkDefaultFileFormat
-vtkDefaultFileFormat -down-|> vtkDefaultFileFormat
-vtkDefaultFileFormat -down-|> vtkDefaultFileFormat
 }
-file {
+file vtkFileSystemUtilities.bas{
 class vtkFileSystemUtilities.bas {
 - file
 }
 class vtkTextFileReader {
 - function
 }
-vtkTextFileReader -down-|> vtkTextFileReader
-vtkTextFileReader -down-|> vtkTextFileReader
 class vtkCleanFolder {
 - function
 }
-vtkCleanFolder -down-|> vtkCleanFolder
-vtkCleanFolder -down-|> vtkCleanFolder
-vtkCleanFolder -down-|> vtkCleanFolder
-vtkCleanFolder -down-|> vtkCleanFolder
 class vtkDeleteFolder {
 - function
 }
 vtkDeleteFolder -down-|> vtkCleanFolder
-vtkDeleteFolder -down-|> vtkDeleteFolder
-vtkDeleteFolder -down-|> vtkDeleteFolder
-vtkDeleteFolder -down-|> vtkDeleteFolder
 class vtkDoesFolderExist {
 - function
 }
-vtkDoesFolderExist -down-|> vtkDoesFolderExist
-vtkDoesFolderExist -down-|> vtkDoesFolderExist
 class vtkCreateFolderPath {
 - sub
 }
 vtkCreateFolderPath -down-|> module
 }
-file {
+file vtkGitFunctions.bas{
 class vtkGitFunctions.bas {
 - file
 }
@@ -877,56 +745,29 @@ vtkInitializeGit -down-|> initialized
 vtkInitializeGit -down-|> init
 vtkInitializeGit -down-|> ShellAndWait
 vtkInitializeGit -down-|> ShellAndWait
-vtkInitializeGit -down-|> vtkInitializeGit
-class vtkGitInitializeErrDescription {
-- function
-}
-class vtkGitInitializeErrDescription {
-- function
-}
 class vtkGitConvertWinPath {
 - function
 }
-vtkGitConvertWinPath -down-|> vtkGitConvertWinPath
-
 }
-
-file {
+file vtkImportExportUtilities.bas{
 class vtkImportExportUtilities.bas {
 - file
 }
 class VBComponentTypeAsString {
 - function
 }
-VBComponentTypeAsString -down-|> VBComponentTypeAsString
-VBComponentTypeAsString -down-|> VBComponentTypeAsString
-VBComponentTypeAsString -down-|> VBComponentTypeAsString
-VBComponentTypeAsString -down-|> VBComponentTypeAsString
-VBComponentTypeAsString -down-|> VBComponentTypeAsString
-VBComponentTypeAsString -down-|> VBComponentTypeAsString
 class extensionForVBComponentType {
 - function
 }
-extensionForVBComponentType -down-|> extensionForVBComponentType
-extensionForVBComponentType -down-|> extensionForVBComponentType
-extensionForVBComponentType -down-|> extensionForVBComponentType
-extensionForVBComponentType -down-|> extensionForVBComponentType
-extensionForVBComponentType -down-|> extensionForVBComponentType
-extensionForVBComponentType -down-|> extensionForVBComponentType
 class vtkStandardCategoryForModuleName {
 - function
 }
-vtkStandardCategoryForModuleName -down-|> vtkStandardCategoryForModuleName
-vtkStandardCategoryForModuleName -down-|> vtkStandardCategoryForModuleName
-vtkStandardCategoryForModuleName -down-|> vtkStandardCategoryForModuleName
 class vtkStandardPathForModule {
 - function
 }
-vtkStandardPathForModule -down-|> vtkStandardPathForModule
 class vtkVBAUnitModulesList {
 - function
 }
-vtkVBAUnitModulesList -down-|> vtkVBAUnitModulesList
 class vtkImportOneModule {
 - sub
 }
@@ -965,10 +806,8 @@ class vtkExportConfiguration {
 vtkExportConfiguration -down-|> projectName
 vtkExportConfiguration -down-|> vtkExportOneModule
 vtkExportConfiguration -down-|> vtkExportOneModule
-vtkExportConfiguration -down-|> vtkExportConfiguration
-vtkExportConfiguration -down-|> vtkExportConfiguration
 }
-file {
+file vtkMainFunctions.bas{
 class vtkMainFunctions.bas {
 - file
 }
@@ -984,19 +823,12 @@ vtkCreateProject -down-|> vtkAddBeforeSaveHandlerInDEVWorkbook
 vtkCreateProject -down-|> module
 vtkCreateProject -down-|> module
 vtkCreateProject -down-|> vtkInitializeGit
-vtkCreateProject -down-|> vtkCreateProject
-vtkCreateProject -down-|> vtkCreateProject
-vtkCreateProject -down-|> vtkCreateProject
-vtkCreateProject -down-|> vtkCreateProject
-vtkCreateProject -down-|> vtkCreateProject
-vtkCreateProject -down-|> vtkCreateProject
-vtkCreateProject -down-|> vtkCreateProject
 class vtkRecreateConfigurations {
 - sub
 }
 vtkRecreateConfigurations -down-|> vtkRecreateConfiguration
 }
-file {
+file vtkModule.cls{
 class vtkModule.cls {
 - file
 }
@@ -1006,78 +838,57 @@ class init {
 class getPathForConfiguration {
 - function
 }
-getPathForConfiguration -down-|> getPathForConfiguration
-getPathForConfiguration -down-|> getPathForConfiguration
 class setPathForConfiguration {
 - function
 }
 }
-file {
+file VtKPathUtilities.bas{
 class VtKPathUtilities.bas {
 - file
 }
 class vtkPathOfCurrentProject {
 - function
 }
-vtkPathOfCurrentProject -down-|> vtkPathOfCurrentProject
-vtkPathOfCurrentProject -down-|> vtkPathOfCurrentProject
 class vtkPathToTestFolder {
 - function
 }
-vtkPathToTestFolder -down-|> vtkPathToTestFolder
 class vtkPathToSourceFolder {
 - function
 }
-vtkPathToSourceFolder -down-|> vtkPathToSourceFolder
 class vtkPathToTemplateFolder {
 - function
 }
-vtkPathToTemplateFolder -down-|> vtkPathToTemplateFolder
 class vtkGetFileExtension {
 - function
 }
-vtkGetFileExtension -down-|> vtkGetFileExtension
-vtkGetFileExtension -down-|> vtkGetFileExtension
 class vtkStripFilePathOrNameOfExtension {
 - function
 }
-vtkStripFilePathOrNameOfExtension -down-|> vtkStripFilePathOrNameOfExtension
 class vtkConvertGenericExcelPath {
 - function
 }
-vtkConvertGenericExcelPath -down-|> vtkConvertGenericExcelPath
-vtkConvertGenericExcelPath -down-|> vtkConvertGenericExcelPath
-vtkConvertGenericExcelPath -down-|> vtkConvertGenericExcelPath
-vtkConvertGenericExcelPath -down-|> vtkConvertGenericExcelPath
 class vtkStripPathOrNameOfVtkExtension {
 - function
 }
-vtkStripPathOrNameOfVtkExtension -down-|> vtkStripPathOrNameOfVtkExtension
 class vtkCreateTreeFolder {
 - function
 }
-vtkCreateTreeFolder -down-|> vtkCreateTreeFolder
-vtkCreateTreeFolder -down-|> vtkCreateTreeFolder
-
-
 class vtkDeleteTreeFolder {
 - sub
 }
 class vtkIsPathAbsolute {
 - function
 }
-vtkIsPathAbsolute -down-|> vtkIsPathAbsolute
 }
-file {
+file vtkProject.cls{
 class vtkProject.cls {
 - file
 }
 class initialized {
 - function
 }
-initialized -down-|> initialized
 }
-file {
+file vtkProjectCreationUtilities.bas{
 class vtkProjectCreationUtilities.bas {
 - file
 }
@@ -1086,7 +897,6 @@ class vtkInitializeVbaUnitNamesAndPathes {
 }
 vtkInitializeVbaUnitNamesAndPathes -down-|> module
 vtkInitializeVbaUnitNamesAndPathes -down-|> module
-vtkInitializeVbaUnitNamesAndPathes -down-|> vtkInitializeVbaUnitNamesAndPathes
 class VtkActivateReferences {
 - sub
 }
@@ -1105,23 +915,21 @@ Workbook_BeforeSave -down-|> projectName
 Workbook_BeforeSave -down-|> projectName
 Workbook_BeforeSave -down-|> projectName
 }
-file {
+file vtkProjects.bas{
 class vtkProjects.bas {
 - file
 }
 class vtkProjectForName {
 - function
 }
-vtkProjectForName -down-|> vtkProjectForName
 class vtkResetProjects {
 - sub
 }
 class getCurrentProjectName {
 - function
 }
-getCurrentProjectName -down-|> getCurrentProjectName
 }
-file {
+file vtkRecreateConfigurationForm.frm{
 class vtkRecreateConfigurationForm.frm {
 - file
 }
@@ -1154,24 +962,21 @@ class XMLFileTextBox_Change {
 - sub
 }
 }
-file {
+file vtkRecreateConfigurationForm.frx{
 class vtkRecreateConfigurationForm.frx {
 - file
 }
 }
-file {
+file vtkReference.cls{
 class vtkReference.cls {
 - file
 }
 class convertRelativePathToFullPath {
 - function
 }
-convertRelativePathToFullPath -down-|> convertRelativePathToFullPath
-convertRelativePathToFullPath -down-|> convertRelativePathToFullPath
 class convertFullPathToRelativePath {
 - function
 }
-convertFullPathToRelativePath -down-|> convertFullPathToRelativePath
 class initWithVBAReference {
 - sub
 }
@@ -1179,7 +984,7 @@ class addToWorkbook {
 - sub
 }
 }
-file {
+file vtkReferenceManager.cls{
 class vtkReferenceManager.cls {
 - file
 }
@@ -1201,7 +1006,6 @@ setReferenceSheet -down-|> alignConfigurationCount
 class selfReference {
 - function
 }
-selfReference -down-|> selfReference
 class initializeReferenceSheet {
 - sub
 }
@@ -1218,11 +1022,9 @@ alignConfigurationCount -down-|> configurationCount
 class configurationCount {
 - function
 }
-configurationCount -down-|> configurationCount
 class referenceCount {
 - function
 }
-referenceCount -down-|> referenceCount
 class addConfiguration {
 - sub
 }
@@ -1237,26 +1039,25 @@ class addOneReference {
 class allReferences {
 - function
 }
-allReferences -down-|> allReferences
 class references {
 - function
 }
-references -down-|> references
 references -down-|> configurationCount
-references -down-|> references
 class setReferenceWihNumber {
 - sub
 }
 setReferenceWihNumber -down-|> referenceCount
 setReferenceWihNumber -down-|> configurationCount
 }
-file {
+file vtkShellAndWait.bas{
 class vtkShellAndWait.bas {
 - file
 }
-
+class ShellAndWait {
+- function
 }
-file {
+}
+file vtkToolBars.bas{
 class vtkToolBars.bas {
 - file
 }
@@ -1269,16 +1070,13 @@ class vtkClearEventHandlers {
 class projectName {
 - function
 }
-projectName -down-|> projectName
 class toolBarName {
 - function
 }
-toolBarName -down-|> toolBarName
 class controlTag {
 - function
 }
 controlTag -down-|> projectName
-controlTag -down-|> controlTag
 class vtkCreateToolbars {
 - sub
 }
@@ -1309,7 +1107,6 @@ class vtkTestCommandBarButtonClickedReset {
 class vtkIsTestCommandBarButtonClicked {
 - function
 }
-vtkIsTestCommandBarButtonClicked -down-|> vtkIsTestCommandBarButtonClicked
 class vtkShowCreateProjectForm {
 - sub
 }
@@ -1325,24 +1122,23 @@ class vtkClickForVBAToolKitDEVRecreation {
 }
 vtkClickForVBAToolKitDEVRecreation -down-|> vtkRecreateConfiguration
 }
-file {
+file vtkWaitForm.frm{
 class vtkWaitForm.frm {
 - file
 }
 }
-file {
+file vtkWaitForm.frx{
 class vtkWaitForm.frx {
 - file
 }
 }
-file {
+file vtkXMLUtilities.bas{
 class vtkXMLUtilities.bas {
 - file
 }
 class escapedString {
 - function
 }
-escapedString -down-|> escapedString
 class vtkExportConfigurationsAsXML {
 - sub
 }
