@@ -75,7 +75,7 @@ class FolderParts : Parts{
         $Global:XMLDOC.Save($xmlFile) | Out-Null
     }
 
-    [string]buildPlantUML([string]$inputXmlFile, [string]$outputUmlFile){
+    [string]buildUML([string]$inputXmlFile, [string]$outputUmlFile){
         $XmlObj = [System.Xml.XmlDocument](Get-Content $inputXmlFile) 
         [UMLFactory]$umlFactory = [UMLFactory]::new();
         $umlFactory.buildFileXMLloop($XmlObj.container);
@@ -121,7 +121,7 @@ class ContextParts : Parts {
         return $line -match $this.end_regex
     }
     
-    [System.Xml.XmlDocument]AppendXmlChild($parents_xml){
+    AppendXmlChild($parents_xml){
         $child_xml = $this.create_element("child", "")
         $child_xml.AppendChild( $this.create_element("type", $this.type)  )
         $child_xml.AppendChild( $this.create_element("name", $this.name)  )
@@ -142,7 +142,6 @@ class ContextParts : Parts {
             }
             $item.AppendXmlChild($child_xml)
         }
-        return $Global:XMLDOC
     }
 }
 
@@ -233,6 +232,24 @@ class ContextFactory : ContextParts{
 class UMLFactory{
     $umltext = ""
     $src_text = ""
+    buildFileXMLloop([System.Xml.XmlElement]$XmlObj){
+        #file単位
+        foreach ($fileitem in $XmlObj.ChildNodes) {
+            $this.src_text = ""
+            $filename = $fileitem.name
+            #xmlタグ単位
+            foreach ($item in $fileitem) {
+                if( ($item.LocalName -eq "child")){
+                    $this.buildXMLloop($item)
+                }
+            }
+            $this.umltext += ( "file " + $filename)
+            $this.umltext += ("{`n")
+                $this.umltext += $this.src_text
+            $this.umltext += ("}`n")
+        }
+    }
+
     buildXMLloop([System.Xml.XmlElement]$XmlObj){
         ##definition
         $this.src_text += ( "class " + $XmlObj.Name + " {`n")
@@ -254,24 +271,6 @@ class UMLFactory{
             }
         }
     }
-
-    buildFileXMLloop([System.Xml.XmlElement]$XmlObj){
-        #file単位
-        foreach ($fileitem in $XmlObj.ChildNodes) {
-            $this.src_text = ""
-            $filename = $fileitem.name
-            #xmlタグ単位
-            foreach ($item in $fileitem) {
-                if( ($item.LocalName -eq "child")){
-                    $this.buildXMLloop($item)
-                }
-            }
-            $this.umltext += ( "file " + $filename)
-            $this.umltext += ("{`n")
-                $this.umltext += $this.src_text
-            $this.umltext += ("}`n")
-        }
-    }
 }
 
 
@@ -283,7 +282,7 @@ $factory = [FolderParts]::new()
 [void]$factory.run( "/Users/minegishirei/myworking/VBAToolKit/Source/ConfProd")
 $Global:NAMESPACE = $Global:NAMESPACE | Select-Object -Unique 
 [void]$factory.buildXML("/Users/minegishirei/myworking/ReadableChart/src.xml")
-Set-Clipboard  $factory.buildPlantUML("/Users/minegishirei/myworking/ReadableChart/src.xml", "test.uml")
+Set-Clipboard  $factory.buildUML("/Users/minegishirei/myworking/ReadableChart/src.xml", "test.uml")
 
 Read-Host "Exit"
 
