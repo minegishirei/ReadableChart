@@ -2,6 +2,7 @@
 #Param($Path)
 
 $Global:XMLDOC = [System.Xml.XmlDocument]::new()
+$Global:XMLS = "urn:oasis:names:tc:opendocument:xmlns:container"
 
 
 
@@ -16,6 +17,9 @@ function is_safe_string([string]$inspect_str){
 }
 
 
+############################################
+##Parts:####################################
+############################################
 class Parts{
     ##param
     $children = [System.Collections.ArrayList]::new()
@@ -26,40 +30,111 @@ class Parts{
     [void]addChild($parts){
         $this.children.Add($parts)
     }
+    [System.Xml.XmlElement]create_element([string]$tag, [string]$innerText){
+        $xmlElement = $Global:XMLDOC.CreateNode("element", $tag, $Global:XMLS )
+        $xmlElement.InnerText = $innerText
+        return $xmlElement
+    }    
+}
+
+class FolderParts : Parts{
+    $filepartslist = [System.Collections.ArrayList]::new()
+
+    [System.Collections.ArrayList]run([string]$rootpath){
+        $rootpathItem = Get-ChildItem -Recurse $rootpath
+        foreach($item in $rootpathItem){
+            if($item.PSIsContainer){
+                #folder
+            }else{
+                #file
+                $fileParts = [FileParts]::new()
+                $fileParts.setName($item.Name)
+                $filepath = [string]$item.Directory + "/"+[string]$item.Name
+                $contextFactory  = [ContextFactory]::new()
+                $contextFactory.setName($item.Name)
+                $fileParts.children = $contextFactory.run($filepath)
+                [void]$this.filepartslist.Add($fileParts)
+            }
+        }
+        return $this.filepartslist
+    }
+
+    [void]buildXML([string]$xmlFile){
+        $xmlns = "urn:oasis:names:tc:opendocument:xmlns:container"
+        $dec = $Global:XMLDOC.CreateXmlDeclaration("1.0", $null, $null)
+        $Global:XMLDOC.AppendChild($dec) | Out-Null
+        
+        [System.Xml.XmlElement]$container = $Global:XMLDOC.CreateNode("element", "container", $xmlns)
+        $container.SetAttribute("version", "1.0")
+        ##ここから中身
+        foreach($fileParts in $this.filepartslist){
+            $fileParts.AppendXmlChild($container)
+        }
+        $Global:XMLDOC.AppendChild($container)
+        ##ここまで中身
+        $Global:XMLDOC.Save($xmlFile) | Out-Null
+    }
+
+    [string]buildPlantUML([string]$inputXmlFile, [string]$outputUmlFile){
+        $XmlObj = [System.Xml.XmlDocument](Get-Content $inputXmlFile) 
+        [UMLFactory]$umlFactory = [UMLFactory]::new();
+        $umlFactory.buildFileXMLloop($XmlObj.container);
+        return "@startuml`n" + $umlFactory.umltext + "@enduml`n"
+    }
+}
+
+class FileParts : Parts{
+    $type = "file"
+    AppendXmlChild($container){
+        $child_xml = $this.create_element("child", "")
+        $child_xml.AppendChild( $this.create_element("type", $this.type)  )
+        $child_xml.AppendChild( $this.create_element("name", $this.name)  )
+        $container.AppendChild($child_xml) | Out-Null
+        foreach ($item in $this.children) {
+            $item.AppendXmlChild($child_xml)
+        }
+    }
+
+    [void] setName($filename){
+        $this.name = $filename
+    }
 }
 
 
+
+##TODO:global =>static変数
 $Global:NAMESPACE = [System.Collections.ArrayList]::new();
 class ContextParts : Parts {
     $code_list = [System.Collections.ArrayList]::new()
 
-    [System.Xml.XmlDocument]AppendXmlChild($container){
-        $xmlns = "urn:oasis:names:tc:opendocument:xmlns:container"
-        $child_xml = $Global:XMLDOC.CreateNode("element", "child", $xmlns)
-            $type_xml = $Global:XMLDOC.CreateNode("element", "type", $xmlns)
-                $type_xml.InnerText = $this.type
-            $child_xml.AppendChild($type_xml)
-            $name_xml = $Global:XMLDOC.CreateNode("element", "name", $xmlns)
-                $name_xml.InnerText = $this.name
-            $child_xml.AppendChild($name_xml)
-            $code_xml = $Global:XMLDOC.CreateNode("element", "code_list", $xmlns)
-                $code = "`n"
-                foreach ($item in $this.code_list) {
-                    $code += ($item+"`n")
-                }
-                $code_xml.InnerText = $code
-            $child_xml.AppendChild($code_xml) | Out-Null
-            ##check call namespace
-            foreach ($line in $this.code_list) {
-                foreach ($callablename in $Global:NAMESPACE) {
-                    if($line.contains(" "+$callablename+" ")){
-                        $call_xml = $Global:XMLDOC.CreateNode("element", "call", $xmlns)
-                        $call_xml.InnerText = $callablename
-                        $child_xml.AppendChild($call_xml)
-                    }
+    [bool]isstart([string]$line){
+        if( ($line -match $this.start_regex) -and (is_safe_string($Matches.match_name)) ){
+            $this.name = $Matches.match_name
+            $Global:NAMESPACE.Add($this.name)
+            return $true
+        }else{
+            return $false
+        }
+    }
+
+    [bool]isend([string]$line){
+        return $line -match $this.end_regex
+    }
+    
+    [System.Xml.XmlDocument]AppendXmlChild($parents_xml){
+        $child_xml = $this.create_element("child", "")
+        $child_xml.AppendChild( $this.create_element("type", $this.type)  )
+        $child_xml.AppendChild( $this.create_element("name", $this.name)  )
+        $child_xml.AppendChild( $this.create_element("code_list", $this.code_list -join "`n")  )
+        ##check call namespace
+        foreach ($line in $this.code_list) {
+            foreach ($callablename in $Global:NAMESPACE) {
+                if($line.contains(" "+$callablename+" ")){
+                    $child_xml.AppendChild( $this.create_element("call", $callablename)  )
                 }
             }
-        $container.AppendChild($child_xml) | Out-Null
+        }
+        $parents_xml.AppendChild($child_xml) | Out-Null
         
         foreach ($item in $this.children) {
             if($item.type -eq "comment"){
@@ -74,62 +149,15 @@ class ContextParts : Parts {
 
 class FunctionParts : ContextParts {
     [string]$type = "function";
-
-    [bool]isstart([string]$line){
-        return ( ($line -like "*Function *") -and ($line -notlike "*End*Function*" ) -and $this.setName($line)) 
-    }
-
-    [bool]isend([string]$line){
-        return $line -like "*End*Function*"
-    }
-    
-    [bool]setName([string]$functionline){
-        try{
-            $right = $functionline.Split("Function")[1]
-            $middle = $right.Split("(")[0]
-            $this.name = $middle.Trim()
-            if(is_safe_string($this.name)){
-                $Global:NAMESPACE.Add($this.name)
-                return $True
-            }
-            return $false
-        }catch{
-            Write-Output "Something threw an exception or used Write-Error"
-            Write-Output $_
-            return $false
-        }
-    }
+    [string]$start_regex = "Function (?<match_name>.*?)\("
+    [string]$end_regex = ".*End.*Function.*"
 }
-
 
 
 class SubParts : ContextParts {
     [string]$type = "sub";
-
-    [bool]isstart([string]$line){
-        return ( ($line -like "*Sub *") -and ($line -notlike "*End*Sub*" )  -and $this.setName($line)) 
-    }
-
-    [bool]isend([string]$line){
-        return $line -like "*End*Sub*"
-    }
-    
-    [bool]setName([string]$functionline){
-        try{
-            $right = $functionline.Split("Sub")[1]
-            $middle = $right.Split("(")[0]
-            $this.name = $middle.Trim()
-            if(is_safe_string($this.name)){
-                $Global:NAMESPACE.Add($this.name)
-                return $True
-            }
-            return $false
-        }catch{
-            Write-Output "Something threw an exception or used Write-Error"
-            Write-Output $_
-            return $false
-        }
-    }
+    [string]$start_regex = "Sub (?<match_name>.*?)\("
+    [string]$end_regex = ".*End.*Sub.*"
 }
 
 
@@ -150,35 +178,11 @@ class CommentParts : ContextParts {
 }
 
 
-
-class FileParts : Parts{
-    $type = "file"
-    [System.Xml.XmlDocument]AppendXmlChild($container){
-        $xmlns = "urn:oasis:names:tc:opendocument:xmlns:container"
-        $child_xml = $Global:XMLDOC.CreateNode("element", "child", $xmlns)
-            $type_xml = $Global:XMLDOC.CreateNode("element", "type", $xmlns)
-                $type_xml.InnerText = $this.type
-            $child_xml.AppendChild($type_xml)
-            $name_xml = $Global:XMLDOC.CreateNode("element", "name", $xmlns)
-                $name_xml.InnerText = $this.name
-            $child_xml.AppendChild($name_xml)
-        $container.AppendChild($child_xml) | Out-Null
-        foreach ($item in $this.children) {
-            $item.AppendXmlChild($child_xml)
-        }
-        return $Global:XMLDOC
-    }
-
-    [void] setName($filename){
-        $this.name = $filename
-    }
-}
-
-
-
-
+############################################
+##ContextFactory:###########################
+############################################
 class ContextFactory : ContextParts{
-    #method
+    ##なぜか使われない
     [bool]isend($line){
         return $false
     }
@@ -190,6 +194,7 @@ class ContextFactory : ContextParts{
     }
     ##mainmethod
     [System.Collections.ArrayList]run($filepath){
+        $this.mother = $this
         $controller = $this;
         $contents = (Get-Content $filepath)
         foreach ($line in $contents) {
@@ -201,7 +206,6 @@ class ContextFactory : ContextParts{
             $functionParts = [FunctionParts]::new();
             if($functionParts.isstart($line)){
                 $controller.addChild($functionParts)
-                $functionParts.setName($line)
                 $functionParts.mother = $controller
                 $controller = $functionParts
             }
@@ -209,7 +213,6 @@ class ContextFactory : ContextParts{
             $subParts = [SubParts]::new();
             if($subParts.isstart($line)){
                 $controller.addChild($subParts)
-                $subParts.setName($line)
                 $subParts.mother = $controller
                 $controller = $subParts
             }
@@ -259,8 +262,6 @@ class UMLFactory{
             $filename = $fileitem.name
             #xmlタグ単位
             foreach ($item in $fileitem) {
-                ##xmlがファイル名の時はfilename変数へ格納
-                ###いよいよスタート!
                 if( ($item.LocalName -eq "child")){
                     $this.buildXMLloop($item)
                 }
@@ -277,59 +278,8 @@ class UMLFactory{
 
 
 
-class FoloderParts : Parts{
-    $filepartslist = [System.Collections.ArrayList]::new()
 
-    [System.Collections.ArrayList]run([string]$rootpath){
-        $rootpathItem = Get-ChildItem -Recurse $rootpath
-        foreach($item in $rootpathItem){
-            if($item.PSIsContainer){
-                #folder
-            }else{
-                #file
-                $fileParts = [FileParts]::new()
-                $fileParts.setName($item.Name)
-                $filepath = [string]$item.Directory + "/"+[string]$item.Name
-                $contextFactory  = [ContextFactory]::new()
-                $contextFactory.setName($item.Name)
-                $fileParts.children = $contextFactory.run($filepath)
-                [void]$this.filepartslist.Add($fileParts)
-            }
-        }
-        return $this.filepartslist
-    }
-
-    [void]buildXML([string]$xmlFile){
-        $xmlns = "urn:oasis:names:tc:opendocument:xmlns:container"
-        $dec = $Global:XMLDOC.CreateXmlDeclaration("1.0", $null, $null)
-        $Global:XMLDOC.AppendChild($dec) | Out-Null
-        
-        [System.Xml.XmlElement]$container = $Global:XMLDOC.CreateNode("element", "container", $xmlns)
-        $container.SetAttribute("version", "1.0")
-        ##ここから中身
-        foreach($fileParts in $this.filepartslist){
-            $fileParts.AppendXmlChild($container)
-        }
-        $Global:XMLDOC.AppendChild($container)
-        ##ここまで中身
-        $Global:XMLDOC.Save($xmlFile) | Out-Null
-    }
-
-    [string]buildPlantUML([string]$inputXmlFile, [string]$outputUmlFile){
-        $XmlObj = [System.Xml.XmlDocument](Get-Content $inputXmlFile) 
-        [UMLFactory]$umlFactory = [UMLFactory]::new();
-        $umlFactory.buildFileXMLloop($XmlObj.container);
-        return "@startuml`n" + $umlFactory.umltext + "@enduml`n"
-    }
-
-}
-
-
-
-
-
-
-$factory = [FoloderParts]::new()
+$factory = [FolderParts]::new()
 [void]$factory.run( "/Users/minegishirei/myworking/VBAToolKit/Source/ConfProd")
 $Global:NAMESPACE = $Global:NAMESPACE | Select-Object -Unique 
 [void]$factory.buildXML("/Users/minegishirei/myworking/ReadableChart/src.xml")

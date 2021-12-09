@@ -6,17 +6,14 @@
     <child>
       <type>sub</type>
       <name>Class_Terminate</name>
-      <code_list>
-Private Sub Class_Terminate()
+      <code_list>Private Sub Class_Terminate()
     Set m_DOMDocument = Nothing
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>init</name>
-      <code_list>
-Public Sub init(ByVal XMLFilePath As String)
+      <code_list>Public Sub init(ByVal XMLFilePath As String)
     Dim fso As New FileSystemObject, DDoc As MSXML2.DOMDocument
     Dim projectName As String, rootPath As String
     If fso.FileExists(XMLFilePath) Then
@@ -42,23 +39,20 @@ Public Sub init(ByVal XMLFilePath As String)
     Exit Sub
 M_Error:
     Err.Raise Number:=VTK_INVALID_XML_FILE, Source:="init:vtkConfigurationManagerXML", Description:="Parse error of " &amp; XMLFilePath &amp; " : " &amp; DDoc.parseError.reason
-End Sub
-</code_list>
+End Sub</code_list>
       <call>projectName</call>
       <call>projectName</call>
     </child>
     <child>
       <type>function</type>
       <name>configuration</name>
-      <code_list>
-Public Function configuration(n As Integer) As String
+      <code_list>Public Function configuration(n As Integer) As String
     If n &gt; 0 And n &lt;= configurationCount Then
         configuration = m_DOMDocument.SelectSingleNode("/vtkConf/configuration[@cID=""c" &amp; n &amp; """]/name").Text
        Else
         configuration = ""
     End If
-End Function
-</code_list>
+End Function</code_list>
       <call>configurationCount</call>
       <call>configuration</call>
       <call>configuration</call>
@@ -66,49 +60,40 @@ End Function
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_configuration</name>
-      <code_list>
-Public Function vtkConfigurationManager_configuration(n As Integer) As String
+      <code_list>Public Function vtkConfigurationManager_configuration(n As Integer) As String
     vtkConfigurationManager_configuration = configuration(n)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_configuration</call>
     </child>
     <child>
       <type>sub</type>
       <name>raiseReadOnlyError</name>
-      <code_list>
-Private Sub raiseReadOnlyError(Source As String)
+      <code_list>Private Sub raiseReadOnlyError(Source As String)
     Err.Raise Number:=VTK_READONLY_FILE, Source:=Source, Description:="A XML Configuration File is considered Read-Only"
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>function</type>
       <name>addConfiguration</name>
-      <code_list>
-Public Function addConfiguration(configuration As String, Optional path As String = "", Optional template As String = "", Optional projectName As String = "", Optional comment As String = "") As Integer
+      <code_list>Public Function addConfiguration(configuration As String, Optional path As String = "", Optional template As String = "", Optional projectName As String = "", Optional comment As String = "") As Integer
     raiseReadOnlyError Source:="addConfiguration:vtkConfigurationManagerXML"
-End Function
-</code_list>
+End Function</code_list>
       <call>projectName</call>
       <call>raiseReadOnlyError</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_addConfiguration</name>
-      <code_list>
-Public Function vtkConfigurationManager_addConfiguration(configuration As String, Optional path As String = "", Optional template As String = "", Optional projectName As String = "", Optional comment As String = "") As Integer
+      <code_list>Public Function vtkConfigurationManager_addConfiguration(configuration As String, Optional path As String = "", Optional template As String = "", Optional projectName As String = "", Optional comment As String = "") As Integer
     vtkConfigurationManager_addConfiguration = addConfiguration(configuration, path, template, projectName, comment)
-End Function
-</code_list>
+End Function</code_list>
       <call>projectName</call>
       <call>vtkConfigurationManager_addConfiguration</call>
     </child>
     <child>
       <type>function</type>
       <name>configurations</name>
-      <code_list>
-Public Function configurations() As Collection
+      <code_list>Public Function configurations() As Collection
     Dim col As New Collection, i As Integer, c As vtkConfiguration
     For i = 1 To configurationCount
         Set c = New vtkConfiguration
@@ -116,25 +101,21 @@ Public Function configurations() As Collection
         col.Add Item:=c, Key:=configuration(i)
     Next i
     Set configurations = col
-End Function
-</code_list>
+End Function</code_list>
       <call>configurations</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_configurations</name>
-      <code_list>
-Public Function vtkConfigurationManager_configurations() As Collection
+      <code_list>Public Function vtkConfigurationManager_configurations() As Collection
     Set vtkConfigurationManager_configurations = configurations
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_configurations</call>
     </child>
     <child>
       <type>function</type>
       <name>getConfigurationNumber</name>
-      <code_list>
-Public Function getConfigurationNumber(configuration As String) As Integer
+      <code_list>Public Function getConfigurationNumber(configuration As String) As Integer
     Dim textValue As String
    On Error Resume Next
     textValue = m_DOMDocument.SelectSingleNode("/vtkConf/configuration[name=""" &amp; configuration &amp; """]/@cID").Text
@@ -144,8 +125,7 @@ Public Function getConfigurationNumber(configuration As String) As Integer
        Else
         getConfigurationNumber = CInt(Right$(textValue, Len(textValue) - 1))
     End If
-End Function
-</code_list>
+End Function</code_list>
       <call>configuration</call>
       <call>getConfigurationNumber</call>
       <call>getConfigurationNumber</call>
@@ -153,25 +133,21 @@ End Function
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_getConfigurationNumber</name>
-      <code_list>
-Public Function vtkConfigurationManager_getConfigurationNumber(configuration As String) As Integer
+      <code_list>Public Function vtkConfigurationManager_getConfigurationNumber(configuration As String) As Integer
     vtkConfigurationManager_getConfigurationNumber = getConfigurationNumber(configuration)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_getConfigurationNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>getConfigurationPathWithNumber</name>
-      <code_list>
-Public Function getConfigurationPathWithNumber(n As Integer) As String
+      <code_list>Public Function getConfigurationPathWithNumber(n As Integer) As String
     If n &gt; 0 And n &lt;= configurationCount Then
         getConfigurationPathWithNumber = m_DOMDocument.SelectSingleNode("/vtkConf/configuration[@cID=""c" &amp; n &amp; """]/path").Text
        Else
         getConfigurationPathWithNumber = ""
     End If
-End Function
-</code_list>
+End Function</code_list>
       <call>configurationCount</call>
       <call>getConfigurationPathWithNumber</call>
       <call>getConfigurationPathWithNumber</call>
@@ -179,85 +155,69 @@ End Function
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_getConfigurationPathWithNumber</name>
-      <code_list>
-Public Function vtkConfigurationManager_getConfigurationPathWithNumber(n As Integer) As String
+      <code_list>Public Function vtkConfigurationManager_getConfigurationPathWithNumber(n As Integer) As String
     vtkConfigurationManager_getConfigurationPathWithNumber = getConfigurationPathWithNumber(n)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_getConfigurationPathWithNumber</call>
     </child>
     <child>
       <type>sub</type>
       <name>setConfigurationPathWithNumber</name>
-      <code_list>
-Public Sub setConfigurationPathWithNumber(n As Integer, path As String)
+      <code_list>Public Sub setConfigurationPathWithNumber(n As Integer, path As String)
     raiseReadOnlyError Source:="setConfigurationPathWithNumber:vtkConfigurationManagerXML"
-End Sub
-</code_list>
+End Sub</code_list>
       <call>raiseReadOnlyError</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkConfigurationManager_setConfigurationPathWithNumber</name>
-      <code_list>
-Public Sub vtkConfigurationManager_setConfigurationPathWithNumber(n As Integer, path As String)
+      <code_list>Public Sub vtkConfigurationManager_setConfigurationPathWithNumber(n As Integer, path As String)
     setConfigurationPathWithNumber n, path
-End Sub
-</code_list>
+End Sub</code_list>
       <call>setConfigurationPathWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>getConfigurationPath</name>
-      <code_list>
-Public Function getConfigurationPath(configuration As String) As String
+      <code_list>Public Function getConfigurationPath(configuration As String) As String
     getConfigurationPath = getConfigurationPathWithNumber(getConfigurationNumber(configuration))
-End Function
-</code_list>
+End Function</code_list>
       <call>getConfigurationPath</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_getConfigurationPath</name>
-      <code_list>
-Public Function vtkConfigurationManager_getConfigurationPath(configuration As String) As String
+      <code_list>Public Function vtkConfigurationManager_getConfigurationPath(configuration As String) As String
     vtkConfigurationManager_getConfigurationPath = getConfigurationPath(configuration)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_getConfigurationPath</call>
     </child>
     <child>
       <type>sub</type>
       <name>setConfigurationPath</name>
-      <code_list>
-Public Sub setConfigurationPath(configuration As String, path As String)
+      <code_list>Public Sub setConfigurationPath(configuration As String, path As String)
     raiseReadOnlyError Source:="setConfigurationPath:vtkConfigurationManagerXML"
-End Sub
-</code_list>
+End Sub</code_list>
       <call>raiseReadOnlyError</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkConfigurationManager_setConfigurationPath</name>
-      <code_list>
-Public Sub vtkConfigurationManager_setConfigurationPath(configuration As String, path As String)
+      <code_list>Public Sub vtkConfigurationManager_setConfigurationPath(configuration As String, path As String)
     setConfigurationPath configuration, path
-End Sub
-</code_list>
+End Sub</code_list>
       <call>setConfigurationPath</call>
     </child>
     <child>
       <type>function</type>
       <name>getConfigurationProjectNameWithNumber</name>
-      <code_list>
-Public Function getConfigurationProjectNameWithNumber(n As Integer) As String
+      <code_list>Public Function getConfigurationProjectNameWithNumber(n As Integer) As String
     If n &gt; 0 And n &lt;= configurationCount Then
         getConfigurationProjectNameWithNumber = m_DOMDocument.SelectSingleNode("/vtkConf/configuration[@cID=""c" &amp; n &amp; """]/title").Text
        Else
         getConfigurationProjectNameWithNumber = ""
     End If
-End Function
-</code_list>
+End Function</code_list>
       <call>configurationCount</call>
       <call>getConfigurationProjectNameWithNumber</call>
       <call>getConfigurationProjectNameWithNumber</call>
@@ -265,47 +225,39 @@ End Function
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_getConfigurationProjectNameWithNumber</name>
-      <code_list>
-Public Function vtkConfigurationManager_getConfigurationProjectNameWithNumber(n As Integer) As String
+      <code_list>Public Function vtkConfigurationManager_getConfigurationProjectNameWithNumber(n As Integer) As String
     vtkConfigurationManager_getConfigurationProjectNameWithNumber = getConfigurationProjectNameWithNumber(n)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_getConfigurationProjectNameWithNumber</call>
     </child>
     <child>
       <type>sub</type>
       <name>setConfigurationProjectNameWithNumber</name>
-      <code_list>
-Public Sub setConfigurationProjectNameWithNumber(n As Integer, projectName As String)
+      <code_list>Public Sub setConfigurationProjectNameWithNumber(n As Integer, projectName As String)
     raiseReadOnlyError Source:="setConfigurationProjectNameWithNumber:vtkConfigurationManagerXML"
-End Sub
-</code_list>
+End Sub</code_list>
       <call>projectName</call>
       <call>raiseReadOnlyError</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkConfigurationManager_setConfigurationProjectNameWithNumber</name>
-      <code_list>
-Public Sub vtkConfigurationManager_setConfigurationProjectNameWithNumber(n As Integer, projectName As String)
+      <code_list>Public Sub vtkConfigurationManager_setConfigurationProjectNameWithNumber(n As Integer, projectName As String)
     setConfigurationProjectNameWithNumber n, projectName
-End Sub
-</code_list>
+End Sub</code_list>
       <call>projectName</call>
       <call>setConfigurationProjectNameWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>getConfigurationCommentWithNumber</name>
-      <code_list>
-Public Function getConfigurationCommentWithNumber(n As Integer) As String
+      <code_list>Public Function getConfigurationCommentWithNumber(n As Integer) As String
     If n &gt; 0 And n &lt;= configurationCount Then
         getConfigurationCommentWithNumber = m_DOMDocument.SelectSingleNode("/vtkConf/configuration[@cID=""c" &amp; n &amp; """]/comment").Text
        Else
         getConfigurationCommentWithNumber = ""
     End If
-End Function
-</code_list>
+End Function</code_list>
       <call>configurationCount</call>
       <call>getConfigurationCommentWithNumber</call>
       <call>getConfigurationCommentWithNumber</call>
@@ -313,38 +265,31 @@ End Function
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_getConfigurationCommentWithNumber</name>
-      <code_list>
-Public Function vtkConfigurationManager_getConfigurationCommentWithNumber(n As Integer) As String
+      <code_list>Public Function vtkConfigurationManager_getConfigurationCommentWithNumber(n As Integer) As String
     vtkConfigurationManager_getConfigurationCommentWithNumber = getConfigurationCommentWithNumber(n)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_getConfigurationCommentWithNumber</call>
     </child>
     <child>
       <type>sub</type>
       <name>setConfigurationCommentWithNumber</name>
-      <code_list>
-Public Sub setConfigurationCommentWithNumber(n As Integer, comment As String)
+      <code_list>Public Sub setConfigurationCommentWithNumber(n As Integer, comment As String)
     raiseReadOnlyError Source:="setConfigurationCommentWithNumber:vtkConfigurationManagerXML"
-End Sub
-</code_list>
+End Sub</code_list>
       <call>raiseReadOnlyError</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkConfigurationManager_setConfigurationCommentWithNumber</name>
-      <code_list>
-Public Sub vtkConfigurationManager_setConfigurationCommentWithNumber(n As Integer, comment As String)
+      <code_list>Public Sub vtkConfigurationManager_setConfigurationCommentWithNumber(n As Integer, comment As String)
     setConfigurationCommentWithNumber n, comment
-End Sub
-</code_list>
+End Sub</code_list>
       <call>setConfigurationCommentWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>getConfigurationTemplateWithNumber</name>
-      <code_list>
-Public Function getConfigurationTemplateWithNumber(n As Integer) As String
+      <code_list>Public Function getConfigurationTemplateWithNumber(n As Integer) As String
     If n &gt; 0 And n &lt;= configurationCount Then
        On Error Resume Next
         getConfigurationTemplateWithNumber = m_DOMDocument.SelectSingleNode("/vtkConf/configuration[@cID=""c" &amp; n &amp; """]/templatePath").Text
@@ -352,8 +297,7 @@ Public Function getConfigurationTemplateWithNumber(n As Integer) As String
        Else
         getConfigurationTemplateWithNumber = ""
     End If
-End Function
-</code_list>
+End Function</code_list>
       <call>configurationCount</call>
       <call>getConfigurationTemplateWithNumber</call>
       <call>getConfigurationTemplateWithNumber</call>
@@ -361,38 +305,31 @@ End Function
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_getConfigurationTemplateWithNumber</name>
-      <code_list>
-Public Function vtkConfigurationManager_getConfigurationTemplateWithNumber(n As Integer) As String
+      <code_list>Public Function vtkConfigurationManager_getConfigurationTemplateWithNumber(n As Integer) As String
     vtkConfigurationManager_getConfigurationTemplateWithNumber = getConfigurationTemplateWithNumber(n)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_getConfigurationTemplateWithNumber</call>
     </child>
     <child>
       <type>sub</type>
       <name>setConfigurationTemplateWithNumber</name>
-      <code_list>
-Public Sub setConfigurationTemplateWithNumber(n As Integer, template As String)
+      <code_list>Public Sub setConfigurationTemplateWithNumber(n As Integer, template As String)
     raiseReadOnlyError Source:="setConfigurationTemplateWithNumber:vtkConfigurationManagerXML"
-End Sub
-</code_list>
+End Sub</code_list>
       <call>raiseReadOnlyError</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkConfigurationManager_setConfigurationTemplateWithNumber</name>
-      <code_list>
-Public Sub vtkConfigurationManager_setConfigurationTemplateWithNumber(n As Integer, template As String)
+      <code_list>Public Sub vtkConfigurationManager_setConfigurationTemplateWithNumber(n As Integer, template As String)
     setConfigurationTemplateWithNumber n, template
-End Sub
-</code_list>
+End Sub</code_list>
       <call>setConfigurationTemplateWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>getConfigurationPasswordWithNumber</name>
-      <code_list>
-Public Function getConfigurationPasswordWithNumber(n As Integer) As String
+      <code_list>Public Function getConfigurationPasswordWithNumber(n As Integer) As String
     If n &gt; 0 And n &lt;= configurationCount Then
        On Error Resume Next
         getConfigurationPasswordWithNumber = m_DOMDocument.SelectSingleNode("/vtkConf/configuration[@cID=""c" &amp; n &amp; """]/password").Text
@@ -400,8 +337,7 @@ Public Function getConfigurationPasswordWithNumber(n As Integer) As String
        Else
         getConfigurationPasswordWithNumber = ""
     End If
-End Function
-</code_list>
+End Function</code_list>
       <call>configurationCount</call>
       <call>getConfigurationPasswordWithNumber</call>
       <call>getConfigurationPasswordWithNumber</call>
@@ -409,38 +345,31 @@ End Function
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_getConfigurationPasswordWithNumber</name>
-      <code_list>
-Public Function vtkConfigurationManager_getConfigurationPasswordWithNumber(n As Integer) As String
+      <code_list>Public Function vtkConfigurationManager_getConfigurationPasswordWithNumber(n As Integer) As String
     vtkConfigurationManager_getConfigurationPasswordWithNumber = getConfigurationPasswordWithNumber(n)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_getConfigurationPasswordWithNumber</call>
     </child>
     <child>
       <type>sub</type>
       <name>setConfigurationPasswordWithNumber</name>
-      <code_list>
-Public Sub setConfigurationPasswordWithNumber(n As Integer, password As String)
+      <code_list>Public Sub setConfigurationPasswordWithNumber(n As Integer, password As String)
     raiseReadOnlyError Source:="setConfigurationPasswordWithNumber:vtkConfigurationManagerXML"
-End Sub
-</code_list>
+End Sub</code_list>
       <call>raiseReadOnlyError</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkConfigurationManager_setConfigurationPasswordWithNumber</name>
-      <code_list>
-Public Sub vtkConfigurationManager_setConfigurationPasswordWithNumber(n As Integer, password As String)
+      <code_list>Public Sub vtkConfigurationManager_setConfigurationPasswordWithNumber(n As Integer, password As String)
     setConfigurationPasswordWithNumber n, password
-End Sub
-</code_list>
+End Sub</code_list>
       <call>setConfigurationPasswordWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkReferenceWithXML</name>
-      <code_list>
-Private Function vtkReferenceWithXML(id As String) As vtkReference
+      <code_list>Private Function vtkReferenceWithXML(id As String) As vtkReference
     Dim ref As New vtkReference
     ref.id = id
     ref.name = m_DOMDocument.SelectSingleNode("/vtkConf/reference[@refID=""" &amp; id &amp; """]/name").Text
@@ -452,15 +381,13 @@ Private Function vtkReferenceWithXML(id As String) As vtkReference
     End If
    On Error GoTo 0
     Set vtkReferenceWithXML = ref
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkReferenceWithXML</call>
     </child>
     <child>
       <type>function</type>
       <name>getConfigurationReferencesWithNumber</name>
-      <code_list>
-Public Function getConfigurationReferencesWithNumber(n As Integer) As Collection
+      <code_list>Public Function getConfigurationReferencesWithNumber(n As Integer) As Collection
     Dim refIDs() As String, i As Integer, refs As New Collection
    On Error GoTo M_Error
     refIDs = Split(m_DOMDocument.SelectSingleNode("/vtkConf/configuration[@cID=""c" &amp; n &amp; """]").Attributes.getNamedItem("refIDs").Text)
@@ -470,25 +397,21 @@ Public Function getConfigurationReferencesWithNumber(n As Integer) As Collection
     Next i
 M_Error:    ' refIDs attribute is optional
     Set getConfigurationReferencesWithNumber = refs
-End Function
-</code_list>
+End Function</code_list>
       <call>getConfigurationReferencesWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_getConfigurationReferencesWithNumber</name>
-      <code_list>
-Public Function vtkConfigurationManager_getConfigurationReferencesWithNumber(n As Integer) As Collection
+      <code_list>Public Function vtkConfigurationManager_getConfigurationReferencesWithNumber(n As Integer) As Collection
     Set vtkConfigurationManager_getConfigurationReferencesWithNumber = getConfigurationReferencesWithNumber(n)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_getConfigurationReferencesWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>modules</name>
-      <code_list>
-Public Function modules() As Collection
+      <code_list>Public Function modules() As Collection
     Dim col As New Collection, i As Integer, m As vtkModule
     For i = 1 To moduleCount
         Set m = New vtkModule
@@ -496,50 +419,42 @@ Public Function modules() As Collection
         col.Add Item:=m, Key:=module(i)
     Next i
     Set modules = col
-End Function
-</code_list>
+End Function</code_list>
       <call>modules</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_modules</name>
-      <code_list>
-Public Function vtkConfigurationManager_modules() As Collection
+      <code_list>Public Function vtkConfigurationManager_modules() As Collection
     Set vtkConfigurationManager_modules = modules
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_modules</call>
     </child>
     <child>
       <type>function</type>
       <name>module</name>
-      <code_list>
-Public Function module(n As Integer) As String
+      <code_list>Public Function module(n As Integer) As String
     If n &gt; 0 And n &lt;= moduleCount Then
         module = m_DOMDocument.SelectSingleNode("/vtkConf/module[@mID=""m" &amp; n &amp; """]/name").Text
        Else
         module = ""
     End If
-End Function
-</code_list>
+End Function</code_list>
       <call>module</call>
       <call>module</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_module</name>
-      <code_list>
-Public Function vtkConfigurationManager_module(n As Integer) As String
+      <code_list>Public Function vtkConfigurationManager_module(n As Integer) As String
     vtkConfigurationManager_module = module(n)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_module</call>
     </child>
     <child>
       <type>function</type>
       <name>getModuleNumber</name>
-      <code_list>
-Public Function getModuleNumber(module As String) As Integer
+      <code_list>Public Function getModuleNumber(module As String) As Integer
     Dim textValue As String
    On Error Resume Next
     textValue = m_DOMDocument.SelectSingleNode("/vtkConf/module[name=""" &amp; module &amp; """]/@mID").Text
@@ -549,8 +464,7 @@ Public Function getModuleNumber(module As String) As Integer
        Else
         getModuleNumber = CInt(Right$(textValue, Len(textValue) - 1))
     End If
-End Function
-</code_list>
+End Function</code_list>
       <call>module</call>
       <call>getModuleNumber</call>
       <call>getModuleNumber</call>
@@ -558,38 +472,31 @@ End Function
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_getModuleNumber</name>
-      <code_list>
-Public Function vtkConfigurationManager_getModuleNumber(module As String) As Integer
+      <code_list>Public Function vtkConfigurationManager_getModuleNumber(module As String) As Integer
     vtkConfigurationManager_getModuleNumber = getModuleNumber(module)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_getModuleNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>addModule</name>
-      <code_list>
-Public Function addModule(module As String) As Integer
+      <code_list>Public Function addModule(module As String) As Integer
     raiseReadOnlyError Source:="addModule:vtkConfigurationManagerXML"
-End Function
-</code_list>
+End Function</code_list>
       <call>raiseReadOnlyError</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_addModule</name>
-      <code_list>
-Public Function vtkConfigurationManager_addModule(module As String) As Integer
+      <code_list>Public Function vtkConfigurationManager_addModule(module As String) As Integer
     vtkConfigurationManager_addModule = addModule(module)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_addModule</call>
     </child>
     <child>
       <type>function</type>
       <name>getModulePathWithNumber</name>
-      <code_list>
-Public Function getModulePathWithNumber(numModule As Integer, numConfiguration As Integer) As String
+      <code_list>Public Function getModulePathWithNumber(numModule As Integer, numConfiguration As Integer) As String
     If numModule &gt; 0 And numModule &lt;= moduleCount And numConfiguration &gt; 0 And numConfiguration &lt;= configurationCount Then
        On Error Resume Next
         getModulePathWithNumber = m_DOMDocument.SelectSingleNode("/vtkConf/module[@mID=""m" &amp; numModule &amp; """]/modulePath[@confId=""c" &amp; numConfiguration &amp; """]").Text
@@ -597,8 +504,7 @@ Public Function getModulePathWithNumber(numModule As Integer, numConfiguration A
        Else
         getModulePathWithNumber = ""
     End If
-End Function
-</code_list>
+End Function</code_list>
       <call>configurationCount</call>
       <call>getModulePathWithNumber</call>
       <call>getModulePathWithNumber</call>
@@ -606,56 +512,46 @@ End Function
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_getModulePathWithNumber</name>
-      <code_list>
-Public Function vtkConfigurationManager_getModulePathWithNumber(numModule As Integer, numConfiguration As Integer) As String
+      <code_list>Public Function vtkConfigurationManager_getModulePathWithNumber(numModule As Integer, numConfiguration As Integer) As String
     vtkConfigurationManager_getModulePathWithNumber = getModulePathWithNumber(numModule, numConfiguration)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_getModulePathWithNumber</call>
     </child>
     <child>
       <type>sub</type>
       <name>setModulePathWithNumber</name>
-      <code_list>
-Public Sub setModulePathWithNumber(path As String, numModule As Integer, numConfiguration As Integer)
+      <code_list>Public Sub setModulePathWithNumber(path As String, numModule As Integer, numConfiguration As Integer)
     raiseReadOnlyError Source:="setModulePathWithNumber:vtkConfigurationManagerXML"
-End Sub
-</code_list>
+End Sub</code_list>
       <call>raiseReadOnlyError</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkConfigurationManager_setModulePathWithNumber</name>
-      <code_list>
-Public Sub vtkConfigurationManager_setModulePathWithNumber(path As String, numModule As Integer, numConfiguration As Integer)
+      <code_list>Public Sub vtkConfigurationManager_setModulePathWithNumber(path As String, numModule As Integer, numConfiguration As Integer)
     setModulePathWithNumber path, numModule, numConfiguration
-End Sub
-</code_list>
+End Sub</code_list>
       <call>setModulePathWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>references</name>
-      <code_list>
-Public Function references() As Collection
+      <code_list>Public Function references() As Collection
     Dim i As Integer, refs As New Collection, id As String
     For i = 1 To m_DOMDocument.SelectNodes("/vtkConf/reference").Length
         id = "r" &amp; i
         refs.Add vtkReferenceWithXML(id), Key:=id
     Next i
     Set references = refs
-End Function
-</code_list>
+End Function</code_list>
       <call>references</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_references</name>
-      <code_list>
-Public Function vtkConfigurationManager_references() As Collection
+      <code_list>Public Function vtkConfigurationManager_references() As Collection
     Set vtkConfigurationManager_references = references
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_references</call>
     </child>
   </child>
@@ -665,8 +561,7 @@ End Function
     <child>
       <type>sub</type>
       <name>initializeList</name>
-      <code_list>
-Private Sub initializeList()
+      <code_list>Private Sub initializeList()
     
     Dim properlyCasedIdentifiersString As String
     
@@ -697,14 +592,12 @@ Private Sub initializeList()
     
     properlyCasedIdentifiersArray = Split(properlyCasedIdentifiersString, ",")
     
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>function</type>
       <name>vtkListOfProperlyCasedIdentifiers</name>
-      <code_list>
-Public Function vtkListOfProperlyCasedIdentifiers() As String()
+      <code_list>Public Function vtkListOfProperlyCasedIdentifiers() As String()
     
     If Len(Join(properlyCasedIdentifiersArray, "")) = 0 Then ' if the array has not been initialized
         initializeList
@@ -712,15 +605,13 @@ Public Function vtkListOfProperlyCasedIdentifiers() As String()
     
     vtkListOfProperlyCasedIdentifiers = properlyCasedIdentifiersArray
     
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkListOfProperlyCasedIdentifiers</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkNormalizeToken</name>
-      <code_list>
-Public Function vtkNormalizeToken(token As String, listOfTokens() As String) As String
+      <code_list>Public Function vtkNormalizeToken(token As String, listOfTokens() As String) As String
 
     On Error GoTo vtkNormalizeToken_Error
     
@@ -743,8 +634,7 @@ vtkNormalizeToken_Error:
     Err.Number = VTK_UNEXPECTED_ERROR
     Err.Raise Err.Number, Err.Source, Err.Description
     Exit Function
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkNormalizeToken</call>
       <call>vtkNormalizeToken</call>
       <call>module</call>
@@ -753,8 +643,7 @@ End Function
     <child>
       <type>function</type>
       <name>vtkNormalizeString</name>
-      <code_list>
-Public Function vtkNormalizeString(s As String, listOfTokens() As String) As String
+      <code_list>Public Function vtkNormalizeString(s As String, listOfTokens() As String) As String
 
 Dim token As String
 Dim State As Integer, OldState As Integer
@@ -870,16 +759,14 @@ vtkNormalizeString_Error:
     
     Err.Raise Err.Number, Err.Source, Err.Description
     
-End Function
-</code_list>
+End Function</code_list>
       <call>module</call>
       <call>vtkNormalizeString</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkNormalizeFile</name>
-      <code_list>
-Public Sub vtkNormalizeFile(fullFilePath As String, listOfTokens() As String)
+      <code_list>Public Sub vtkNormalizeFile(fullFilePath As String, listOfTokens() As String)
 
 On Error GoTo vtkNormalizeFile_Error
 
@@ -929,8 +816,7 @@ vtkNormalizeFile_Error:
     
     Exit Sub
     
-End Sub
-</code_list>
+End Sub</code_list>
       <call>module</call>
       <call>vtkNormalizeFile</call>
     </child>
@@ -941,105 +827,85 @@ End Sub
     <child>
       <type>sub</type>
       <name>Class_Initialize</name>
-      <code_list>
-Private Sub Class_Initialize()
+      <code_list>Private Sub Class_Initialize()
     m_devConfiguration = -1
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>Class_Terminate</name>
-      <code_list>
-Private Sub Class_Terminate()
+      <code_list>Private Sub Class_Terminate()
     Set m_configurationSheet = Nothing
     Set m_workbook = Nothing
     Set m_refManager = Nothing
-End Sub
-</code_list>
+End Sub</code_list>
       <child>
         <type>sub</type>
         <name>Workbook_AddinInstall2</name>
-        <code_list>
-    Private Sub Workbook_AddinInstall2()
+        <code_list>    Private Sub Workbook_AddinInstall2()
         VBAToolKit.vtkToolBars.vtkCreateToolbars
-    End Sub
-</code_list>
+    End Sub</code_list>
       </child>
       <child>
         <type>sub</type>
         <name>Workbook_AddinInstall2</name>
-        <code_list>
-    Private Sub Workbook_AddinInstall2()
+        <code_list>    Private Sub Workbook_AddinInstall2()
         VBAToolKit.vtkToolBars.vtkCreateToolbars
-    End Sub
-</code_list>
+    End Sub</code_list>
       </child>
     </child>
     <child>
       <type>function</type>
       <name>defaultProjectNameWithNumber</name>
-      <code_list>
-Private Function defaultProjectNameWithNumber(n As Integer) As String
+      <code_list>Private Function defaultProjectNameWithNumber(n As Integer) As String
     defaultProjectNameWithNumber = Me.configuration(n)
-End Function
-</code_list>
+End Function</code_list>
       <call>defaultProjectNameWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>defaultCommentWithNumber</name>
-      <code_list>
-Private Function defaultCommentWithNumber(n As Integer) As String
+      <code_list>Private Function defaultCommentWithNumber(n As Integer) As String
     defaultCommentWithNumber = "Project " &amp; Me.configuration(n)
-End Function
-</code_list>
+End Function</code_list>
       <call>defaultCommentWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>defaultTemplateWithNumber</name>
-      <code_list>
-Private Function defaultTemplateWithNumber(n As Integer) As String
+      <code_list>Private Function defaultTemplateWithNumber(n As Integer) As String
     defaultTemplateWithNumber = ""
-End Function
-</code_list>
+End Function</code_list>
       <call>defaultTemplateWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>defaultPasswordWithNumber</name>
-      <code_list>
-Private Function defaultPasswordWithNumber(n As Integer) As String
+      <code_list>Private Function defaultPasswordWithNumber(n As Integer) As String
     defaultPasswordWithNumber = ""
-End Function
-</code_list>
+End Function</code_list>
       <call>defaultPasswordWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>isConfigurationInitializedForWorkbook</name>
-      <code_list>
-Public Function isConfigurationInitializedForWorkbook(ExcelName As String) As Boolean
+      <code_list>Public Function isConfigurationInitializedForWorkbook(ExcelName As String) As Boolean
     Dim ws As Worksheet
    On Error Resume Next
     Set ws = Workbooks(ExcelName).Worksheets(sheetName)
    On Error GoTo 0
     isConfigurationInitializedForWorkbook = Not (ws Is Nothing)
-End Function
-</code_list>
+End Function</code_list>
       <call>isConfigurationInitializedForWorkbook</call>
     </child>
     <child>
       <type>function</type>
       <name>nbTitleRows</name>
-      <code_list>
-Private Function nbTitleRows() As Integer
+      <code_list>Private Function nbTitleRows() As Integer
     If m_sheetVersion = version10 Then nbTitleRows = 2
     If m_sheetVersion = version11 Then nbTitleRows = 5
     If m_sheetVersion = currentVersion Then nbTitleRows = 6
-End Function
-</code_list>
+End Function</code_list>
       <call>nbTitleRows</call>
       <call>nbTitleRows</call>
       <call>nbTitleRows</call>
@@ -1047,8 +913,7 @@ End Function
     <child>
       <type>sub</type>
       <name>setConfigurationSheet</name>
-      <code_list>
-Private Sub setConfigurationSheet()
+      <code_list>Private Sub setConfigurationSheet()
     Dim ws As Worksheet
     On Error Resume Next
     Set ws = Workbook.Worksheets(sheetName)
@@ -1071,15 +936,13 @@ Private Sub setConfigurationSheet()
         m_sheetVersion = currentVersion
         End If
     Set m_configurationSheet = ws
-End Sub
-</code_list>
+End Sub</code_list>
       <call>initializeConfigurationSheet</call>
     </child>
     <child>
       <type>sub</type>
       <name>initializeConfigurationSheet</name>
-      <code_list>
-Private Sub initializeConfigurationSheet(ws As Worksheet)
+      <code_list>Private Sub initializeConfigurationSheet(ws As Worksheet)
     ws.Range("A1") = currentVersion
     ws.Range("A2") = "Path"
     ws.Range("A3") = "Template"
@@ -1104,14 +967,12 @@ Private Sub initializeConfigurationSheet(ws As Worksheet)
         ws.Range("B1:C1").Font.Bold = True
         ws.Columns("B:C").ColumnWidth = 22
     End If
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>updateConfigurationSheetFormat</name>
-      <code_list>
-Public Sub updateConfigurationSheetFormat()
+      <code_list>Public Sub updateConfigurationSheetFormat()
     Dim ws As Worksheet
     
     If m_sheetVersion = version11 Then
@@ -1162,14 +1023,12 @@ Public Sub updateConfigurationSheetFormat()
         m_sheetVersion = currentVersion     ' Set the sheetVersion for correct behavior after conversion
     End If
 
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>function</type>
       <name>configuration</name>
-      <code_list>
-Public Function configuration(n As Integer) As String
+      <code_list>Public Function configuration(n As Integer) As String
     Dim sResult As String
     sResult = ""
     If n &gt;= 1 And n &lt;= configurationCount Then
@@ -1178,26 +1037,22 @@ Public Function configuration(n As Integer) As String
         sResult = ""
     End If
     configuration = sResult
-End Function
-</code_list>
+End Function</code_list>
       <call>configurationCount</call>
       <call>configuration</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_configuration</name>
-      <code_list>
-Public Function vtkConfigurationManager_configuration(n As Integer) As String
+      <code_list>Public Function vtkConfigurationManager_configuration(n As Integer) As String
     vtkConfigurationManager_configuration = configuration(n)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_configuration</call>
     </child>
     <child>
       <type>function</type>
       <name>addConfiguration</name>
-      <code_list>
-Public Function addConfiguration(configuration As String, Optional path As String = "", Optional template As String = "", Optional projectName As String = "", Optional comment As String = "") As Integer
+      <code_list>Public Function addConfiguration(configuration As String, Optional path As String = "", Optional template As String = "", Optional projectName As String = "", Optional comment As String = "") As Integer
     Dim n As Integer
     n = getConfigurationNumber(configuration)
     If n = 0 Then   ' n = 0 means non-existant configuration
@@ -1215,8 +1070,7 @@ Public Function addConfiguration(configuration As String, Optional path As Strin
        Else
         addConfiguration = -n
     End If
-End Function
-</code_list>
+End Function</code_list>
       <call>projectName</call>
       <call>configuration</call>
       <call>configurationCount</call>
@@ -1232,19 +1086,16 @@ End Function
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_addConfiguration</name>
-      <code_list>
-Public Function vtkConfigurationManager_addConfiguration(configuration As String, Optional path As String = "", Optional template As String = "", Optional projectName As String = "", Optional comment As String = "") As Integer
+      <code_list>Public Function vtkConfigurationManager_addConfiguration(configuration As String, Optional path As String = "", Optional template As String = "", Optional projectName As String = "", Optional comment As String = "") As Integer
     vtkConfigurationManager_addConfiguration = addConfiguration(configuration, path, template, projectName, comment)
-End Function
-</code_list>
+End Function</code_list>
       <call>projectName</call>
       <call>vtkConfigurationManager_addConfiguration</call>
     </child>
     <child>
       <type>function</type>
       <name>configurations</name>
-      <code_list>
-Public Function configurations() As Collection
+      <code_list>Public Function configurations() As Collection
     Dim col As New Collection, i As Integer, c As vtkConfiguration
     For i = 1 To configurationCount
         Set c = New vtkConfiguration
@@ -1252,25 +1103,21 @@ Public Function configurations() As Collection
         col.Add Item:=c, Key:=configuration(i)
     Next i
     Set configurations = col
-End Function
-</code_list>
+End Function</code_list>
       <call>configurations</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_configurations</name>
-      <code_list>
-Public Function vtkConfigurationManager_configurations() As Collection
+      <code_list>Public Function vtkConfigurationManager_configurations() As Collection
     Set vtkConfigurationManager_configurations = configurations
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_configurations</call>
     </child>
     <child>
       <type>function</type>
       <name>getConfigurationNumber</name>
-      <code_list>
-Public Function getConfigurationNumber(configuration As String) As Integer
+      <code_list>Public Function getConfigurationNumber(configuration As String) As Integer
     Dim r As Range
     On Error Resume Next
     Set r = configurationSheet.Rows(1)      ' Select first column of the sheet
@@ -1282,26 +1129,22 @@ Public Function getConfigurationNumber(configuration As String) As Integer
        Else
         getConfigurationNumber = r.Column - nbTitleColumns
     End If
-End Function
-</code_list>
+End Function</code_list>
       <call>getConfigurationNumber</call>
       <call>getConfigurationNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_getConfigurationNumber</name>
-      <code_list>
-Public Function vtkConfigurationManager_getConfigurationNumber(configuration As String) As Integer
+      <code_list>Public Function vtkConfigurationManager_getConfigurationNumber(configuration As String) As Integer
     vtkConfigurationManager_getConfigurationNumber = getConfigurationNumber(configuration)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_getConfigurationNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>getConfigurationPathWithNumber</name>
-      <code_list>
-Public Function getConfigurationPathWithNumber(n As Integer) As String
+      <code_list>Public Function getConfigurationPathWithNumber(n As Integer) As String
     Dim sResult As String
     sResult = ""
     If n &gt;= 1 And n &lt;= configurationCount Then
@@ -1310,88 +1153,72 @@ Public Function getConfigurationPathWithNumber(n As Integer) As String
         sResult = ""
     End If
     getConfigurationPathWithNumber = sResult
-End Function
-</code_list>
+End Function</code_list>
       <call>configurationCount</call>
       <call>getConfigurationPathWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_getConfigurationPathWithNumber</name>
-      <code_list>
-Public Function vtkConfigurationManager_getConfigurationPathWithNumber(n As Integer) As String
+      <code_list>Public Function vtkConfigurationManager_getConfigurationPathWithNumber(n As Integer) As String
     vtkConfigurationManager_getConfigurationPathWithNumber = getConfigurationPathWithNumber(n)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_getConfigurationPathWithNumber</call>
     </child>
     <child>
       <type>sub</type>
       <name>setConfigurationPathWithNumber</name>
-      <code_list>
-Public Sub setConfigurationPathWithNumber(n As Integer, path As String)
+      <code_list>Public Sub setConfigurationPathWithNumber(n As Integer, path As String)
     If n &gt;= 1 And n &lt;= configurationCount Then
         configurationSheet.Cells(pathLine, n + nbTitleColumns) = path
     End If
-End Sub
-</code_list>
+End Sub</code_list>
       <call>configurationCount</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkConfigurationManager_setConfigurationPathWithNumber</name>
-      <code_list>
-Public Sub vtkConfigurationManager_setConfigurationPathWithNumber(n As Integer, path As String)
+      <code_list>Public Sub vtkConfigurationManager_setConfigurationPathWithNumber(n As Integer, path As String)
     setConfigurationPathWithNumber n, path
-End Sub
-</code_list>
+End Sub</code_list>
       <call>setConfigurationPathWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>getConfigurationPath</name>
-      <code_list>
-Public Function getConfigurationPath(configuration As String) As String
+      <code_list>Public Function getConfigurationPath(configuration As String) As String
     getConfigurationPath = getConfigurationPathWithNumber(getConfigurationNumber(configuration))
-End Function
-</code_list>
+End Function</code_list>
       <call>getConfigurationPath</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_getConfigurationPath</name>
-      <code_list>
-Public Function vtkConfigurationManager_getConfigurationPath(configuration As String) As String
+      <code_list>Public Function vtkConfigurationManager_getConfigurationPath(configuration As String) As String
     vtkConfigurationManager_getConfigurationPath = getConfigurationPath(configuration)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_getConfigurationPath</call>
     </child>
     <child>
       <type>sub</type>
       <name>setConfigurationPath</name>
-      <code_list>
-Public Sub setConfigurationPath(configuration As String, path As String)
+      <code_list>Public Sub setConfigurationPath(configuration As String, path As String)
     setConfigurationPathWithNumber n:=getConfigurationNumber(configuration), path:=path
-End Sub
-</code_list>
+End Sub</code_list>
       <call>setConfigurationPathWithNumber</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkConfigurationManager_setConfigurationPath</name>
-      <code_list>
-Public Sub vtkConfigurationManager_setConfigurationPath(configuration As String, path As String)
+      <code_list>Public Sub vtkConfigurationManager_setConfigurationPath(configuration As String, path As String)
     setConfigurationPath configuration, path
-End Sub
-</code_list>
+End Sub</code_list>
       <call>setConfigurationPath</call>
     </child>
     <child>
       <type>function</type>
       <name>getConfigurationProjectNameWithNumber</name>
-      <code_list>
-Public Function getConfigurationProjectNameWithNumber(n As Integer) As String
+      <code_list>Public Function getConfigurationProjectNameWithNumber(n As Integer) As String
     Dim sResult As String
     sResult = ""
     If n &gt;= 1 And n &lt;= configurationCount Then
@@ -1405,26 +1232,22 @@ Public Function getConfigurationProjectNameWithNumber(n As Integer) As String
         sResult = ""
     End If
     getConfigurationProjectNameWithNumber = sResult
-End Function
-</code_list>
+End Function</code_list>
       <call>configurationCount</call>
       <call>getConfigurationProjectNameWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_getConfigurationProjectNameWithNumber</name>
-      <code_list>
-Public Function vtkConfigurationManager_getConfigurationProjectNameWithNumber(n As Integer) As String
+      <code_list>Public Function vtkConfigurationManager_getConfigurationProjectNameWithNumber(n As Integer) As String
     vtkConfigurationManager_getConfigurationProjectNameWithNumber = getConfigurationProjectNameWithNumber(n)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_getConfigurationProjectNameWithNumber</call>
     </child>
     <child>
       <type>sub</type>
       <name>setConfigurationProjectNameWithNumber</name>
-      <code_list>
-Public Sub setConfigurationProjectNameWithNumber(n As Integer, projectName As String)
+      <code_list>Public Sub setConfigurationProjectNameWithNumber(n As Integer, projectName As String)
     If n &gt;= 1 And n &lt;= configurationCount Then
         If m_sheetVersion = currentVersion Or m_sheetVersion = version11 Then
             configurationSheet.Cells(projectNameLine, n + nbTitleColumns) = projectName
@@ -1433,8 +1256,7 @@ Public Sub setConfigurationProjectNameWithNumber(n As Integer, projectName As St
             "Impossible to set a configuration projectName with this configuration sheet version (project=" &amp; m_projectName &amp; ", " &amp; m_sheetVersion &amp; ")"
         End If
     End If
-End Sub
-</code_list>
+End Sub</code_list>
       <call>projectName</call>
       <call>configurationCount</call>
       <call>configuration</call>
@@ -1443,19 +1265,16 @@ End Sub
     <child>
       <type>sub</type>
       <name>vtkConfigurationManager_setConfigurationProjectNameWithNumber</name>
-      <code_list>
-Public Sub vtkConfigurationManager_setConfigurationProjectNameWithNumber(n As Integer, projectName As String)
+      <code_list>Public Sub vtkConfigurationManager_setConfigurationProjectNameWithNumber(n As Integer, projectName As String)
     setConfigurationProjectNameWithNumber n, projectName
-End Sub
-</code_list>
+End Sub</code_list>
       <call>projectName</call>
       <call>setConfigurationProjectNameWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>getConfigurationCommentWithNumber</name>
-      <code_list>
-Public Function getConfigurationCommentWithNumber(n As Integer) As String
+      <code_list>Public Function getConfigurationCommentWithNumber(n As Integer) As String
     Dim sResult As String
     sResult = ""
     If n &gt;= 1 And n &lt;= configurationCount Then
@@ -1469,26 +1288,22 @@ Public Function getConfigurationCommentWithNumber(n As Integer) As String
         sResult = ""
     End If
     getConfigurationCommentWithNumber = sResult
-End Function
-</code_list>
+End Function</code_list>
       <call>configurationCount</call>
       <call>getConfigurationCommentWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_getConfigurationCommentWithNumber</name>
-      <code_list>
-Public Function vtkConfigurationManager_getConfigurationCommentWithNumber(n As Integer) As String
+      <code_list>Public Function vtkConfigurationManager_getConfigurationCommentWithNumber(n As Integer) As String
     vtkConfigurationManager_getConfigurationCommentWithNumber = getConfigurationCommentWithNumber(n)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_getConfigurationCommentWithNumber</call>
     </child>
     <child>
       <type>sub</type>
       <name>setConfigurationCommentWithNumber</name>
-      <code_list>
-Public Sub setConfigurationCommentWithNumber(n As Integer, comment As String)
+      <code_list>Public Sub setConfigurationCommentWithNumber(n As Integer, comment As String)
     If n &gt;= 1 And n &lt;= configurationCount Then
         If m_sheetVersion = currentVersion Or m_sheetVersion = version11 Then
             configurationSheet.Cells(commentLine, n + nbTitleColumns) = comment
@@ -1497,26 +1312,22 @@ Public Sub setConfigurationCommentWithNumber(n As Integer, comment As String)
             "Impossible to set a configuration comment with this configuration sheet version (project=" &amp; m_projectName &amp; ", " &amp; m_sheetVersion &amp; ")"
         End If
     End If
-End Sub
-</code_list>
+End Sub</code_list>
       <call>configurationCount</call>
       <call>configuration</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkConfigurationManager_setConfigurationCommentWithNumber</name>
-      <code_list>
-Public Sub vtkConfigurationManager_setConfigurationCommentWithNumber(n As Integer, comment As String)
+      <code_list>Public Sub vtkConfigurationManager_setConfigurationCommentWithNumber(n As Integer, comment As String)
     setConfigurationCommentWithNumber n, comment
-End Sub
-</code_list>
+End Sub</code_list>
       <call>setConfigurationCommentWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>getConfigurationTemplateWithNumber</name>
-      <code_list>
-Public Function getConfigurationTemplateWithNumber(n As Integer) As String
+      <code_list>Public Function getConfigurationTemplateWithNumber(n As Integer) As String
     Dim sResult As String
     sResult = ""
     If n &gt;= 1 And n &lt;= configurationCount Then
@@ -1530,26 +1341,22 @@ Public Function getConfigurationTemplateWithNumber(n As Integer) As String
         sResult = ""
     End If
     getConfigurationTemplateWithNumber = sResult
-End Function
-</code_list>
+End Function</code_list>
       <call>configurationCount</call>
       <call>getConfigurationTemplateWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_getConfigurationTemplateWithNumber</name>
-      <code_list>
-Public Function vtkConfigurationManager_getConfigurationTemplateWithNumber(n As Integer) As String
+      <code_list>Public Function vtkConfigurationManager_getConfigurationTemplateWithNumber(n As Integer) As String
     vtkConfigurationManager_getConfigurationTemplateWithNumber = getConfigurationTemplateWithNumber(n)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_getConfigurationTemplateWithNumber</call>
     </child>
     <child>
       <type>sub</type>
       <name>setConfigurationTemplateWithNumber</name>
-      <code_list>
-Public Sub setConfigurationTemplateWithNumber(n As Integer, template As String)
+      <code_list>Public Sub setConfigurationTemplateWithNumber(n As Integer, template As String)
     If n &gt;= 1 And n &lt;= configurationCount Then
         If m_sheetVersion = currentVersion Or m_sheetVersion = version11 Then
             configurationSheet.Cells(templateLine, n + nbTitleColumns) = template
@@ -1558,26 +1365,22 @@ Public Sub setConfigurationTemplateWithNumber(n As Integer, template As String)
             "Impossible to set a configuration template path with this configuration sheet version (project=" &amp; m_projectName &amp; ", " &amp; m_sheetVersion &amp; ")"
         End If
     End If
-End Sub
-</code_list>
+End Sub</code_list>
       <call>configurationCount</call>
       <call>configuration</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkConfigurationManager_setConfigurationTemplateWithNumber</name>
-      <code_list>
-Public Sub vtkConfigurationManager_setConfigurationTemplateWithNumber(n As Integer, template As String)
+      <code_list>Public Sub vtkConfigurationManager_setConfigurationTemplateWithNumber(n As Integer, template As String)
     setConfigurationTemplateWithNumber n, template
-End Sub
-</code_list>
+End Sub</code_list>
       <call>setConfigurationTemplateWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>getConfigurationPasswordWithNumber</name>
-      <code_list>
-Public Function getConfigurationPasswordWithNumber(n As Integer) As String
+      <code_list>Public Function getConfigurationPasswordWithNumber(n As Integer) As String
     Dim sResult As String
     sResult = ""
     If n &gt;= 1 And n &lt;= configurationCount Then
@@ -1591,26 +1394,22 @@ Public Function getConfigurationPasswordWithNumber(n As Integer) As String
         sResult = ""
     End If
     getConfigurationPasswordWithNumber = sResult
-End Function
-</code_list>
+End Function</code_list>
       <call>configurationCount</call>
       <call>getConfigurationPasswordWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_getConfigurationPasswordWithNumber</name>
-      <code_list>
-Public Function vtkConfigurationManager_getConfigurationPasswordWithNumber(n As Integer) As String
+      <code_list>Public Function vtkConfigurationManager_getConfigurationPasswordWithNumber(n As Integer) As String
     vtkConfigurationManager_getConfigurationPasswordWithNumber = getConfigurationPasswordWithNumber(n)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_getConfigurationPasswordWithNumber</call>
     </child>
     <child>
       <type>sub</type>
       <name>setConfigurationPasswordWithNumber</name>
-      <code_list>
-Public Sub setConfigurationPasswordWithNumber(n As Integer, password As String)
+      <code_list>Public Sub setConfigurationPasswordWithNumber(n As Integer, password As String)
     If n &gt;= 1 And n &lt;= configurationCount Then
         If m_sheetVersion = currentVersion Then
             configurationSheet.Cells(passwordLine, n + nbTitleColumns) = password
@@ -1619,46 +1418,38 @@ Public Sub setConfigurationPasswordWithNumber(n As Integer, password As String)
             "Impossible to set a configuration code password with this configuration sheet version (project=" &amp; m_projectName &amp; ", " &amp; m_sheetVersion &amp; ")"
         End If
     End If
-End Sub
-</code_list>
+End Sub</code_list>
       <call>configurationCount</call>
       <call>configuration</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkConfigurationManager_setConfigurationPasswordWithNumber</name>
-      <code_list>
-Public Sub vtkConfigurationManager_setConfigurationPasswordWithNumber(n As Integer, password As String)
+      <code_list>Public Sub vtkConfigurationManager_setConfigurationPasswordWithNumber(n As Integer, password As String)
     setConfigurationPasswordWithNumber n, password
-End Sub
-</code_list>
+End Sub</code_list>
       <call>setConfigurationPasswordWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>getConfigurationReferencesWithNumber</name>
-      <code_list>
-Public Function getConfigurationReferencesWithNumber(n As Integer) As Collection
+      <code_list>Public Function getConfigurationReferencesWithNumber(n As Integer) As Collection
     Set getConfigurationReferencesWithNumber = referenceManager.references(n)
-End Function
-</code_list>
+End Function</code_list>
       <call>getConfigurationReferencesWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_getConfigurationReferencesWithNumber</name>
-      <code_list>
-Public Function vtkConfigurationManager_getConfigurationReferencesWithNumber(n As Integer) As Collection
+      <code_list>Public Function vtkConfigurationManager_getConfigurationReferencesWithNumber(n As Integer) As Collection
     Set vtkConfigurationManager_getConfigurationReferencesWithNumber = getConfigurationReferencesWithNumber(n)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_getConfigurationReferencesWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>modules</name>
-      <code_list>
-Public Function modules() As Collection
+      <code_list>Public Function modules() As Collection
     Dim col As New Collection, i As Integer, m As vtkModule
     For i = 1 To moduleCount
         Set m = New vtkModule
@@ -1666,25 +1457,21 @@ Public Function modules() As Collection
         col.Add Item:=m, Key:=module(i)
     Next i
     Set modules = col
-End Function
-</code_list>
+End Function</code_list>
       <call>modules</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_modules</name>
-      <code_list>
-Public Function vtkConfigurationManager_modules() As Collection
+      <code_list>Public Function vtkConfigurationManager_modules() As Collection
     Set vtkConfigurationManager_modules = modules
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_modules</call>
     </child>
     <child>
       <type>function</type>
       <name>module</name>
-      <code_list>
-Public Function module(n As Integer) As String
+      <code_list>Public Function module(n As Integer) As String
     Dim sResult As String
     sResult = ""
     If n &gt;= 1 And n &lt;= moduleCount Then
@@ -1693,25 +1480,21 @@ Public Function module(n As Integer) As String
         sResult = ""
     End If
     module = sResult
-End Function
-</code_list>
+End Function</code_list>
       <call>module</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_module</name>
-      <code_list>
-Public Function vtkConfigurationManager_module(n As Integer) As String
+      <code_list>Public Function vtkConfigurationManager_module(n As Integer) As String
     vtkConfigurationManager_module = module(n)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_module</call>
     </child>
     <child>
       <type>function</type>
       <name>getModuleNumber</name>
-      <code_list>
-Public Function getModuleNumber(module As String) As Integer
+      <code_list>Public Function getModuleNumber(module As String) As Integer
     Dim r As Range
     On Error Resume Next
     Set r = configurationSheet.Columns(1)   ' Select first column of the sheet
@@ -1723,26 +1506,22 @@ Public Function getModuleNumber(module As String) As Integer
        Else
         getModuleNumber = r.Row - nbTitleRows
     End If
-End Function
-</code_list>
+End Function</code_list>
       <call>getModuleNumber</call>
       <call>getModuleNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_getModuleNumber</name>
-      <code_list>
-Public Function vtkConfigurationManager_getModuleNumber(module As String) As Integer
+      <code_list>Public Function vtkConfigurationManager_getModuleNumber(module As String) As Integer
     vtkConfigurationManager_getModuleNumber = getModuleNumber(module)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_getModuleNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>addModule</name>
-      <code_list>
-Public Function addModule(module As String) As Integer
+      <code_list>Public Function addModule(module As String) As Integer
     Dim n As Integer
     n = getModuleNumber(module)
     If n = 0 Then   ' n = 0 means non-existant module
@@ -1756,8 +1535,7 @@ Public Function addModule(module As String) As Integer
        Else
         addModule = -n
     End If
-End Function
-</code_list>
+End Function</code_list>
       <call>module</call>
       <call>module</call>
       <call>configurationCount</call>
@@ -1767,18 +1545,15 @@ End Function
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_addModule</name>
-      <code_list>
-Public Function vtkConfigurationManager_addModule(module As String) As Integer
+      <code_list>Public Function vtkConfigurationManager_addModule(module As String) As Integer
     vtkConfigurationManager_addModule = addModule(module)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_addModule</call>
     </child>
     <child>
       <type>function</type>
       <name>getModulePathWithNumber</name>
-      <code_list>
-Public Function getModulePathWithNumber(numModule As Integer, numConfiguration As Integer) As String
+      <code_list>Public Function getModulePathWithNumber(numModule As Integer, numConfiguration As Integer) As String
     Dim sResult As String
     If numModule &gt;= 1 And numModule &lt;= moduleCount And numConfiguration &gt;= 1 And numConfiguration &lt;= configurationCount Then
         sResult = configurationSheet.Cells(numModule + nbTitleRows, numConfiguration + nbTitleColumns)
@@ -1787,26 +1562,22 @@ Public Function getModulePathWithNumber(numModule As Integer, numConfiguration A
         sResult = ""
     End If
     getModulePathWithNumber = sResult
-End Function
-</code_list>
+End Function</code_list>
       <call>configurationCount</call>
       <call>getModulePathWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_getModulePathWithNumber</name>
-      <code_list>
-Public Function vtkConfigurationManager_getModulePathWithNumber(numModule As Integer, numConfiguration As Integer) As String
+      <code_list>Public Function vtkConfigurationManager_getModulePathWithNumber(numModule As Integer, numConfiguration As Integer) As String
     vtkConfigurationManager_getModulePathWithNumber = getModulePathWithNumber(numModule, numConfiguration)
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_getModulePathWithNumber</call>
     </child>
     <child>
       <type>sub</type>
       <name>setModulePathWithNumber</name>
-      <code_list>
-Public Sub setModulePathWithNumber(path As String, numModule As Integer, numConfiguration As Integer)
+      <code_list>Public Sub setModulePathWithNumber(path As String, numModule As Integer, numConfiguration As Integer)
     Dim s As String
     If numModule &gt;= 1 And numModule &lt;= moduleCount And numConfiguration &gt;= 1 And numConfiguration &lt;= configurationCount Then
         If path = "" Then
@@ -1816,69 +1587,57 @@ Public Sub setModulePathWithNumber(path As String, numModule As Integer, numConf
         End If
         configurationSheet.Cells(numModule + nbTitleRows, numConfiguration + nbTitleColumns) = s
     End If
-End Sub
-</code_list>
+End Sub</code_list>
       <call>configurationCount</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkConfigurationManager_setModulePathWithNumber</name>
-      <code_list>
-Public Sub vtkConfigurationManager_setModulePathWithNumber(path As String, numModule As Integer, numConfiguration As Integer)
+      <code_list>Public Sub vtkConfigurationManager_setModulePathWithNumber(path As String, numModule As Integer, numConfiguration As Integer)
     setModulePathWithNumber path, numModule, numConfiguration
-End Sub
-</code_list>
+End Sub</code_list>
       <call>setModulePathWithNumber</call>
     </child>
     <child>
       <type>function</type>
       <name>referenceManager</name>
-      <code_list>
-Private Function referenceManager() As vtkReferenceManager
+      <code_list>Private Function referenceManager() As vtkReferenceManager
     initReferences refs:=Nothing
     Set referenceManager = m_refManager
-End Function
-</code_list>
+End Function</code_list>
       <call>initReferences</call>
       <call>referenceManager</call>
     </child>
     <child>
       <type>function</type>
       <name>references</name>
-      <code_list>
-Public Function references() As Collection
+      <code_list>Public Function references() As Collection
     Set references = referenceManager.allReferences
-End Function
-</code_list>
+End Function</code_list>
       <call>references</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConfigurationManager_references</name>
-      <code_list>
-Public Function vtkConfigurationManager_references() As Collection
+      <code_list>Public Function vtkConfigurationManager_references() As Collection
     Set vtkConfigurationManager_references = references
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConfigurationManager_references</call>
     </child>
     <child>
       <type>sub</type>
       <name>initReferences</name>
-      <code_list>
-Public Sub initReferences(refs As Collection)
+      <code_list>Public Sub initReferences(refs As Collection)
     If m_refManager Is Nothing Then
         Set m_refManager = New vtkReferenceManager
         m_refManager.init Wb:=Workbook, confCount:=Me.configurationCount, nbTitleColumnsInConfSheet:=nbTitleColumns, devConf:=m_devConfiguration, references:=refs
     End If
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>duplicate</name>
-      <code_list>
-Public Sub duplicate(Wb As Workbook, cm As vtkConfigurationManager)
+      <code_list>Public Sub duplicate(Wb As Workbook, cm As vtkConfigurationManager)
     Dim ws As Worksheet, i As Integer, j As Integer, ref As vtkReference, refs As Collection, refn As Integer
     If Not m_workbook Is Nothing Then _
         Err.Raise Number:=VTK_ALREADY_INITIALIZED, Source:="vtkConfigurationManagerExcel:duplicate", Description:="The configuration manager to duplicate to is already initialized with an attached workbook."
@@ -1916,8 +1675,7 @@ Public Sub duplicate(Wb As Workbook, cm As vtkConfigurationManager)
             referenceManager.setReferenceWihNumber True, refn, i
         Next j
     Next i
-End Sub
-</code_list>
+End Sub</code_list>
       <call>configuration</call>
       <call>duplicate</call>
       <call>initialized</call>
@@ -1933,8 +1691,7 @@ End Sub
     <child>
       <type>function</type>
       <name>vtkConfigurationManagerForProject</name>
-      <code_list>
-Public Function vtkConfigurationManagerForProject(projectName As String) As vtkConfigurationManager
+      <code_list>Public Function vtkConfigurationManagerForProject(projectName As String) As vtkConfigurationManager
     If configurationManagers Is Nothing Then
         Set configurationManagers = New Collection
         End If
@@ -1954,8 +1711,7 @@ Public Function vtkConfigurationManagerForProject(projectName As String) As vtkC
     End If
    On Error GoTo 0
     Set vtkConfigurationManagerForProject = cm
-End Function
-</code_list>
+End Function</code_list>
       <call>projectName</call>
       <call>projectName</call>
       <call>vtkConfigurationManagerForProject</call>
@@ -1963,17 +1719,14 @@ End Function
     <child>
       <type>sub</type>
       <name>vtkResetConfigurationManagers</name>
-      <code_list>
-Public Sub vtkResetConfigurationManagers()
+      <code_list>Public Sub vtkResetConfigurationManagers()
     Set configurationManagers = Nothing
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>vtkInitializeConfigurationForActiveWorkBook</name>
-      <code_list>
-Public Sub vtkInitializeConfigurationForActiveWorkBook(Optional withBeforeSaveHandler As Boolean = False)
+      <code_list>Public Sub vtkInitializeConfigurationForActiveWorkBook(Optional withBeforeSaveHandler As Boolean = False)
     Dim cm As New vtkConfigurationManagerExcel
     If cm.isConfigurationInitializedForWorkbook(ExcelName:=ActiveWorkbook.name) Then Exit Sub
     Set cm = Nothing
@@ -2007,15 +1760,13 @@ Public Sub vtkInitializeConfigurationForActiveWorkBook(Optional withBeforeSaveHa
     
     ActiveWorkbook.Save
     
-End Sub
-</code_list>
+End Sub</code_list>
       <call>vtkAddBeforeSaveHandlerInDEVWorkbook</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkVerifyConfigurations</name>
-      <code_list>
-Sub vtkVerifyConfigurations()
+      <code_list>Sub vtkVerifyConfigurations()
     Application.EnableEvents = False
 
     Dim prj As vtkProject
@@ -2143,8 +1894,7 @@ Sub vtkVerifyConfigurations()
     
     Application.EnableEvents = True
 
-End Sub
-</code_list>
+End Sub</code_list>
       <call>getCurrentProjectName</call>
       <call>configuration</call>
       <call>projectName</call>
@@ -2172,8 +1922,7 @@ End Sub
     <child>
       <type>sub</type>
       <name>Workbook_AddinInstall</name>
-      <code_list>
-Private Sub Workbook_AddinInstall()
+      <code_list>Private Sub Workbook_AddinInstall()
     VBAToolKit.vtkToolBars.vtkCreateToolbars
 
 
@@ -2183,54 +1932,43 @@ Private Sub Workbook_AddinInstall()
     
 
 
-End Sub
-</code_list>
+End Sub</code_list>
       <child>
         <type>sub</type>
         <name>Workbook_AddinInstall</name>
-        <code_list>
-    Private Sub Workbook_AddinInstall()
+        <code_list>    Private Sub Workbook_AddinInstall()
         VBAToolKit.vtkToolBars.vtkCreateToolbars
-    End Sub
-</code_list>
+    End Sub</code_list>
       </child>
       <child>
         <type>sub</type>
         <name>Workbook_AddinInstall2</name>
-        <code_list>
-    Private Sub Workbook_AddinInstall2()
+        <code_list>    Private Sub Workbook_AddinInstall2()
         VBAToolKit.vtkToolBars.vtkCreateToolbars
-    End Sub
-</code_list>
+    End Sub</code_list>
       </child>
       <child>
         <type>sub</type>
         <name>Workbook_AddinInstall33</name>
-        <code_list>
-    Private Sub Workbook_AddinInstall33()
+        <code_list>    Private Sub Workbook_AddinInstall33()
         VBAToolKit.vtkToolBars.vtkCreateToolbars
-    End Sub
-</code_list>
+    End Sub</code_list>
       </child>
     </child>
     <child>
       <type>sub</type>
       <name>Workbook_AddinUninstall</name>
-      <code_list>
-Private Sub Workbook_AddinUninstall()
+      <code_list>Private Sub Workbook_AddinUninstall()
     VBAToolKit.vtkToolBars.vtkDeleteToolbars
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>Workbook_Open</name>
-      <code_list>
-Private Sub Workbook_Open()
+      <code_list>Private Sub Workbook_Open()
     On Error Resume Next
     If AddIns("VBAToolKit").Installed Then VBAToolKit.vtkToolBars.vtkCreateToolbars excToolbar:=False
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
   </child>
   <child>
@@ -2239,24 +1977,20 @@ End Sub
     <child>
       <type>sub</type>
       <name>init</name>
-      <code_list>
-Public Sub init(confManager As vtkConfigurationManager, confNumber As Integer)
+      <code_list>Public Sub init(confManager As vtkConfigurationManager, confNumber As Integer)
     Set m_parent = confManager
     m_number = confNumber
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>addReferencesToWorkbook</name>
-      <code_list>
-Public Sub addReferencesToWorkbook(Wb As Workbook)
+      <code_list>Public Sub addReferencesToWorkbook(Wb As Workbook)
     Dim ref As vtkReference
     For Each ref In Me.references
         ref.addToWorkbook Wb
     Next
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
   </child>
   <child>
@@ -2265,155 +1999,107 @@ End Sub
     <child>
       <type>function</type>
       <name>configurations</name>
-      <code_list>
-Public Function configurations() As Collection
-</code_list>
+      <code_list>Public Function configurations() As Collection</code_list>
       <child>
         <type>function</type>
         <name>configuration</name>
-        <code_list>
-Public Function configuration(n As Integer) As String
-</code_list>
+        <code_list>Public Function configuration(n As Integer) As String</code_list>
         <child>
           <type>function</type>
           <name>getConfigurationNumber</name>
-          <code_list>
-Public Function getConfigurationNumber(configuration As String) As Integer
-</code_list>
+          <code_list>Public Function getConfigurationNumber(configuration As String) As Integer</code_list>
           <child>
             <type>sub</type>
             <name>setConfigurationPath</name>
-            <code_list>
-Public Sub setConfigurationPath(configuration As String, path As String)
-</code_list>
+            <code_list>Public Sub setConfigurationPath(configuration As String, path As String)</code_list>
             <child>
               <type>function</type>
               <name>getConfigurationPath</name>
-              <code_list>
-Public Function getConfigurationPath(configuration As String) As String
-</code_list>
+              <code_list>Public Function getConfigurationPath(configuration As String) As String</code_list>
               <child>
                 <type>function</type>
                 <name>getConfigurationPathWithNumber</name>
-                <code_list>
-Public Function getConfigurationPathWithNumber(n As Integer) As String
-</code_list>
+                <code_list>Public Function getConfigurationPathWithNumber(n As Integer) As String</code_list>
                 <child>
                   <type>sub</type>
                   <name>setConfigurationPathWithNumber</name>
-                  <code_list>
-Public Sub setConfigurationPathWithNumber(n As Integer, path As String)
-</code_list>
+                  <code_list>Public Sub setConfigurationPathWithNumber(n As Integer, path As String)</code_list>
                   <child>
                     <type>function</type>
                     <name>getConfigurationProjectNameWithNumber</name>
-                    <code_list>
-Public Function getConfigurationProjectNameWithNumber(n As Integer) As String
-</code_list>
+                    <code_list>Public Function getConfigurationProjectNameWithNumber(n As Integer) As String</code_list>
                     <child>
                       <type>sub</type>
                       <name>setConfigurationProjectNameWithNumber</name>
-                      <code_list>
-Public Sub setConfigurationProjectNameWithNumber(n As Integer, projectName As String)
-</code_list>
+                      <code_list>Public Sub setConfigurationProjectNameWithNumber(n As Integer, projectName As String)</code_list>
                       <call>projectName</call>
                       <child>
                         <type>function</type>
                         <name>getConfigurationCommentWithNumber</name>
-                        <code_list>
-Public Function getConfigurationCommentWithNumber(n As Integer) As String
-</code_list>
+                        <code_list>Public Function getConfigurationCommentWithNumber(n As Integer) As String</code_list>
                         <child>
                           <type>sub</type>
                           <name>setConfigurationCommentWithNumber</name>
-                          <code_list>
-Public Sub setConfigurationCommentWithNumber(n As Integer, comment As String)
-</code_list>
+                          <code_list>Public Sub setConfigurationCommentWithNumber(n As Integer, comment As String)</code_list>
                           <child>
                             <type>function</type>
                             <name>getConfigurationTemplateWithNumber</name>
-                            <code_list>
-Public Function getConfigurationTemplateWithNumber(n As Integer) As String
-</code_list>
+                            <code_list>Public Function getConfigurationTemplateWithNumber(n As Integer) As String</code_list>
                             <child>
                               <type>sub</type>
                               <name>setConfigurationTemplateWithNumber</name>
-                              <code_list>
-Public Sub setConfigurationTemplateWithNumber(n As Integer, template As String)
-</code_list>
+                              <code_list>Public Sub setConfigurationTemplateWithNumber(n As Integer, template As String)</code_list>
                               <child>
                                 <type>function</type>
                                 <name>getConfigurationPasswordWithNumber</name>
-                                <code_list>
-Public Function getConfigurationPasswordWithNumber(n As Integer) As String
-</code_list>
+                                <code_list>Public Function getConfigurationPasswordWithNumber(n As Integer) As String</code_list>
                                 <child>
                                   <type>sub</type>
                                   <name>setConfigurationPasswordWithNumber</name>
-                                  <code_list>
-Public Sub setConfigurationPasswordWithNumber(n As Integer, password As String)
+                                  <code_list>Public Sub setConfigurationPasswordWithNumber(n As Integer, password As String)
 
-End Sub
-</code_list>
+End Sub</code_list>
                                 </child>
                                 <child>
                                   <type>function</type>
                                   <name>addConfiguration</name>
-                                  <code_list>
-Public Function addConfiguration(configuration As String, Optional path As String = "", Optional template As String = "", Optional projectName As String = "", Optional comment As String = "") As Integer
+                                  <code_list>Public Function addConfiguration(configuration As String, Optional path As String = "", Optional template As String = "", Optional projectName As String = "", Optional comment As String = "") As Integer
 
-Public Property Get moduleCount() As Integer
-</code_list>
+Public Property Get moduleCount() As Integer</code_list>
                                   <call>projectName</call>
                                   <child>
                                     <type>function</type>
                                     <name>modules</name>
-                                    <code_list>
-Public Function modules() As Collection
-</code_list>
+                                    <code_list>Public Function modules() As Collection</code_list>
                                     <child>
                                       <type>function</type>
                                       <name>module</name>
-                                      <code_list>
-Public Function module(n As Integer) As String
-</code_list>
+                                      <code_list>Public Function module(n As Integer) As String</code_list>
                                       <child>
                                         <type>function</type>
                                         <name>getModuleNumber</name>
-                                        <code_list>
-Public Function getModuleNumber(module As String) As Integer
-</code_list>
+                                        <code_list>Public Function getModuleNumber(module As String) As Integer</code_list>
                                         <child>
                                           <type>function</type>
                                           <name>getModulePathWithNumber</name>
-                                          <code_list>
-Public Function getModulePathWithNumber(numModule As Integer, numConfiguration As Integer) As String
-</code_list>
+                                          <code_list>Public Function getModulePathWithNumber(numModule As Integer, numConfiguration As Integer) As String</code_list>
                                           <child>
                                             <type>sub</type>
                                             <name>setModulePathWithNumber</name>
-                                            <code_list>
-Public Sub setModulePathWithNumber(path As String, numModule As Integer, numConfiguration As Integer)
-</code_list>
+                                            <code_list>Public Sub setModulePathWithNumber(path As String, numModule As Integer, numConfiguration As Integer)</code_list>
                                             <child>
                                               <type>function</type>
                                               <name>addModule</name>
-                                              <code_list>
-Public Function addModule(module As String) As Integer
-
+                                              <code_list>Public Function addModule(module As String) As Integer
 </code_list>
                                               <child>
                                                 <type>function</type>
                                                 <name>references</name>
-                                                <code_list>
-Public Function references() As Collection
-</code_list>
+                                                <code_list>Public Function references() As Collection</code_list>
                                                 <child>
                                                   <type>function</type>
                                                   <name>getConfigurationReferencesWithNumber</name>
-                                                  <code_list>
-Public Function getConfigurationReferencesWithNumber(n As Integer) As Collection
-
+                                                  <code_list>Public Function getConfigurationReferencesWithNumber(n As Integer) As Collection
 </code_list>
                                                 </child>
                                               </child>
@@ -2449,8 +2135,7 @@ Public Function getConfigurationReferencesWithNumber(n As Integer) As Collection
     <child>
       <type>sub</type>
       <name>BrowseButton_Click</name>
-      <code_list>
-Private Sub BrowseButton_Click()
+      <code_list>Private Sub BrowseButton_Click()
     With Application.FileDialog(msoFileDialogFolderPicker)
         .AllowMultiSelect = False
         .Show
@@ -2458,60 +2143,48 @@ Private Sub BrowseButton_Click()
             ProjectPathTextBox.Text = .SelectedItems(1)
         End If
     End With
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>CreateButton_Click</name>
-      <code_list>
-Private Sub CreateButton_Click()
+      <code_list>Private Sub CreateButton_Click()
     VBAToolKit.vtkCreateProject path:=ProjectPathTextBox.Text, name:=ProjectNameTextBox.Text
     Unload Me
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>CancelButton_Click</name>
-      <code_list>
-Private Sub CancelButton_Click()
+      <code_list>Private Sub CancelButton_Click()
     Unload Me
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>ProjectPathTextBox_Change</name>
-      <code_list>
-Private Sub ProjectPathTextBox_Change()
+      <code_list>Private Sub ProjectPathTextBox_Change()
     enableCreateButton
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>ProjectNameTextBox_Change</name>
-      <code_list>
-Private Sub ProjectNameTextBox_Change()
+      <code_list>Private Sub ProjectNameTextBox_Change()
     enableCreateButton
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>UserForm_Initialize</name>
-      <code_list>
-Private Sub UserForm_Initialize()
+      <code_list>Private Sub UserForm_Initialize()
     enableCreateButton
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>enableCreateButton</name>
-      <code_list>
-Private Sub enableCreateButton()
+      <code_list>Private Sub enableCreateButton()
     Dim folderExists As Boolean, projectDoesntExists As Boolean, sep As String
     Dim fso As New FileSystemObject
     Const PINK = &amp;HC0E0FF
@@ -2530,8 +2203,7 @@ Private Sub enableCreateButton()
    On Error GoTo 0
     
     CreateButton.Enabled = folderExists And projectDoesntExists
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
   </child>
   <child>
@@ -2544,14 +2216,12 @@ End Sub
     <child>
       <type>sub</type>
       <name>cbe_Click</name>
-      <code_list>
-Private Sub cbe_Click(ByVal CommandBarControl As Object, Handled As Boolean, CancelDefault As Boolean)
+      <code_list>Private Sub cbe_Click(ByVal CommandBarControl As Object, Handled As Boolean, CancelDefault As Boolean)
     On Error Resume Next
     Application.Run CommandBarControl.onAction
     Handled = True
     CancelDefault = True
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
   </child>
   <child>
@@ -2560,77 +2230,65 @@ End Sub
     <child>
       <type>function</type>
       <name>vtkCreateExcelWorkbook</name>
-      <code_list>
-Public Function vtkCreateExcelWorkbook() As Workbook
+      <code_list>Public Function vtkCreateExcelWorkbook() As Workbook
     Dim Wb As Workbook
     Set Wb = Workbooks.Add(xlWBATWorksheet)
     Set vtkCreateExcelWorkbook = Wb
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkCreateExcelWorkbook</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkCreateExcelWorkbookForTestWithProjectName</name>
-      <code_list>
-Public Function vtkCreateExcelWorkbookForTestWithProjectName(projectName As String) As Workbook
+      <code_list>Public Function vtkCreateExcelWorkbookForTestWithProjectName(projectName As String) As Workbook
     Dim Wb As Workbook
     Set Wb = vtkCreateExcelWorkbookWithPathAndName(vtkPathToTestFolder, vtkProjectForName(projectName).workbookDEVName)
     Wb.VBProject.name = projectName
     Set vtkCreateExcelWorkbookForTestWithProjectName = Wb
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkCreateExcelWorkbookForTestWithProjectName</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkCreateExcelWorkbookWithPathAndName</name>
-      <code_list>
-Public Function vtkCreateExcelWorkbookWithPathAndName(path As String, name As String) As Workbook
+      <code_list>Public Function vtkCreateExcelWorkbookWithPathAndName(path As String, name As String) As Workbook
     Dim Wb As Workbook
     Set Wb = vtkCreateExcelWorkbook
     Wb.SaveAs fileName:=path &amp; "\" &amp; name, FileFormat:=xlOpenXMLWorkbookMacroEnabled
     Set vtkCreateExcelWorkbookWithPathAndName = Wb
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkCreateExcelWorkbookWithPathAndName</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkCloseAndKillWorkbook</name>
-      <code_list>
-Public Sub vtkCloseAndKillWorkbook(Wb As Workbook)
+      <code_list>Public Sub vtkCloseAndKillWorkbook(Wb As Workbook)
     Dim fullPath As String
     fullPath = Wb.fullName
     Wb.Close saveChanges:=False
     Kill PathName:=fullPath
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>function</type>
       <name>VtkWorkbookIsOpen</name>
-      <code_list>
-Public Function VtkWorkbookIsOpen(workbookName As String) As Boolean
+      <code_list>Public Function VtkWorkbookIsOpen(workbookName As String) As Boolean
     On Error Resume Next
     Workbooks(workbookName).Activate 'if we have a problem to activate workbook = the workbook is closed , if we can activate it without problem = the workbook is open
     VtkWorkbookIsOpen = (Err = 0)
-End Function
-</code_list>
+End Function</code_list>
       <call>VtkWorkbookIsOpen</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkDefaultExcelExtension</name>
-      <code_list>
-Public Function vtkDefaultExcelExtension() As String
+      <code_list>Public Function vtkDefaultExcelExtension() As String
     If vtkExcelVersion &gt;= 12 Then
         vtkDefaultExcelExtension = ".xlsm"
     Else
         vtkDefaultExcelExtension = ".xls"
     End If
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkExcelVersion</call>
       <call>vtkDefaultExcelExtension</call>
       <call>vtkDefaultExcelExtension</call>
@@ -2638,15 +2296,13 @@ End Function
     <child>
       <type>function</type>
       <name>vtkDefaultExcelAddInExtension</name>
-      <code_list>
-Public Function vtkDefaultExcelAddInExtension() As String
+      <code_list>Public Function vtkDefaultExcelAddInExtension() As String
     If vtkExcelVersion &gt;= 12 Then
         vtkDefaultExcelAddInExtension = ".xlam"
     Else
         vtkDefaultExcelAddInExtension = ".xla"
     End If
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkExcelVersion</call>
       <call>vtkDefaultExcelAddInExtension</call>
       <call>vtkDefaultExcelAddInExtension</call>
@@ -2654,33 +2310,28 @@ End Function
     <child>
       <type>function</type>
       <name>vtkExcelVersion</name>
-      <code_list>
-Public Function vtkExcelVersion() As Integer
+      <code_list>Public Function vtkExcelVersion() As Integer
     If vtkExcelVersionForTest = 0 Then
         vtkExcelVersion = Val(Application.Version)
        Else
         vtkExcelVersion = vtkExcelVersionForTest
     End If
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkExcelVersion</call>
       <call>vtkExcelVersion</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkDefaultIsAddIn</name>
-      <code_list>
-Public Function vtkDefaultIsAddIn(filePath As String) As Boolean
+      <code_list>Public Function vtkDefaultIsAddIn(filePath As String) As Boolean
     vtkDefaultIsAddIn = (vtkGetFileExtension(filePath) = "xlam") Or (vtkGetFileExtension(filePath) = "xla")
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkDefaultIsAddIn</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkReferencesInWorkbook</name>
-      <code_list>
-Public Function vtkReferencesInWorkbook(Wb As Workbook) As Collection
+      <code_list>Public Function vtkReferencesInWorkbook(Wb As Workbook) As Collection
     Dim c As New Collection, ref As vtkReference, r As VBIDE.Reference
     For Each r In Wb.VBProject.references
         Set ref = New vtkReference
@@ -2688,20 +2339,17 @@ Public Function vtkReferencesInWorkbook(Wb As Workbook) As Collection
         c.Add Item:=ref, Key:=ref.name
     Next
     Set vtkReferencesInWorkbook = c
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkReferencesInWorkbook</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkProtectProject</name>
-      <code_list>
-Sub vtkProtectProject(project As VBProject, password As String)
+      <code_list>Sub vtkProtectProject(project As VBProject, password As String)
     Set Application.VBE.ActiveVBProject = project
     Application.VBE.CommandBars(1).FindControl(id:=2578, recursive:=True).Execute
     SendKeys "+{TAB}{RIGHT}%V{+}{TAB}" &amp; password &amp; "{TAB}" &amp; password &amp; "~", True
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
   </child>
   <child>
@@ -2710,8 +2358,7 @@ End Sub
     <child>
       <type>function</type>
       <name>vtkDefaultFileFormat</name>
-      <code_list>
-Public Function vtkDefaultFileFormat(filePath As String) As XlFileFormat
+      <code_list>Public Function vtkDefaultFileFormat(filePath As String) As XlFileFormat
     Select Case vtkGetFileExtension(filePath)
         Case "xla"
             vtkDefaultFileFormat = xlAddIn
@@ -2720,8 +2367,7 @@ Public Function vtkDefaultFileFormat(filePath As String) As XlFileFormat
         Case Else
             vtkDefaultFileFormat = 0
         End Select
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkDefaultFileFormat</call>
       <call>vtkDefaultFileFormat</call>
       <call>vtkDefaultFileFormat</call>
@@ -2733,8 +2379,7 @@ End Function
     <child>
       <type>function</type>
       <name>vtkDefaultFileFormat</name>
-      <code_list>
-Public Function vtkDefaultFileFormat(filePath As String) As XlFileFormat
+      <code_list>Public Function vtkDefaultFileFormat(filePath As String) As XlFileFormat
     Select Case vtkGetFileExtension(filePath)
         Case "xlsx"
             vtkDefaultFileFormat = xlOpenXMLWorkbook
@@ -2753,8 +2398,7 @@ Public Function vtkDefaultFileFormat(filePath As String) As XlFileFormat
         Case Else
             vtkDefaultFileFormat = 0
         End Select
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkDefaultFileFormat</call>
       <call>vtkDefaultFileFormat</call>
       <call>vtkDefaultFileFormat</call>
@@ -2771,8 +2415,7 @@ End Function
     <child>
       <type>function</type>
       <name>vtkTextFileReader</name>
-      <code_list>
-Public Function vtkTextFileReader(fullFilePath As String) As String
+      <code_list>Public Function vtkTextFileReader(fullFilePath As String) As String
 
     Dim Textfile As Variant
     Dim strresult As String
@@ -2792,16 +2435,14 @@ On Error GoTo vtkTextFileReader_Error
 vtkTextFileReader_Error:
     MsgBox "Error " &amp; Err.Number &amp; " (" &amp; Err.Description &amp; ") in procedure VtkTextFileReader of Module vtkGitFunctions"
     vtkTextFileReader = Err.Number
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkTextFileReader</call>
       <call>vtkTextFileReader</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkCleanFolder</name>
-      <code_list>
-Public Function vtkCleanFolder(folderPath As String) As Integer
+      <code_list>Public Function vtkCleanFolder(folderPath As String) As Integer
     
     On Error GoTo vtkCleanFolder_Error
     
@@ -2831,8 +2472,7 @@ vtkCleanFolder_Error:
     End If
     Exit Function
     
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkCleanFolder</call>
       <call>vtkCleanFolder</call>
       <call>vtkCleanFolder</call>
@@ -2841,8 +2481,7 @@ End Function
     <child>
       <type>function</type>
       <name>vtkDeleteFolder</name>
-      <code_list>
-Public Function vtkDeleteFolder(folderPath As String)
+      <code_list>Public Function vtkDeleteFolder(folderPath As String)
     
     Dim fso As New Scripting.FileSystemObject
     Dim sourceFolder As Scripting.Folder
@@ -2866,8 +2505,7 @@ vtkDeleteFolder_Error:
     End If
     Exit Function
 
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkCleanFolder</call>
       <call>vtkDeleteFolder</call>
       <call>vtkDeleteFolder</call>
@@ -2876,8 +2514,7 @@ End Function
     <child>
       <type>function</type>
       <name>vtkDoesFolderExist</name>
-      <code_list>
-Public Function vtkDoesFolderExist(folderPath As String) As Integer
+      <code_list>Public Function vtkDoesFolderExist(folderPath As String) As Integer
 
     On Error GoTo vtkDoesFolderExist_Error
     
@@ -2892,16 +2529,14 @@ vtkDoesFolderExist_Error:
     vtkDoesFolderExist = False
     Exit Function
 
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkDoesFolderExist</call>
       <call>vtkDoesFolderExist</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkCreateFolderPath</name>
-      <code_list>
-Public Sub vtkCreateFolderPath(fileOrFolderPath As String)
+      <code_list>Public Sub vtkCreateFolderPath(fileOrFolderPath As String)
 
     Dim fso As New FileSystemObject
 
@@ -2958,8 +2593,7 @@ vtkCreateFolderPath_Error:
     Err.Raise Err.Number, Err.Source, Err.Description
     
     Exit Sub
-End Sub
-</code_list>
+End Sub</code_list>
       <call>module</call>
     </child>
   </child>
@@ -2969,8 +2603,7 @@ End Sub
     <child>
       <type>function</type>
       <name>vtkInitializeGit</name>
-      <code_list>
-Public Function vtkInitializeGit(folderPath As String, Optional logFile As String = "")
+      <code_list>Public Function vtkInitializeGit(folderPath As String, Optional logFile As String = "")
     Dim tmpLogFileName As String
     tmpLogFileName = "initialize.log"
     Dim logFileFullPath As String
@@ -3060,8 +2693,7 @@ vtkInitializeGit_Err:
      
     Exit Function
 
-End Function
-</code_list>
+End Function</code_list>
       <call>initialized</call>
       <call>init</call>
       <call>ShellAndWait</call>
@@ -3071,8 +2703,7 @@ End Function
     <child>
       <type>function</type>
       <name>vtkGitConvertWinPath</name>
-      <code_list>
-Public Function vtkGitConvertWinPath(winPath As String) As String
+      <code_list>Public Function vtkGitConvertWinPath(winPath As String) As String
     
     Dim convertedPath As String
     convertedPath = winPath
@@ -3103,8 +2734,7 @@ vtkGitConvertWinPath_Error:
     End If
     Exit Function
 
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkGitConvertWinPath</call>
     </child>
   </child>
@@ -3114,8 +2744,7 @@ End Function
     <child>
       <type>function</type>
       <name>VBComponentTypeAsString</name>
-      <code_list>
-Private Function VBComponentTypeAsString(ctype As Integer)
+      <code_list>Private Function VBComponentTypeAsString(ctype As Integer)
     Select Case ctype
         Case vbext_ct_ActiveXDesigner
             VBComponentTypeAsString = "ActiveX"
@@ -3130,8 +2759,7 @@ Private Function VBComponentTypeAsString(ctype As Integer)
         Case Else
             VBComponentTypeAsString = "Unknown"
     End Select
-End Function
-</code_list>
+End Function</code_list>
       <call>VBComponentTypeAsString</call>
       <call>VBComponentTypeAsString</call>
       <call>VBComponentTypeAsString</call>
@@ -3142,8 +2770,7 @@ End Function
     <child>
       <type>function</type>
       <name>extensionForVBComponentType</name>
-      <code_list>
-Private Function extensionForVBComponentType(ctype As Integer)
+      <code_list>Private Function extensionForVBComponentType(ctype As Integer)
     Select Case ctype
         Case vbext_ct_ActiveXDesigner
             extensionForVBComponentType = ".???"
@@ -3158,8 +2785,7 @@ Private Function extensionForVBComponentType(ctype As Integer)
         Case Else
             extensionForVBComponentType = ".???"
     End Select
-End Function
-</code_list>
+End Function</code_list>
       <call>extensionForVBComponentType</call>
       <call>extensionForVBComponentType</call>
       <call>extensionForVBComponentType</call>
@@ -3170,8 +2796,7 @@ End Function
     <child>
       <type>function</type>
       <name>vtkStandardCategoryForModuleName</name>
-      <code_list>
-Public Function vtkStandardCategoryForModuleName(moduleName As String) As String
+      <code_list>Public Function vtkStandardCategoryForModuleName(moduleName As String) As String
    
    On Error Resume Next
     Dim ret As String
@@ -3189,8 +2814,7 @@ Public Function vtkStandardCategoryForModuleName(moduleName As String) As String
         vtkStandardCategoryForModuleName = "Prod"
     End If
 
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkStandardCategoryForModuleName</call>
       <call>vtkStandardCategoryForModuleName</call>
       <call>vtkStandardCategoryForModuleName</call>
@@ -3198,8 +2822,7 @@ End Function
     <child>
       <type>function</type>
       <name>vtkStandardPathForModule</name>
-      <code_list>
-Public Function vtkStandardPathForModule(module As VBComponent) As String
+      <code_list>Public Function vtkStandardPathForModule(module As VBComponent) As String
 
     Dim path As String
     Select Case vtkStandardCategoryForModuleName(moduleName:=module.name)
@@ -3213,15 +2836,13 @@ Public Function vtkStandardPathForModule(module As VBComponent) As String
     
     vtkStandardPathForModule = path &amp; module.name &amp; extensionForVBComponentType(ctype:=module.Type)
     
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkStandardPathForModule</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkVBAUnitModulesList</name>
-      <code_list>
-Public Function vtkVBAUnitModulesList() As Collection
+      <code_list>Public Function vtkVBAUnitModulesList() As Collection
     If vbaUnitModules Is Nothing Then
         Set vbaUnitModules = New Collection
         With vbaUnitModules
@@ -3246,15 +2867,13 @@ Public Function vtkVBAUnitModulesList() As Collection
         End With
     End If
     Set vtkVBAUnitModulesList = vbaUnitModules
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkVBAUnitModulesList</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkImportOneModule</name>
-      <code_list>
-Public Sub vtkImportOneModule(project As VBProject, moduleName As String, filePath As String)
+      <code_list>Public Sub vtkImportOneModule(project As VBProject, moduleName As String, filePath As String)
     Dim newModule As VBComponent, oldModule As VBComponent
     
    
@@ -3287,14 +2906,12 @@ Public Sub vtkImportOneModule(project As VBProject, moduleName As String, filePa
         Set fso = Nothing
     End If
    On Error GoTo 0
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>vtkExportOneModule</name>
-      <code_list>
-Public Sub vtkExportOneModule(project As VBProject, moduleName As String, filePath As String, Optional normalize As Boolean = True)
+      <code_list>Public Sub vtkExportOneModule(project As VBProject, moduleName As String, filePath As String, Optional normalize As Boolean = True)
     Dim fso As New FileSystemObject, m As VBComponent
     
    On Error GoTo vtkExportOneModule_Error
@@ -3318,16 +2935,14 @@ vtkExportOneModule_Error:
        Else
         Err.Raise Number:=VTK_UNEXPECTED_ERROR, Source:="ExportOneModule", Description:="Unexpected error when exporting " &amp; moduleName &amp; " : " &amp; Err.Description
     End If
-End Sub
-</code_list>
+End Sub</code_list>
       <call>vtkCreateFolderPath</call>
       <call>vtkNormalizeFile</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkExportModulesFromAnotherProject</name>
-      <code_list>
-Public Sub vtkExportModulesFromAnotherProject(projectWithModules As VBProject, projectName As String, confName As String)
+      <code_list>Public Sub vtkExportModulesFromAnotherProject(projectWithModules As VBProject, projectName As String, confName As String)
     Dim cm As vtkConfigurationManager, rootPath As String
     Dim cn As Integer, filePath As String, i As Integer
     
@@ -3347,8 +2962,7 @@ Public Sub vtkExportModulesFromAnotherProject(projectWithModules As VBProject, p
 
 vtkExportModulesFromAnotherProject_Error:
     Err.Raise VTK_UNEXPECTED_ERROR, "vtkExportModulesFromAnotherProject", "Unexpected error when exporting modules from " &amp; projectWithModules.name &amp; " : " &amp; Err.Description
-End Sub
-</code_list>
+End Sub</code_list>
       <call>projectName</call>
       <call>vtkExportOneModule</call>
       <call>modules</call>
@@ -3356,8 +2970,7 @@ End Sub
     <child>
       <type>sub</type>
       <name>vtkImportModulesInAnotherProject</name>
-      <code_list>
-Public Sub vtkImportModulesInAnotherProject(projectForModules As VBProject, projectName As String, confName As String, Optional cm As vtkConfigurationManager = Nothing)
+      <code_list>Public Sub vtkImportModulesInAnotherProject(projectForModules As VBProject, projectName As String, confName As String, Optional cm As vtkConfigurationManager = Nothing)
     Dim rootPath As String, cn As Integer, filePath As String, i As Integer
     
    On Error GoTo vtkImportModulesInAnotherProject_Error
@@ -3376,8 +2989,7 @@ Public Sub vtkImportModulesInAnotherProject(projectForModules As VBProject, proj
 
 vtkImportModulesInAnotherProject_Error:
     Err.Raise VTK_UNEXPECTED_ERROR, "vtkImportModulesInAnotherProject_Error", "Unexpected error when importing modules into " &amp; projectForModules.name &amp; " : " &amp; Err.Description
-End Sub
-</code_list>
+End Sub</code_list>
       <call>projectName</call>
       <call>vtkImportOneModule</call>
       <call>modules</call>
@@ -3385,8 +2997,7 @@ End Sub
     <child>
       <type>sub</type>
       <name>vtkRecreateConfiguration</name>
-      <code_list>
-Public Sub vtkRecreateConfiguration(projectName As String, configurationName As String, Optional confManager As vtkConfigurationManager = Nothing)
+      <code_list>Public Sub vtkRecreateConfiguration(projectName As String, configurationName As String, Optional confManager As vtkConfigurationManager = Nothing)
     Dim cm As vtkConfigurationManager
     Dim rootPath As String
     Dim wbPath As String, templatePath As String
@@ -3499,8 +3110,7 @@ vtkRecreateConfiguration_Error:
     
     Exit Sub
     
-End Sub
-</code_list>
+End Sub</code_list>
       <call>vtkImportModulesInAnotherProject</call>
       <call>vtkProtectProject</call>
       <call>vtkCreateFolderPath</call>
@@ -3514,8 +3124,7 @@ End Sub
     <child>
       <type>function</type>
       <name>vtkExportConfiguration</name>
-      <code_list>
-Public Function vtkExportConfiguration(projectWithModules As VBProject, projectName As String, confName As String, _
+      <code_list>Public Function vtkExportConfiguration(projectWithModules As VBProject, projectName As String, confName As String, _
         Optional onlyModified As Boolean = False) As Integer
     
     Dim cm As vtkConfigurationManager, rootPath As String
@@ -3552,8 +3161,7 @@ vtkExportConfiguration_Error:
     Err.Raise Err.Number, "procedure vtkExportConfiguration of Module vtkImportExportUtilities", Err.Description
     Resume Next
 
-End Function
-</code_list>
+End Function</code_list>
       <call>projectName</call>
       <call>vtkExportOneModule</call>
       <call>vtkExportOneModule</call>
@@ -3567,8 +3175,7 @@ End Function
     <child>
       <type>function</type>
       <name>vtkCreateProject</name>
-      <code_list>
-Public Function vtkCreateProject(path As String, name As String, Optional displayError As Boolean = True) As Long
+      <code_list>Public Function vtkCreateProject(path As String, name As String, Optional displayError As Boolean = True) As Long
     
   On Error GoTo vtkCreateProject_Error
 
@@ -3628,8 +3235,7 @@ vtkCreateProject_ErrorGit:
     vtkCreateProject = Err.Number
     If displayError Then MsgBox "Error " &amp; Err.Number &amp; " (" &amp; Err.Description &amp; ") in procedure vtkCreateProject of Module MainFunctions"
 
-End Function
-</code_list>
+End Function</code_list>
       <call>VtkActivateReferences</call>
       <call>vtkInitializeVbaUnitNamesAndPathes</call>
       <call>VtkActivateReferences</call>
@@ -3650,15 +3256,13 @@ End Function
     <child>
       <type>sub</type>
       <name>vtkRecreateConfigurations</name>
-      <code_list>
-Public Sub vtkRecreateConfigurations(confManager As vtkConfigurationManager, confNames As Collection)
+      <code_list>Public Sub vtkRecreateConfigurations(confManager As vtkConfigurationManager, confNames As Collection)
     Dim c As Variant, confName As String
     For Each c In confNames
         confName = c
         vtkRecreateConfiguration confManager.projectName, confName, confManager
     Next c
-End Sub
-</code_list>
+End Sub</code_list>
       <call>vtkRecreateConfiguration</call>
     </child>
   </child>
@@ -3668,40 +3272,34 @@ End Sub
     <child>
       <type>sub</type>
       <name>init</name>
-      <code_list>
-Public Sub init(confManager As vtkConfigurationManager, modNumber As Integer, Optional confNumber As Integer = 0)
+      <code_list>Public Sub init(confManager As vtkConfigurationManager, modNumber As Integer, Optional confNumber As Integer = 0)
     Set m_parent = confManager
     m_number = modNumber
     m_confNumber = confNumber
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>function</type>
       <name>getPathForConfiguration</name>
-      <code_list>
-Public Function getPathForConfiguration(confName As String) As String
+      <code_list>Public Function getPathForConfiguration(confName As String) As String
     Dim cn As Integer
     cn = parent.getConfigurationNumber(confName)
     getPathForConfiguration = ""
     If cn = 0 Then Err.Raise VTK_INEXISTANT_CONFIGURATION, "vtkModule getPathForConfiguration", "Configuration """ &amp; confName &amp; """ in project """ &amp; parent.projectName &amp; """"
     getPathForConfiguration = parent.getModulePathWithNumber(Number, cn)
-End Function
-</code_list>
+End Function</code_list>
       <call>getPathForConfiguration</call>
       <call>getPathForConfiguration</call>
     </child>
     <child>
       <type>function</type>
       <name>setPathForConfiguration</name>
-      <code_list>
-Public Function setPathForConfiguration(confName As String, newPath As String) As String
+      <code_list>Public Function setPathForConfiguration(confName As String, newPath As String) As String
     Dim cn As Integer
     cn = parent.getConfigurationNumber(confName)
     If cn = 0 Then Err.Raise VTK_INEXISTANT_CONFIGURATION, "vtkModule getPathForConfiguration", "Configuration """ &amp; confName &amp; """ in project """ &amp; parent.projectName &amp; """"
     parent.setModulePathWithNumber path:=newPath, numModule:=Number, numConfiguration:=cn
-End Function
-</code_list>
+End Function</code_list>
     </child>
   </child>
   <child>
@@ -3710,57 +3308,48 @@ End Function
     <child>
       <type>function</type>
       <name>vtkPathOfCurrentProject</name>
-      <code_list>
-Public Function vtkPathOfCurrentProject(Optional Wb As Workbook) As String
+      <code_list>Public Function vtkPathOfCurrentProject(Optional Wb As Workbook) As String
     Dim fso As New FileSystemObject
     If Wb Is Nothing Then
         vtkPathOfCurrentProject = fso.GetParentFolderName(ThisWorkbook.path)
        Else
         vtkPathOfCurrentProject = fso.GetParentFolderName(Wb.path)
     End If
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkPathOfCurrentProject</call>
       <call>vtkPathOfCurrentProject</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkPathToTestFolder</name>
-      <code_list>
-Public Function vtkPathToTestFolder(Optional Wb As Workbook) As String '\VBAToolKit\Tests
+      <code_list>Public Function vtkPathToTestFolder(Optional Wb As Workbook) As String '\VBAToolKit\Tests
     Dim path As String
     path = vtkPathOfCurrentProject(Wb) &amp; "\Tests"
     If Dir(path, vbDirectory) = vbNullString Then MkDir (path)
     vtkPathToTestFolder = path
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkPathToTestFolder</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkPathToSourceFolder</name>
-      <code_list>
-Public Function vtkPathToSourceFolder(Optional Wb As Workbook) As String 'VBAToolKit\Source
+      <code_list>Public Function vtkPathToSourceFolder(Optional Wb As Workbook) As String 'VBAToolKit\Source
    vtkPathToSourceFolder = vtkPathOfCurrentProject(Wb) &amp; "\Source"
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkPathToSourceFolder</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkPathToTemplateFolder</name>
-      <code_list>
-Public Function vtkPathToTemplateFolder(Optional Wb As Workbook) As String 'VBAToolKit\Source
+      <code_list>Public Function vtkPathToTemplateFolder(Optional Wb As Workbook) As String 'VBAToolKit\Source
    vtkPathToTemplateFolder = vtkPathOfCurrentProject(Wb) &amp; "\Templates"
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkPathToTemplateFolder</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkGetFileExtension</name>
-      <code_list>
-Public Function vtkGetFileExtension(filePath As String) As String
+      <code_list>Public Function vtkGetFileExtension(filePath As String) As String
     Dim dotPosition As Integer
     dotPosition = InStrRev(filePath, ".")
     If dotPosition = 0 Then
@@ -3768,16 +3357,14 @@ Public Function vtkGetFileExtension(filePath As String) As String
        Else
         vtkGetFileExtension = Mid(filePath, dotPosition + 1)
     End If
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkGetFileExtension</call>
       <call>vtkGetFileExtension</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkStripFilePathOrNameOfExtension</name>
-      <code_list>
-Public Function vtkStripFilePathOrNameOfExtension(fileNameOrPath As String) As String
+      <code_list>Public Function vtkStripFilePathOrNameOfExtension(fileNameOrPath As String) As String
 
     On Error GoTo vtkStripFilePathOrNameOfExtension_Error
 
@@ -3800,15 +3387,13 @@ vtkStripFilePathOrNameOfExtension_Error:
     Err.Raise VTK_UNEXPECTED_ERROR, "vtkStripFileNameOfExtension", Err.Description
     Resume Next
 
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkStripFilePathOrNameOfExtension</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkConvertGenericExcelPath</name>
-      <code_list>
-Public Function vtkConvertGenericExcelPath(genericFilePath As String) As String
+      <code_list>Public Function vtkConvertGenericExcelPath(genericFilePath As String) As String
     Dim extension As String, template As String, dotPosition As Integer, pathWithoutExt As String
     
     dotPosition = InStrRev(genericFilePath, ".")
@@ -3828,8 +3413,7 @@ Public Function vtkConvertGenericExcelPath(genericFilePath As String) As String
        Else
         vtkConvertGenericExcelPath = genericFilePath
     End If
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkConvertGenericExcelPath</call>
       <call>vtkConvertGenericExcelPath</call>
       <call>vtkConvertGenericExcelPath</call>
@@ -3838,8 +3422,7 @@ End Function
     <child>
       <type>function</type>
       <name>vtkStripPathOrNameOfVtkExtension</name>
-      <code_list>
-Public Function vtkStripPathOrNameOfVtkExtension(projectNameOrPath As String, extension As String) As String
+      <code_list>Public Function vtkStripPathOrNameOfVtkExtension(projectNameOrPath As String, extension As String) As String
 
     On Error GoTo vtkStripPathOrNameOfVtkExtension_Error
 
@@ -3861,15 +3444,13 @@ vtkStripPathOrNameOfVtkExtension_Error:
     Err.Raise VTK_UNEXPECTED_ERROR, "vtkStripPathOrNameOfVtkExtension", Err.Description
     Resume Next
 
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkStripPathOrNameOfVtkExtension</call>
     </child>
     <child>
       <type>function</type>
       <name>vtkCreateTreeFolder</name>
-      <code_list>
-Public Function vtkCreateTreeFolder(rootPath As String)
+      <code_list>Public Function vtkCreateTreeFolder(rootPath As String)
    On Error GoTo vtkCreateTreeFolder_Error
     
     MkDir rootPath
@@ -3890,16 +3471,14 @@ Public Function vtkCreateTreeFolder(rootPath As String)
 vtkCreateTreeFolder_Error:
     vtkCreateTreeFolder = Err.Number
     Err.Raise Err.Number, "Module vtkFileSystemUtilities : Function vtkCreateTreeFolder", Err.Description
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkCreateTreeFolder</call>
       <call>vtkCreateTreeFolder</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkDeleteTreeFolder</name>
-      <code_list>
-Public Sub vtkDeleteTreeFolder(rootPath As String)
+      <code_list>Public Sub vtkDeleteTreeFolder(rootPath As String)
     Dir (rootPath)                  ' Make sure to be out of the folder to clean it without Err
     On Error Resume Next
     Kill rootPath &amp; "\Source\ConfProd\*"
@@ -3922,17 +3501,14 @@ Public Sub vtkDeleteTreeFolder(rootPath As String)
     RmDir rootPath &amp; "\Project"
     Kill rootPath &amp; "\*"
     RmDir rootPath
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>function</type>
       <name>vtkIsPathAbsolute</name>
-      <code_list>
-Public Function vtkIsPathAbsolute(path As String) As Boolean
+      <code_list>Public Function vtkIsPathAbsolute(path As String) As Boolean
     vtkIsPathAbsolute = (UCase(Left(path, 3)) Like "[A-Z]:\") Or (Left(path, 1) = "\")
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkIsPathAbsolute</call>
     </child>
   </child>
@@ -3942,11 +3518,9 @@ End Function
     <child>
       <type>function</type>
       <name>initialized</name>
-      <code_list>
-Private Function initialized() As Boolean
+      <code_list>Private Function initialized() As Boolean
     initialized = (m_projectName &lt;&gt; "")
-End Function
-</code_list>
+End Function</code_list>
       <call>initialized</call>
     </child>
   </child>
@@ -3956,8 +3530,7 @@ End Function
     <child>
       <type>function</type>
       <name>vtkInitializeVbaUnitNamesAndPathes</name>
-      <code_list>
-Public Function vtkInitializeVbaUnitNamesAndPathes(project As String) As Boolean
+      <code_list>Public Function vtkInitializeVbaUnitNamesAndPathes(project As String) As Boolean
     Dim i As Integer, cm As vtkConfigurationManager, ret As Boolean, nm As Integer, nc As Integer, ext As String
     Dim moduleName As String, module As VBComponent
     
@@ -3977,8 +3550,7 @@ Public Function vtkInitializeVbaUnitNamesAndPathes(project As String) As Boolean
     Next i
     
     vtkInitializeVbaUnitNamesAndPathes = ret
-End Function
-</code_list>
+End Function</code_list>
       <call>module</call>
       <call>module</call>
       <call>vtkInitializeVbaUnitNamesAndPathes</call>
@@ -3986,35 +3558,30 @@ End Function
     <child>
       <type>sub</type>
       <name>VtkActivateReferences</name>
-      <code_list>
-Public Sub VtkActivateReferences(Wb As Workbook, projectName As String, confName As String)
+      <code_list>Public Sub VtkActivateReferences(Wb As Workbook, projectName As String, confName As String)
     Dim ref As vtkReference
     If VtkWorkbookIsOpen(Wb.name) Then
         For Each ref In vtkConfigurationManagerForProject(projectName).getConfigurationReferencesWithNumber(vtkConfigurationManagerForProject(projectName).getConfigurationNumber(confName))
             ref.addToWorkbook Wb
         Next
     End If
-End Sub
-</code_list>
+End Sub</code_list>
       <call>projectName</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkDisplayActivatedReferencesGuid</name>
-      <code_list>
-Public Sub vtkDisplayActivatedReferencesGuid()
+      <code_list>Public Sub vtkDisplayActivatedReferencesGuid()
     Dim r As vtkReference
     For Each r In vtkReferencesInWorkbook(ActiveWorkbook)
         Debug.Print r.name, r.GUID, r.fullPath
     Next
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>vtkAddBeforeSaveHandlerInDEVWorkbook</name>
-      <code_list>
-Public Sub vtkAddBeforeSaveHandlerInDEVWorkbook(Wb As Workbook, projectName As String, confName As String)
+      <code_list>Public Sub vtkAddBeforeSaveHandlerInDEVWorkbook(Wb As Workbook, projectName As String, confName As String)
     
     On Error GoTo vtkAddBeforeSaveHandlerInDEVWorkbook_Error
     
@@ -4037,14 +3604,12 @@ Public Sub vtkAddBeforeSaveHandlerInDEVWorkbook(Wb As Workbook, projectName As S
 vtkAddBeforeSaveHandlerInDEVWorkbook_Error:
     Err.Raise VTK_UNEXPECTED_ERROR, "vtkAddBeforeSaveHandlerInDEVWorkBook", Err.Description
     Resume Next
-End Sub
-</code_list>
+End Sub</code_list>
       <call>projectName</call>
       <child>
         <type>sub</type>
         <name>Workbook_BeforeSave</name>
-        <code_list>
-    "Private Sub Workbook_BeforeSave(ByVal SaveAsUI As Boolean, Cancel As Boolean)" &amp; vbNewLine &amp; _
+        <code_list>    "Private Sub Workbook_BeforeSave(ByVal SaveAsUI As Boolean, Cancel As Boolean)" &amp; vbNewLine &amp; _
     "   On error goto M_Error" &amp; vbNewLine &amp; _
     "   " &amp; wbVTKName &amp; ".vtkExportConfiguration projectWithModules:=ThisWorkbook.VBProject, projectName:=" &amp; """" &amp; projectName &amp; """" &amp; _
                                                                     " , confName:=" &amp; """" &amp; confName &amp; """" &amp; _
@@ -4054,8 +3619,7 @@ End Sub
     "   " &amp; wbVTKName &amp; ".vtkExportConfigurationsAsXML projectName:=""" &amp; projectName &amp; """, filePath:=" &amp; _
     wbVTKName &amp; ".vtkPathOfCurrentProject(ThisWorkbook) &amp; ""\"" &amp; " &amp; wbVTKName &amp; ".vtkProjectForName(""" &amp; projectName &amp; """).XMLConfigurationStandardRelativePath" &amp; vbNewLine &amp; _
     "M_Error:" &amp; vbNewLine &amp; _
-    "End Sub" &amp; vbNewLine
-</code_list>
+    "End Sub" &amp; vbNewLine</code_list>
         <call>projectName</call>
         <call>projectName</call>
         <call>projectName</call>
@@ -4068,8 +3632,7 @@ End Sub
     <child>
       <type>function</type>
       <name>vtkProjectForName</name>
-      <code_list>
-Public Function vtkProjectForName(projectName As String) As vtkProject
+      <code_list>Public Function vtkProjectForName(projectName As String) As vtkProject
     If projects Is Nothing Then
         Set projects = New Collection
     End If
@@ -4083,27 +3646,22 @@ Public Function vtkProjectForName(projectName As String) As vtkProject
         End If
     On Error GoTo 0
     Set vtkProjectForName = cm
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkProjectForName</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkResetProjects</name>
-      <code_list>
-Public Sub vtkResetProjects()
+      <code_list>Public Sub vtkResetProjects()
     Set projects = Nothing
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>function</type>
       <name>getCurrentProjectName</name>
-      <code_list>
-Public Function getCurrentProjectName() As String
+      <code_list>Public Function getCurrentProjectName() As String
     getCurrentProjectName = vtkStripPathOrNameOfVtkExtension(ActiveWorkbook.FullName, "DEV")
-End Function
-</code_list>
+End Function</code_list>
       <call>getCurrentProjectName</call>
     </child>
   </child>
@@ -4113,8 +3671,7 @@ End Function
     <child>
       <type>sub</type>
       <name>BrowseButton_Click</name>
-      <code_list>
-Private Sub BrowseButton_Click()
+      <code_list>Private Sub BrowseButton_Click()
     With Application.FileDialog(msoFileDialogFilePicker)
         .AllowMultiSelect = False
         .Show
@@ -4122,60 +3679,50 @@ Private Sub BrowseButton_Click()
             XMLFileTextBox.Text = .SelectedItems(1)
         End If
     End With
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>UserForm_Initialize</name>
-      <code_list>
-Private Sub UserForm_Initialize()
+      <code_list>Private Sub UserForm_Initialize()
     
     XMLFileTextBox.Text = m_XMLFilePath
     validateXMLFileTextBox
     
     enableReCreateButton
 
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>ConfigurationListBox_AfterUpdate</name>
-      <code_list>
-Private Sub ConfigurationListBox_AfterUpdate()
+      <code_list>Private Sub ConfigurationListBox_AfterUpdate()
     If m_ConfSelected Then ConfigurationListBox.BackColor = GREEN Else ConfigurationListBox.BackColor = PINK
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>ConfigurationListBox_Change</name>
-      <code_list>
-Private Sub ConfigurationListBox_Change()
+      <code_list>Private Sub ConfigurationListBox_Change()
     Dim i As Integer
     m_ConfSelected = False
     For i = 0 To ConfigurationListBox.ListCount - 1
         m_ConfSelected = m_ConfSelected Or ConfigurationListBox.Selected(i)
     Next i
     enableReCreateButton
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>CancelButton_Click</name>
-      <code_list>
-Private Sub CancelButton_Click()
+      <code_list>Private Sub CancelButton_Click()
     vtkRecreateConfigurationForm.Hide
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>CreateConfigurationButton_Click</name>
-      <code_list>
-Private Sub CreateConfigurationButton_Click()
+      <code_list>Private Sub CreateConfigurationButton_Click()
     Me.Hide
     vtkWaitForm.Show vbModeless
     Dim confNames As New Collection, i As Integer
@@ -4184,15 +3731,13 @@ Private Sub CreateConfigurationButton_Click()
     Next i
     vtkRecreateConfigurations m_confManager, confNames
     vtkWaitForm.Hide
-End Sub
-</code_list>
+End Sub</code_list>
       <call>vtkRecreateConfigurations</call>
     </child>
     <child>
       <type>sub</type>
       <name>validateXMLFileTextBox</name>
-      <code_list>
-Private Sub validateXMLFileTextBox()
+      <code_list>Private Sub validateXMLFileTextBox()
     Dim cmX As New vtkConfigurationManagerXML, conf As vtkConfiguration
    On Error Resume Next
     cmX.init XMLFileTextBox.Text
@@ -4213,26 +3758,21 @@ Private Sub validateXMLFileTextBox()
         Set m_confManager = Nothing
     End If
     enableReCreateButton
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>enableReCreateButton</name>
-      <code_list>
-Private Sub enableReCreateButton()
+      <code_list>Private Sub enableReCreateButton()
     CreateConfigurationButton.Enabled = m_XMLFileOK And m_ConfSelected
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>XMLFileTextBox_Change</name>
-      <code_list>
-Private Sub XMLFileTextBox_Change()
+      <code_list>Private Sub XMLFileTextBox_Change()
     validateXMLFileTextBox
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
   </child>
   <child>
@@ -4245,44 +3785,37 @@ End Sub
     <child>
       <type>function</type>
       <name>convertRelativePathToFullPath</name>
-      <code_list>
-Private Function convertRelativePathToFullPath(relPath As String) As String
+      <code_list>Private Function convertRelativePathToFullPath(relPath As String) As String
     If vtkIsPathAbsolute(relPath) Then
         convertRelativePathToFullPath = relPath
        Else
         convertRelativePathToFullPath = Environ("AppData") &amp; "\" &amp; relPath
     End If
-End Function
-</code_list>
+End Function</code_list>
       <call>convertRelativePathToFullPath</call>
       <call>convertRelativePathToFullPath</call>
     </child>
     <child>
       <type>function</type>
       <name>convertFullPathToRelativePath</name>
-      <code_list>
-Private Function convertFullPathToRelativePath(fullPath As String) As String
+      <code_list>Private Function convertFullPathToRelativePath(fullPath As String) As String
     convertFullPathToRelativePath = Replace(fullPath, Environ("AppData") &amp; "\", "")
-End Function
-</code_list>
+End Function</code_list>
       <call>convertFullPathToRelativePath</call>
     </child>
     <child>
       <type>sub</type>
       <name>initWithVBAReference</name>
-      <code_list>
-Public Sub initWithVBAReference(ref As Reference)
+      <code_list>Public Sub initWithVBAReference(ref As Reference)
     Me.name = ref.name
     Me.GUID = ref.GUID
     Me.fullPath = ref.fullPath
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>addToWorkbook</name>
-      <code_list>
-Public Sub addToWorkbook(Wb As Workbook)
+      <code_list>Public Sub addToWorkbook(Wb As Workbook)
     On Error Resume Next
     If Me.GUID = "" Then
         Wb.VBProject.references.AddFromFile Me.fullPath
@@ -4290,8 +3823,7 @@ Public Sub addToWorkbook(Wb As Workbook)
         Wb.VBProject.references.AddFromGuid Me.GUID, 0, 0
     End If
     On Error GoTo 0
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
   </child>
   <child>
@@ -4300,18 +3832,15 @@ End Sub
     <child>
       <type>sub</type>
       <name>Class_Terminate</name>
-      <code_list>
-Private Sub Class_Terminate()
+      <code_list>Private Sub Class_Terminate()
     Set m_referenceSheet = Nothing
     Set m_workbook = Nothing
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>init</name>
-      <code_list>
-Public Sub init(Wb As Workbook, confCount As Integer, nbTitleColumnsInConfSheet As Integer, Optional devConf As Integer = -1, Optional references As Collection = Nothing)
+      <code_list>Public Sub init(Wb As Workbook, confCount As Integer, nbTitleColumnsInConfSheet As Integer, Optional devConf As Integer = -1, Optional references As Collection = Nothing)
     If Not m_workbook Is Wb Then
         Set m_workbook = Wb
         m_nbTitleColumnsInConfSheet = nbTitleColumnsInConfSheet
@@ -4321,8 +3850,7 @@ Public Sub init(Wb As Workbook, confCount As Integer, nbTitleColumnsInConfSheet 
             Set m_referenceSheet = Nothing
         End If
     End If
-End Sub
-</code_list>
+End Sub</code_list>
       <call>references</call>
       <call>references</call>
       <call>setReferenceSheet</call>
@@ -4330,8 +3858,7 @@ End Sub
     <child>
       <type>sub</type>
       <name>setReferenceSheet</name>
-      <code_list>
-Private Sub setReferenceSheet(confCount As Integer, devConf As Integer, references As Collection)
+      <code_list>Private Sub setReferenceSheet(confCount As Integer, devConf As Integer, references As Collection)
     On Error Resume Next
     Set m_referenceSheet = m_workbook.Worksheets(sheetName)
     On Error GoTo 0
@@ -4344,8 +3871,7 @@ Private Sub setReferenceSheet(confCount As Integer, devConf As Integer, referenc
         End If
     alignConfigurationCount confCount
     addReferences
-End Sub
-</code_list>
+End Sub</code_list>
       <call>references</call>
       <call>initializeReferenceSheet</call>
       <call>alignConfigurationCount</call>
@@ -4353,21 +3879,18 @@ End Sub
     <child>
       <type>function</type>
       <name>selfReference</name>
-      <code_list>
-Private Function selfReference() As vtkReference
+      <code_list>Private Function selfReference() As vtkReference
     Dim ref As New vtkReference
     ref.name = ThisWorkbook.VBProject.name
     ref.fullPath = ThisWorkbook.fullName
     Set selfReference = ref
-End Function
-</code_list>
+End Function</code_list>
       <call>selfReference</call>
     </child>
     <child>
       <type>sub</type>
       <name>initializeReferenceSheet</name>
-      <code_list>
-Private Sub initializeReferenceSheet(confCount As Integer, devConf As Integer, references As Collection)
+      <code_list>Private Sub initializeReferenceSheet(confCount As Integer, devConf As Integer, references As Collection)
     Dim ref As vtkReference, i As Integer, j As Integer
     m_referenceSheet.Range("A1") = currentVersion
     m_referenceSheet.Range("A1").Font.Size = 8
@@ -4412,8 +3935,7 @@ Private Sub initializeReferenceSheet(confCount As Integer, devConf As Integer, r
             If i &lt;&gt; devConf And m_referenceSheet.Cells(nbTitleRows + j, 1) = ref.name Then m_referenceSheet.Cells(nbTitleRows + j, nbTitleColumns + i) = ""
         Next j
     Next i
-End Sub
-</code_list>
+End Sub</code_list>
       <call>references</call>
       <call>addConfiguration</call>
       <call>references</call>
@@ -4423,44 +3945,37 @@ End Sub
     <child>
       <type>sub</type>
       <name>alignConfigurationCount</name>
-      <code_list>
-Private Sub alignConfigurationCount(confCount As Integer)
+      <code_list>Private Sub alignConfigurationCount(confCount As Integer)
     If confCount &gt; configurationCount Then  ' we have to add columns
         Dim i As Integer
         For i = configurationCount + 1 To confCount
             addConfiguration
         Next i
     End If
-End Sub
-</code_list>
+End Sub</code_list>
       <call>configurationCount</call>
       <call>configurationCount</call>
     </child>
     <child>
       <type>function</type>
       <name>configurationCount</name>
-      <code_list>
-Private Function configurationCount() As Integer
+      <code_list>Private Function configurationCount() As Integer
     configurationCount = m_referenceSheet.UsedRange.Columns.Count - nbTitleColumns
-End Function
-</code_list>
+End Function</code_list>
       <call>configurationCount</call>
     </child>
     <child>
       <type>function</type>
       <name>referenceCount</name>
-      <code_list>
-Private Function referenceCount() As Integer
+      <code_list>Private Function referenceCount() As Integer
     referenceCount = m_referenceSheet.UsedRange.Rows.Count - nbTitleRows
-End Function
-</code_list>
+End Function</code_list>
       <call>referenceCount</call>
     </child>
     <child>
       <type>sub</type>
       <name>addConfiguration</name>
-      <code_list>
-Public Sub addConfiguration()
+      <code_list>Public Sub addConfiguration()
     Dim newColumn As Integer
     If Not m_referenceSheet Is Nothing Then
         newColumn = m_referenceSheet.UsedRange.Columns.Count + 1
@@ -4471,15 +3986,13 @@ Public Sub addConfiguration()
        Else
         Err.Raise Number:=VTK_NOTINITIALIZED, Source:="vtkReferenceManager:addConfiguration", Description:="Impossible to add a configuration to the reference sheet of a null workbook."
     End If
-End Sub
-</code_list>
+End Sub</code_list>
       <call>configuration</call>
     </child>
     <child>
       <type>sub</type>
       <name>addReferences</name>
-      <code_list>
-Private Sub addReferences()
+      <code_list>Private Sub addReferences()
     Dim ref As Reference, ra As Range, vtkRef As New vtkReference
     For Each ref In m_workbook.VBProject.references
         Set ra = m_referenceSheet.Columns("A:A").Find(ref.name, , xlValues, xlWhole)
@@ -4488,15 +4001,13 @@ Private Sub addReferences()
             addOneReference vtkRef
         End If
     Next
-End Sub
-</code_list>
+End Sub</code_list>
       <call>addOneReference</call>
     </child>
     <child>
       <type>sub</type>
       <name>addOneReference</name>
-      <code_list>
-Private Sub addOneReference(vtkRef As vtkReference)
+      <code_list>Private Sub addOneReference(vtkRef As vtkReference)
     Dim newRow As Integer
     newRow = m_referenceSheet.UsedRange.Rows.Count + 1
     m_referenceSheet.Cells(newRow, 1) = vtkRef.name
@@ -4505,24 +4016,20 @@ Private Sub addOneReference(vtkRef As vtkReference)
        Else
         m_referenceSheet.Cells(newRow, 2) = vtkRef.GUID
     End If
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>function</type>
       <name>allReferences</name>
-      <code_list>
-Public Function allReferences() As Collection
+      <code_list>Public Function allReferences() As Collection
     Set allReferences = references(0)
-End Function
-</code_list>
+End Function</code_list>
       <call>allReferences</call>
     </child>
     <child>
       <type>function</type>
       <name>references</name>
-      <code_list>
-Public Function references(confNumber As Integer) As Collection
+      <code_list>Public Function references(confNumber As Integer) As Collection
     If Not m_referenceSheet Is Nothing Then
         If Not (confNumber &lt; 0 Or confNumber &gt; configurationCount) Then
             Dim c As New Collection, i As Integer, r As vtkReference, s As String, b As Boolean
@@ -4554,8 +4061,7 @@ Public Function references(confNumber As Integer) As Collection
        Else
         Err.Raise Number:=VTK_NOTINITIALIZED, Source:="vtkReferenceManager:references", Description:="Impossible to get references from a sheet of a null workbook"
     End If
-End Function
-</code_list>
+End Function</code_list>
       <call>references</call>
       <call>configurationCount</call>
       <call>references</call>
@@ -4563,8 +4069,7 @@ End Function
     <child>
       <type>sub</type>
       <name>setReferenceWihNumber</name>
-      <code_list>
-Public Sub setReferenceWihNumber(usedRef As Boolean, refNumber As Integer, confNumber As Integer)
+      <code_list>Public Sub setReferenceWihNumber(usedRef As Boolean, refNumber As Integer, confNumber As Integer)
     If refNumber &lt; 1 Or refNumber &gt; referenceCount Then _
         Err.Raise Number:=VTK_FORBIDDEN_PARAMETER, Source:="vtkReferenceManager:setReferenceWithNumber", Description:="Reference number (" &amp; refNumber &amp; ") must be between 1 and " &amp; referenceCount
     If confNumber &lt; 1 Or confNumber &gt; configurationCount Then _
@@ -4574,8 +4079,7 @@ Public Sub setReferenceWihNumber(usedRef As Boolean, refNumber As Integer, confN
        Else
         m_referenceSheet.Cells(nbTitleRows + refNumber, nbTitleColumns + confNumber) = ""
     End If
-End Sub
-</code_list>
+End Sub</code_list>
       <call>referenceCount</call>
       <call>configurationCount</call>
     </child>
@@ -4586,8 +4090,7 @@ End Sub
     <child>
       <type>function</type>
       <name>ShellAndWait</name>
-      <code_list>
-Public Function ShellAndWait(ShellCommand As String, _
+      <code_list>Public Function ShellAndWait(ShellCommand As String, _
                     TimeOutMs As Long, _
                     ShellWindowState As VbAppWinStyle, _
                     BreakKey As ActionOnBreak) As ShellAndWaitResult
@@ -4718,8 +4221,7 @@ End If
 
 Application.EnableCancelKey = SaveCancelKey
 
-End Function
-</code_list>
+End Function</code_list>
       <call>ShellAndWait</call>
       <call>ShellAndWait</call>
       <call>ShellAndWait</call>
@@ -4743,62 +4245,51 @@ End Function
     <child>
       <type>sub</type>
       <name>vtkAddEventHandler</name>
-      <code_list>
-Public Sub vtkAddEventHandler(action As String, cmdBarCtl As CommandBarControl)
+      <code_list>Public Sub vtkAddEventHandler(action As String, cmdBarCtl As CommandBarControl)
     Dim evh As New vtkEventHandler
     cmdBarCtl.onAction = action
     Set evh.cbe = Application.VBE.Events.CommandBarEvents(cmdBarCtl)
     If colEventHandlers Is Nothing Then Set colEventHandlers = New Collection
     colEventHandlers.Add Item:=evh, Key:=action
     Set evh = Nothing
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>vtkClearEventHandlers</name>
-      <code_list>
-Public Sub vtkClearEventHandlers()
+      <code_list>Public Sub vtkClearEventHandlers()
     Set colEventHandlers = Nothing
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>function</type>
       <name>projectName</name>
-      <code_list>
-Private Function projectName() As String
+      <code_list>Private Function projectName() As String
     projectName = ThisWorkbook.VBProject.name
-End Function
-</code_list>
+End Function</code_list>
       <call>projectName</call>
     </child>
     <child>
       <type>function</type>
       <name>toolBarName</name>
-      <code_list>
-Private Function toolBarName() As String
+      <code_list>Private Function toolBarName() As String
     toolBarName = projectName
-End Function
-</code_list>
+End Function</code_list>
       <call>toolBarName</call>
     </child>
     <child>
       <type>function</type>
       <name>controlTag</name>
-      <code_list>
-Private Function controlTag() As String
+      <code_list>Private Function controlTag() As String
     controlTag = projectName &amp; "_Tag"
-End Function
-</code_list>
+End Function</code_list>
       <call>projectName</call>
       <call>controlTag</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkCreateToolbars</name>
-      <code_list>
-Public Sub vtkCreateToolbars(Optional vbeToolbar As Boolean = True, Optional excToolbar As Boolean = True)
+      <code_list>Public Sub vtkCreateToolbars(Optional vbeToolbar As Boolean = True, Optional excToolbar As Boolean = True)
     vtkCreateEmptyToolbars vbeToolbar:=vbeToolbar, excToolbar:=excToolbar
     If excToolbar Then
         vtkCreateToolbarButton caption:="Reset VBE Toolbar", _
@@ -4824,8 +4315,7 @@ Public Sub vtkCreateToolbars(Optional vbeToolbar As Boolean = True, Optional exc
                            excToolbar:=excToolbar
                            
                            
-End Sub
-</code_list>
+End Sub</code_list>
       <call>vtkCreateEmptyToolbars</call>
       <call>vtkCreateToolbarButton</call>
       <call>vtkCreateToolbarButton</call>
@@ -4834,8 +4324,7 @@ End Sub
     <child>
       <type>sub</type>
       <name>vtkCreateEmptyToolbars</name>
-      <code_list>
-Public Sub vtkCreateEmptyToolbars(Optional vbeToolbar As Boolean = True, Optional excToolbar As Boolean = True)
+      <code_list>Public Sub vtkCreateEmptyToolbars(Optional vbeToolbar As Boolean = True, Optional excToolbar As Boolean = True)
     Dim barE As CommandBar, barV As CommandBar, cbControl As CommandBarControl
     
     If excToolbar Then
@@ -4854,41 +4343,35 @@ Public Sub vtkCreateEmptyToolbars(Optional vbeToolbar As Boolean = True, Optiona
         barV.Visible = True
     End If
     
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>vtkDeleteToolbars</name>
-      <code_list>
-Public Sub vtkDeleteToolbars()
+      <code_list>Public Sub vtkDeleteToolbars()
    On Error Resume Next
     Application.CommandBars(toolBarName).Delete     ' Unit tests confirm that the button are deleted with the toolbar
     Application.VBE.CommandBars(toolBarName).Delete
     vtkClearEventHandlers
    On Error GoTo 0
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>vtkReactivateVBEToolBar</name>
-      <code_list>
-Public Sub vtkReactivateVBEToolBar()
+      <code_list>Public Sub vtkReactivateVBEToolBar()
     Dim c As CommandBarControl
     vtkClearEventHandlers
     For Each c In Application.VBE.CommandBars(toolBarName).Controls
         vtkAddEventHandler action:=c.onAction, cmdBarCtl:=c
     Next
-End Sub
-</code_list>
+End Sub</code_list>
       <call>vtkAddEventHandler</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkCreateToolbarButton</name>
-      <code_list>
-Public Sub vtkCreateToolbarButton(caption As String, helpText As String, faceId As Integer, action As String, Optional vbeToolbar As Boolean = True, Optional excToolbar As Boolean = True)
+      <code_list>Public Sub vtkCreateToolbarButton(caption As String, helpText As String, faceId As Integer, action As String, Optional vbeToolbar As Boolean = True, Optional excToolbar As Boolean = True)
     Dim cbControl As CommandBarButton
 
     If excToolbar Then
@@ -4909,76 +4392,61 @@ Public Sub vtkCreateToolbarButton(caption As String, helpText As String, faceId 
         vtkAddEventHandler action:=action, cmdBarCtl:=cbControl
     End If
 
-End Sub
-</code_list>
+End Sub</code_list>
       <call>vtkAddEventHandler</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkTestCommandBarButtonClicked</name>
-      <code_list>
-Public Sub vtkTestCommandBarButtonClicked()
+      <code_list>Public Sub vtkTestCommandBarButtonClicked()
     buttonClicked = True
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>vtkTestCommandBarButtonClickedReset</name>
-      <code_list>
-Public Sub vtkTestCommandBarButtonClickedReset()
+      <code_list>Public Sub vtkTestCommandBarButtonClickedReset()
     buttonClicked = False
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>function</type>
       <name>vtkIsTestCommandBarButtonClicked</name>
-      <code_list>
-Public Function vtkIsTestCommandBarButtonClicked() As Boolean
+      <code_list>Public Function vtkIsTestCommandBarButtonClicked() As Boolean
     vtkIsTestCommandBarButtonClicked = buttonClicked
-End Function
-</code_list>
+End Function</code_list>
       <call>vtkIsTestCommandBarButtonClicked</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkShowCreateProjectForm</name>
-      <code_list>
-Private Sub vtkShowCreateProjectForm()
+      <code_list>Private Sub vtkShowCreateProjectForm()
     vtkCreateProjectForm.Show
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>vtkShowRecreateConfigurationForm</name>
-      <code_list>
-Public Sub vtkShowRecreateConfigurationForm()
+      <code_list>Public Sub vtkShowRecreateConfigurationForm()
     vtkRecreateConfigurationForm.Show
-End Sub
-</code_list>
+End Sub</code_list>
     </child>
     <child>
       <type>sub</type>
       <name>vtkClickForVBAToolKitRecreation</name>
-      <code_list>
-Public Sub vtkClickForVBAToolKitRecreation()
+      <code_list>Public Sub vtkClickForVBAToolKitRecreation()
     vtkRecreateConfiguration projectName:="VBAToolKit", configurationName:="VBAToolKit"
-End Sub
-</code_list>
+End Sub</code_list>
       <call>vtkRecreateConfiguration</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkClickForVBAToolKitDEVRecreation</name>
-      <code_list>
-Public Sub vtkClickForVBAToolKitDEVRecreation()
+      <code_list>Public Sub vtkClickForVBAToolKitDEVRecreation()
     If Not ActiveWorkbook.VBProject.name Like "VBAToolKit2_DEV" Then Exit Sub
     If Not ActiveWorkbook.name Like "VBAToolKit2_DEV.xlsm" Then Exit Sub
     vtkRecreateConfiguration projectName:="VBAToolKit2", configurationName:="VBAToolKit_DEV"
-End Sub
-</code_list>
+End Sub</code_list>
       <call>vtkRecreateConfiguration</call>
     </child>
   </child>
@@ -4996,20 +4464,17 @@ End Sub
     <child>
       <type>function</type>
       <name>escapedString</name>
-      <code_list>
-Public Function escapedString(str As String) As String
+      <code_list>Public Function escapedString(str As String) As String
     Dim str1 As String
     str1 = Replace(str, "&lt;", "&amp;lt;")
     escapedString = Replace(str1, "&gt;", "&amp;gt;")
-End Function
-</code_list>
+End Function</code_list>
       <call>escapedString</call>
     </child>
     <child>
       <type>sub</type>
       <name>vtkExportConfigurationsAsXML</name>
-      <code_list>
-Public Sub vtkExportConfigurationsAsXML(projectName As String, filePath As String)
+      <code_list>Public Sub vtkExportConfigurationsAsXML(projectName As String, filePath As String)
 
    On Error GoTo vtkExportConfigurationsAsXML_Error
 
@@ -5123,8 +4588,7 @@ vtkExportConfigurationsAsXML_Error:
     End Select
 
     Err.Raise Err.Number, s, Err.Description
-End Sub
-</code_list>
+End Sub</code_list>
       <call>projectName</call>
       <call>configuration</call>
       <call>configuration</call>
