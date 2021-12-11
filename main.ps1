@@ -217,9 +217,6 @@ class CommentParts : ContextParts {
 
 
 
-
-
-
 ##TODO:なくす⇨Partsに移植。
 class UMLFactory{
     $umltext = ""
@@ -271,14 +268,11 @@ class UMLFactory{
 
 
 
-
-
-
 $factory = [FolderParts]::new()
 [void]$factory.run( "/Users/minegishirei/myworking/VBAToolKit/Source/ConfProd/vtkReferenceManager.cls")
 $Global:NAMESPACE = $Global:NAMESPACE | Select-Object -Unique 
-[void]$factory.buildXML("./src.xml")
-$factory.buildUML("./src.xml") > src.uml
+[void]$factory.buildXML("./material/material.xml")
+$factory.buildUML("./material/material.xml") > src.uml
 
 Read-Host "Exit"
 

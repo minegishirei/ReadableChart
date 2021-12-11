@@ -2,7 +2,7 @@
 
 you can automatically build "call graph" from source code written in vba and vb6.
 
-<img src="https://raw.githubusercontent.com/kawadasatoshi/ReadableChart/main/sample.svg">
+<img src="https://raw.githubusercontent.com/kawadasatoshi/ReadableChart/main/sample/sample.svg">
 
 This original srouce code is <a href="https://github.com/jpimbert/VBAToolKit/blob/master/Source/ConfProd/vtkReferenceManager.cls">VBAToolKit</a>.
 
