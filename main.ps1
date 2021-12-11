@@ -275,6 +275,10 @@ class UMLFactory{
 $target_file_path   = "./test/testsrc1/vtkReferenceManager.cls"
 $xml_file_path      = "./material/material.xml"
 
+##test
+$target_file_path   = ".test/testsrc2/ConfProd"
+
+
 ## building xml
 $factory = [FolderParts]::new()
 [void]$factory.run($target_file_path)
