@@ -237,6 +237,8 @@ class UMLFactory{
             foreach ($item in $fileitem) {
                 if( ($item.LocalName -eq "child")){
                     $this.buildXMLloop($item)
+                }elseif(($item.LocalName -eq "type")){
+                    continue
                 }
             }
             $this.umltext += ( "file " + $filename)
@@ -259,6 +261,8 @@ class UMLFactory{
         foreach ($item in $XmlObj.ChildNodes) {
             if( ($item.LocalName -eq "child")){
                 $this.buildXMLloop($item)
+            }elseif(($item.LocalName -eq "type")){
+                continue
             }elseif($item.LocalName -eq "call"){
                 if($XmlObj.Name  -eq  $item.InnerText){
                     continue
@@ -275,10 +279,10 @@ class UMLFactory{
 
 
 $factory = [FolderParts]::new()
-[void]$factory.run( "/Users/minegishirei/myworking/VBAToolKit/Source/ConfProd")
+[void]$factory.run( "/Users/minegishirei/myworking/VBAToolKit/Source/ConfProd/vtkReferenceManager.cls")
 $Global:NAMESPACE = $Global:NAMESPACE | Select-Object -Unique 
 [void]$factory.buildXML("/Users/minegishirei/myworking/ReadableChart/src.xml")
-Set-Clipboard  $factory.buildUML("/Users/minegishirei/myworking/ReadableChart/src.xml", "test.uml")
+$factory.buildUML("/Users/minegishirei/myworking/ReadableChart/src.xml", "test.uml") > src.uml
 
 Read-Host "Exit"
 
