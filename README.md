@@ -1,10 +1,8 @@
 # ReadableChart
 
-ソースコードの構造把握を補助するためのOSSソフトウェアです
+ソースコードの構造把握を補助するためのOSSソフトウェアです。
 
-## 成果物
-
-関数同士のつながりを可視化します。
+VB6,VBAのコールグラフの作成を自動で行います。
 
 <img src="https://raw.githubusercontent.com/kawadasatoshi/ReadableChart/main/sample.svg">
 
