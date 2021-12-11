@@ -11,15 +11,21 @@
 
 ## how to install(インストール方法)
 
+run next command in powershell terminal
+
 <pre><code>
 git clone git@github.com:kawadasatoshi/ReadableChart.git
+
 </code></pre>
 
 ## how to run(実行方法)
 
+run next command and open src.svg
+
 <pre><code>
 ./main.ps1              #build src.xml and src.uml
 plantuml -svg src.uml   #build src.svg
+
 </code></pre>
 
 
