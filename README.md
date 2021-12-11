@@ -11,16 +11,16 @@
 
 ## how to install(インストール方法)
 
-<code>
+<pre><code>
 git clone git@github.com:kawadasatoshi/ReadableChart.git
-</code>
+</code></pre>
 
 ## how to run(実行方法)
 
-<code>
+<pre><code>
 ./main.ps1              #build src.xml and src.uml
 plantuml -svg src.uml   #build src.svg
-</code>
+</code></pre>
 
 
 
