@@ -1,10 +1,11 @@
-# ReadableChart
+# ReadableChart(what is this?)
 
-ソースコードの構造把握を補助するためのOSSソフトウェアです。
-
-VB6,VBAのコールグラフの作成を自動で行います。
+you can automatically build "call graph" from source code written in vba and vb6.
 
 <img src="https://raw.githubusercontent.com/kawadasatoshi/ReadableChart/main/sample.svg">
+
+this is from <a href="https://github.com/jpimbert/VBAToolKit/blob/master/Source/ConfProd/vtkReferenceManager.cls">VBAToolKit</a>
+
 
 
 ## how to install(インストール方法)
