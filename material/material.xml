@@ -1,0 +1,259 @@
+<container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
+  <child>
+    <type>file</type>
+    <name>vtkReferenceManager.cls</name>
+    <child>
+      <type>sub</type>
+      <name>Class_Terminate</name>
+      <code_list>Private Sub Class_Terminate()
+    Set m_referenceSheet = Nothing
+    Set m_workbook = Nothing
+End Sub</code_list>
+    </child>
+    <child>
+      <type>sub</type>
+      <name>init</name>
+      <code_list>Public Sub init(Wb As Workbook, confCount As Integer, nbTitleColumnsInConfSheet As Integer, Optional devConf As Integer = -1, Optional references As Collection = Nothing)
+    If Not m_workbook Is Wb Then
+        Set m_workbook = Wb
+        m_nbTitleColumnsInConfSheet = nbTitleColumnsInConfSheet
+        If Not m_workbook Is Nothing Then
+            setReferenceSheet confCount, devConf, references    ' Reset the reference sheet when the attached workbook is changed
+           Else
+            Set m_referenceSheet = Nothing
+        End If
+    End If
+End Sub</code_list>
+      <call>references</call>
+      <call>setReferenceSheet</call>
+      <call>references</call>
+    </child>
+    <child>
+      <type>sub</type>
+      <name>setReferenceSheet</name>
+      <code_list>Private Sub setReferenceSheet(confCount As Integer, devConf As Integer, references As Collection)
+    On Error Resume Next
+    Set m_referenceSheet = m_workbook.Worksheets(sheetName)
+    On Error GoTo 0
+    If m_referenceSheet Is Nothing Then        ' If the Configuration doesn't exist, create one
+        Set m_referenceSheet = m_workbook.Worksheets.Add(Type:=xlWorksheet)
+        m_referenceSheet.name = sheetName
+        initializeReferenceSheet confCount, devConf, references
+        End If
+    If m_referenceSheet.Range("A1") &lt;&gt; currentVersion Then
+        End If
+    alignConfigurationCount confCount
+    addReferences
+End Sub</code_list>
+      <call>references</call>
+      <call>initializeReferenceSheet</call>
+      <call>alignConfigurationCount</call>
+    </child>
+    <child>
+      <type>function</type>
+      <name>selfReference</name>
+      <code_list>Private Function selfReference() As vtkReference
+    Dim ref As New vtkReference
+    ref.name = ThisWorkbook.VBProject.name
+    ref.fullPath = ThisWorkbook.fullName
+    Set selfReference = ref
+End Function</code_list>
+      <call>selfReference</call>
+    </child>
+    <child>
+      <type>sub</type>
+      <name>initializeReferenceSheet</name>
+      <code_list>Private Sub initializeReferenceSheet(confCount As Integer, devConf As Integer, references As Collection)
+    Dim ref As vtkReference, i As Integer, j As Integer
+    m_referenceSheet.Range("A1") = currentVersion
+    m_referenceSheet.Range("A1").Font.Size = 8
+    m_referenceSheet.Range("B1") = ""
+    m_referenceSheet.Range("C1") = "-"      ' addConfiguration works with the usedRange property
+    m_referenceSheet.Columns("A:C").ColumnWidth = 22
+    
+    If references Is Nothing Then
+        m_referenceSheet.Range("A2") = "VBA"
+        m_referenceSheet.Range("B2") = "{000204EF-0000-0000-C000-000000000046}"
+        m_referenceSheet.Range("A3") = "Excel"
+        m_referenceSheet.Range("B3") = "{00020813-0000-0000-C000-000000000046}"
+        m_referenceSheet.Range("A4") = "stdole"
+        m_referenceSheet.Range("B4") = "{00020430-0000-0000-C000-000000000046}"
+        m_referenceSheet.Range("A5") = "Office"
+        m_referenceSheet.Range("B5") = "{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}"
+        m_referenceSheet.Range("A6") = "MSForms"
+        m_referenceSheet.Range("B6") = "{0D452EE1-E08F-101A-852E-02608C4D0BB4}"
+        m_referenceSheet.Range("A7") = "Scripting"
+        m_referenceSheet.Range("B7") = "{420B2830-E718-11CF-893D-00A0C9054228}"
+        m_referenceSheet.Range("A8") = "VBIDE"
+        m_referenceSheet.Range("B8") = "{0002E157-0000-0000-C000-000000000046}"
+        m_referenceSheet.Range("A9") = "Shell32"
+        m_referenceSheet.Range("B9") = "{50A7E9B0-70EF-11D1-B75A-00A0C90564FE}"
+        m_referenceSheet.Range("A10") = "MSXML2"
+        m_referenceSheet.Range("B10") = "{F5078F18-C551-11D3-89B9-0000F81FE221}"
+        m_referenceSheet.Range("A11") = "ADODB"
+        m_referenceSheet.Range("B11") = "{00000206-0000-0010-8000-00AA006D2EA4}"
+       Else
+        For Each ref In references
+            addOneReference ref
+        Next
+    End If
+    
+    Set ref = selfReference()
+    If devConf &gt;= 0 Then addOneReference ref
+    
+    For i = 1 To confCount
+        addConfiguration
+        For j = 1 To referenceCount
+            If devConf &gt;= 0 And devConf &lt;= confCount Then m_referenceSheet.Cells(nbTitleRows + j, nbTitleColumns + i) = "X"
+            If i &lt;&gt; devConf And m_referenceSheet.Cells(nbTitleRows + j, 1) = ref.name Then m_referenceSheet.Cells(nbTitleRows + j, nbTitleColumns + i) = ""
+        Next j
+    Next i
+End Sub</code_list>
+      <call>references</call>
+      <call>addConfiguration</call>
+      <call>references</call>
+      <call>addOneReference</call>
+      <call>addOneReference</call>
+    </child>
+    <child>
+      <type>sub</type>
+      <name>alignConfigurationCount</name>
+      <code_list>Private Sub alignConfigurationCount(confCount As Integer)
+    If confCount &gt; configurationCount Then  ' we have to add columns
+        Dim i As Integer
+        For i = configurationCount + 1 To confCount
+            addConfiguration
+        Next i
+    End If
+End Sub</code_list>
+      <call>configurationCount</call>
+      <call>configurationCount</call>
+    </child>
+    <child>
+      <type>function</type>
+      <name>configurationCount</name>
+      <code_list>Private Function configurationCount() As Integer
+    configurationCount = m_referenceSheet.UsedRange.Columns.Count - nbTitleColumns
+End Function</code_list>
+      <call>configurationCount</call>
+    </child>
+    <child>
+      <type>function</type>
+      <name>referenceCount</name>
+      <code_list>Private Function referenceCount() As Integer
+    referenceCount = m_referenceSheet.UsedRange.Rows.Count - nbTitleRows
+End Function</code_list>
+      <call>referenceCount</call>
+    </child>
+    <child>
+      <type>sub</type>
+      <name>addConfiguration</name>
+      <code_list>Public Sub addConfiguration()
+    Dim newColumn As Integer
+    If Not m_referenceSheet Is Nothing Then
+        newColumn = m_referenceSheet.UsedRange.Columns.Count + 1
+        m_referenceSheet.Columns(newColumn).ColumnWidth = 22
+        m_referenceSheet.Columns(newColumn).HorizontalAlignment = xlCenter
+        m_referenceSheet.Cells(1, newColumn).Formula = "=INDIRECT(ADDRESS(1," &amp; newColumn - nbTitleColumns + m_nbTitleColumnsInConfSheet &amp; ",4,1,""vtkConfigurations""))"
+        m_referenceSheet.Cells(1, newColumn).Font.Bold = True
+       Else
+        Err.Raise Number:=VTK_NOTINITIALIZED, Source:="vtkReferenceManager:addConfiguration", Description:="Impossible to add a configuration to the reference sheet of a null workbook."
+    End If
+End Sub</code_list>
+    </child>
+    <child>
+      <type>sub</type>
+      <name>addReferences</name>
+      <code_list>Private Sub addReferences()
+    Dim ref As Reference, ra As Range, vtkRef As New vtkReference
+    For Each ref In m_workbook.VBProject.references
+        Set ra = m_referenceSheet.Columns("A:A").Find(ref.name, , xlValues, xlWhole)
+        If ra Is Nothing Then
+            vtkRef.initWithVBAReference ref
+            addOneReference vtkRef
+        End If
+    Next
+End Sub</code_list>
+      <call>addOneReference</call>
+    </child>
+    <child>
+      <type>sub</type>
+      <name>addOneReference</name>
+      <code_list>Private Sub addOneReference(vtkRef As vtkReference)
+    Dim newRow As Integer
+    newRow = m_referenceSheet.UsedRange.Rows.Count + 1
+    m_referenceSheet.Cells(newRow, 1) = vtkRef.name
+    If vtkRef.GUID Like "" Then
+        m_referenceSheet.Cells(newRow, 3) = vtkRef.relPath
+       Else
+        m_referenceSheet.Cells(newRow, 2) = vtkRef.GUID
+    End If
+End Sub</code_list>
+    </child>
+    <child>
+      <type>function</type>
+      <name>allReferences</name>
+      <code_list>Public Function allReferences() As Collection
+    Set allReferences = references(0)
+End Function</code_list>
+      <call>allReferences</call>
+    </child>
+    <child>
+      <type>function</type>
+      <name>references</name>
+      <code_list>Public Function references(confNumber As Integer) As Collection
+    If Not m_referenceSheet Is Nothing Then
+        If Not (confNumber &lt; 0 Or confNumber &gt; configurationCount) Then
+            Dim c As New Collection, i As Integer, r As vtkReference, s As String, b As Boolean
+            For i = 1 To referenceCount
+                Set r = New vtkReference
+                r.id = "r" &amp; i
+                r.name = m_referenceSheet.Cells(nbTitleRows + i, 1)
+                r.GUID = m_referenceSheet.Cells(nbTitleRows + i, 2)
+                r.relPath = m_referenceSheet.Cells(nbTitleRows + i, 3)
+                If confNumber = 0 Then
+                    b = True
+                   Else
+                    s = m_referenceSheet.Cells(nbTitleRows + i, nbTitleColumns + confNumber)
+                    Select Case s
+                       Case "X"
+                        b = True
+                       Case ""
+                        b = False
+                       Case Else
+                        Err.Raise Number:=VTK_INVALID_FIELD, Source:="vtkReferenceManager:references", Description:="Field (" &amp; s &amp; ") must be blank or X in the reference sheet (ref=" &amp; r.name &amp; ", conf=" &amp; m_referenceSheet.Cells(1, nbTitleColumns + confNumber) &amp; ") for the workbook " &amp; m_workbook.name
+                    End Select
+                End If
+                If b Then c.Add Item:=r, Key:=r.id
+            Next i
+            Set references = c
+           Else
+            Err.Raise Number:=VTK_FORBIDDEN_PARAMETER, Source:="vtkReferenceManager:references", Description:="confNumber (" &amp; confNumber &amp; ") is out of bound (0," &amp; configurationCount &amp; ") for the workbook " &amp; m_workbook.name
+        End If
+       Else
+        Err.Raise Number:=VTK_NOTINITIALIZED, Source:="vtkReferenceManager:references", Description:="Impossible to get references from a sheet of a null workbook"
+    End If
+End Function</code_list>
+      <call>references</call>
+      <call>configurationCount</call>
+      <call>references</call>
+    </child>
+    <child>
+      <type>sub</type>
+      <name>setReferenceWihNumber</name>
+      <code_list>Public Sub setReferenceWihNumber(usedRef As Boolean, refNumber As Integer, confNumber As Integer)
+    If refNumber &lt; 1 Or refNumber &gt; referenceCount Then _
+        Err.Raise Number:=VTK_FORBIDDEN_PARAMETER, Source:="vtkReferenceManager:setReferenceWithNumber", Description:="Reference number (" &amp; refNumber &amp; ") must be between 1 and " &amp; referenceCount
+    If confNumber &lt; 1 Or confNumber &gt; configurationCount Then _
+        Err.Raise Number:=VTK_FORBIDDEN_PARAMETER, Source:="vtkReferenceManager:setReferenceWithNumber", Description:="Configuration number (" &amp; confNumber &amp; ") must be between 1 and " &amp; configurationCount
+    If usedRef Then
+        m_referenceSheet.Cells(nbTitleRows + refNumber, nbTitleColumns + confNumber) = "X"
+       Else
+        m_referenceSheet.Cells(nbTitleRows + refNumber, nbTitleColumns + confNumber) = ""
+    End If
+End Sub</code_list>
+      <call>referenceCount</call>
+      <call>configurationCount</call>
+    </child>
+  </child>
+</container>

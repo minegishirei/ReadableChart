@@ -1,0 +1,67 @@
+@startuml
+file vtkReferenceManager.cls{
+class vtkReferenceManager.cls {
+- file
+}
+class Class_Terminate {
+- sub
+}
+class init {
+- sub
+}
+init -down-|> references
+init -down-|> setReferenceSheet
+init -down-|> references
+class setReferenceSheet {
+- sub
+}
+setReferenceSheet -down-|> references
+setReferenceSheet -down-|> initializeReferenceSheet
+setReferenceSheet -down-|> alignConfigurationCount
+class selfReference {
+- function
+}
+class initializeReferenceSheet {
+- sub
+}
+initializeReferenceSheet -down-|> references
+initializeReferenceSheet -down-|> addConfiguration
+initializeReferenceSheet -down-|> references
+initializeReferenceSheet -down-|> addOneReference
+initializeReferenceSheet -down-|> addOneReference
+class alignConfigurationCount {
+- sub
+}
+alignConfigurationCount -down-|> configurationCount
+alignConfigurationCount -down-|> configurationCount
+class configurationCount {
+- function
+}
+class referenceCount {
+- function
+}
+class addConfiguration {
+- sub
+}
+class addReferences {
+- sub
+}
+addReferences -down-|> addOneReference
+class addOneReference {
+- sub
+}
+class allReferences {
+- function
+}
+class references {
+- function
+}
+references -down-|> configurationCount
+class setReferenceWihNumber {
+- sub
+}
+setReferenceWihNumber -down-|> referenceCount
+setReferenceWihNumber -down-|> configurationCount
+}
+@enduml
+

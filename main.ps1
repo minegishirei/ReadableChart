@@ -269,12 +269,11 @@ class UMLFactory{
 
 
 $factory = [FolderParts]::new()
-[void]$factory.run( "/Users/minegishirei/myworking/VBAToolKit/Source/ConfProd/vtkReferenceManager.cls")
+[void]$factory.run( "./test/testsrc1/vtkReferenceManager.cls")
 $Global:NAMESPACE = $Global:NAMESPACE | Select-Object -Unique 
 [void]$factory.buildXML("./material/material.xml")
 $factory.buildUML("./material/material.xml") > src.uml
 
-Read-Host "Exit"
 
 
 
