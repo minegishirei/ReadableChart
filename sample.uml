@@ -555,12 +555,14 @@ class getConfigurationPath {
 class getConfigurationPathWithNumber {
 - function
 }
+getConfigurationPathWithNumber -down-|> setConfigurationPathWithNumber
 class setConfigurationPathWithNumber {
 - sub
 }
 class getConfigurationProjectNameWithNumber {
 - function
 }
+getConfigurationProjectNameWithNumber -down-|> setConfigurationProjectNameWithNumber
 class setConfigurationProjectNameWithNumber {
 - sub
 }
@@ -568,18 +570,21 @@ setConfigurationProjectNameWithNumber -down-|> projectName
 class getConfigurationCommentWithNumber {
 - function
 }
+getConfigurationCommentWithNumber -down-|> setConfigurationCommentWithNumber
 class setConfigurationCommentWithNumber {
 - sub
 }
 class getConfigurationTemplateWithNumber {
 - function
 }
+getConfigurationTemplateWithNumber -down-|> setConfigurationTemplateWithNumber
 class setConfigurationTemplateWithNumber {
 - sub
 }
 class getConfigurationPasswordWithNumber {
 - function
 }
+getConfigurationPasswordWithNumber -down-|> setConfigurationPasswordWithNumber
 class setConfigurationPasswordWithNumber {
 - sub
 }
@@ -599,6 +604,7 @@ class getModuleNumber {
 class getModulePathWithNumber {
 - function
 }
+getModulePathWithNumber -down-|> setModulePathWithNumber
 class setModulePathWithNumber {
 - sub
 }

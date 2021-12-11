@@ -1,9 +1,9 @@
 
 #Param($Path)
-
+##TODO:global =>static変数
+$Global:NAMESPACE = [System.Collections.ArrayList]::new();
 $Global:XMLDOC = [System.Xml.XmlDocument]::new()
 $Global:XMLS = "urn:oasis:names:tc:opendocument:xmlns:container"
-
 
 
 function is_safe_string([string]$inspect_str){
@@ -15,6 +15,8 @@ function is_safe_string([string]$inspect_str){
     }
     return $True
 }
+
+
 
 
 ############################################
@@ -37,10 +39,11 @@ class Parts{
     }    
 }
 
+##TODO:綺麗に
 class FolderParts : Parts{
     $filepartslist = [System.Collections.ArrayList]::new()
 
-    [System.Collections.ArrayList]run([string]$rootpath){
+    [void]run([string]$rootpath){
         $rootpathItem = Get-ChildItem -Recurse $rootpath
         foreach($item in $rootpathItem){
             if($item.PSIsContainer){
@@ -51,20 +54,14 @@ class FolderParts : Parts{
                 $fileParts.setName($item.Name)
                 $filepath = [string]$item.Directory + "/"+[string]$item.Name
                 $contextFactory  = [ContextFactory]::new()
-                $contextFactory.setName($item.Name)
                 $fileParts.children = $contextFactory.run($filepath)
                 [void]$this.filepartslist.Add($fileParts)
             }
         }
-        return $this.filepartslist
     }
 
     [void]buildXML([string]$xmlFile){
-        $xmlns = "urn:oasis:names:tc:opendocument:xmlns:container"
-        $dec = $Global:XMLDOC.CreateXmlDeclaration("1.0", $null, $null)
-        $Global:XMLDOC.AppendChild($dec) | Out-Null
-        
-        [System.Xml.XmlElement]$container = $Global:XMLDOC.CreateNode("element", "container", $xmlns)
+        [System.Xml.XmlElement]$container = $Global:XMLDOC.CreateNode("element", "container", $Global:XMLS)
         $container.SetAttribute("version", "1.0")
         ##ここから中身
         foreach($fileParts in $this.filepartslist){
@@ -102,8 +99,7 @@ class FileParts : Parts{
 
 
 
-##TODO:global =>static変数
-$Global:NAMESPACE = [System.Collections.ArrayList]::new();
+
 class ContextParts : Parts {
     $code_list = [System.Collections.ArrayList]::new()
 
@@ -135,7 +131,6 @@ class ContextParts : Parts {
             }
         }
         $parents_xml.AppendChild($child_xml) | Out-Null
-        
         foreach ($item in $this.children) {
             if($item.type -eq "comment"){
                 continue
@@ -148,31 +143,28 @@ class ContextParts : Parts {
 
 class FunctionParts : ContextParts {
     [string]$type = "function";
-    [string]$start_regex = "Function (?<match_name>.*?)\("
+    [string]$start_regex = "Function (?<match_name>.+?)\("
     [string]$end_regex = ".*End.*Function.*"
 }
 
 
 class SubParts : ContextParts {
     [string]$type = "sub";
-    [string]$start_regex = "Sub (?<match_name>.*?)\("
+    [string]$start_regex = "Sub (?<match_name>.+?)\("
     [string]$end_regex = ".*End.*Sub.*"
 }
 
 
 class CommentParts : ContextParts {
     [string]$type = "comment";
+    [string]$start_regex = "^(\s)+'"
 
     [bool]isstart([string]$line){
-        return ( $line.Trim().StartsWith("'") )
+        return ($line -match $this.start_regex)
     }
 
     [bool]isend([string]$line){
-        return -not ( $line.Trim().StartsWith("'") )
-    }
-    
-    [void]setName([string]$commentline){
-        $this.name = ""
+        return -not ($line -match $this.start_regex)
     }
 }
 
@@ -180,6 +172,7 @@ class CommentParts : ContextParts {
 ############################################
 ##ContextFactory:###########################
 ############################################
+##:TODO:FolderPartsと同一にしたい
 class ContextFactory : ContextParts{
     ##なぜか使われない
     [bool]isend($line){
@@ -199,6 +192,9 @@ class ContextFactory : ContextParts{
         foreach ($line in $contents) {
             $commentParts = [CommentParts]::new();
             if($commentParts.isstart($line)){
+                #$controller.addChild($commentParts)
+                #$commentParts.mother = $controller
+                #$controller = $commentParts
                 continue
             }
 
@@ -228,7 +224,7 @@ class ContextFactory : ContextParts{
 
 
 
-
+##:TODO綺麗に
 class UMLFactory{
     $umltext = ""
     $src_text = ""
@@ -255,10 +251,10 @@ class UMLFactory{
         $this.src_text += ( "class " + $XmlObj.Name + " {`n")
             $this.src_text += ( "- " + $XmlObj.type +"`n")
         $this.src_text += ("}`n") 
-        #$this.umltext += "note top`n"
+        #$this.src_text += "`n note top`n"
         #    $src = $XmlObj.code_list -join "`n"
-        #    $this.umltext += ($src)
-        #$this.umltext += "end note`n"
+        #    $this.src_text += ($src)
+        #$this.src_text += "`n end note`n"
 
         foreach ($item in $XmlObj.ChildNodes) {
             if( ($item.LocalName -eq "child")){
