@@ -6,6 +6,7 @@ $Global:XMLDOC = [System.Xml.XmlDocument]::new()
 $Global:XMLS = "urn:oasis:names:tc:opendocument:xmlns:container"
 
 
+
 function is_safe_string([string]$inspect_str){
     $check_list = @(";", '"', " ", ",")
     foreach ($item in $check_list) {
@@ -18,10 +19,6 @@ function is_safe_string([string]$inspect_str){
 
 
 
-
-############################################
-##Parts:####################################
-############################################
 class Parts{
     ##param
     $children = [System.Collections.ArrayList]::new()
@@ -39,23 +36,24 @@ class Parts{
     }    
 }
 
+
+
 ##TODO:綺麗に
 class FolderParts : Parts{
-    $filepartslist = [System.Collections.ArrayList]::new()
+    $children = [System.Collections.ArrayList]::new()
 
     [void]run([string]$rootpath){
         $rootpathItem = Get-ChildItem -Recurse $rootpath
-        foreach($item in $rootpathItem){
-            if($item.PSIsContainer){
+        foreach($fileitem in $rootpathItem){
+            if($fileitem.PSIsContainer){
                 #folder
             }else{
                 #file
+                $filepath = [string]$fileitem.Directory + "/"+[string]$fileitem.Name
                 $fileParts = [FileParts]::new()
-                $fileParts.setName($item.Name)
-                $filepath = [string]$item.Directory + "/"+[string]$item.Name
-                $contextFactory  = [ContextFactory]::new()
-                $fileParts.children = $contextFactory.run($filepath)
-                [void]$this.filepartslist.Add($fileParts)
+                $fileParts.setName($fileitem.Name)
+                $fileParts.run($filepath)
+                [void]$this.children.Add($fileParts)
             }
         }
     }
@@ -64,7 +62,7 @@ class FolderParts : Parts{
         [System.Xml.XmlElement]$container = $Global:XMLDOC.CreateNode("element", "container", $Global:XMLS)
         $container.SetAttribute("version", "1.0")
         ##ここから中身
-        foreach($fileParts in $this.filepartslist){
+        foreach($fileParts in $this.children){
             $fileParts.AppendXmlChild($container)
         }
         $Global:XMLDOC.AppendChild($container)
@@ -72,7 +70,7 @@ class FolderParts : Parts{
         $Global:XMLDOC.Save($xmlFile) | Out-Null
     }
 
-    [string]buildUML([string]$inputXmlFile, [string]$outputUmlFile){
+    [string]buildUML([string]$inputXmlFile){
         $XmlObj = [System.Xml.XmlDocument](Get-Content $inputXmlFile) 
         [UMLFactory]$umlFactory = [UMLFactory]::new();
         $umlFactory.buildFileXMLloop($XmlObj.container);
@@ -80,8 +78,23 @@ class FolderParts : Parts{
     }
 }
 
+
+
 class FileParts : Parts{
     $type = "file"
+    $code_list = [System.Collections.ArrayList]::new()
+
+    [void] setName($filename){
+        $this.name = $filename
+    }
+
+    [bool]isend($line){
+        return $false
+    }
+    [bool]isstart($line){
+        return $True
+    }
+
     AppendXmlChild($container){
         $child_xml = $this.create_element("child", "")
         $child_xml.AppendChild( $this.create_element("type", $this.type)  )
@@ -92,11 +105,42 @@ class FileParts : Parts{
         }
     }
 
-    [void] setName($filename){
-        $this.name = $filename
+    run($filepath){
+        ## TODO:なくす
+        $this.mother = $this; 
+        $controller = $this;
+        $contents = (Get-Content $filepath)
+        foreach ($line in $contents) {
+            ## TODO:loop instance and find appropriate one
+            $commentParts = [CommentParts]::new();
+            if($commentParts.isstart($line)){
+                #$controller.addChild($commentParts)
+                #$commentParts.mother = $controller
+                #$controller = $commentParts
+                continue
+            }
+
+            $functionParts = [FunctionParts]::new();
+            if($functionParts.isstart($line)){
+                $controller.addChild($functionParts)
+                $functionParts.mother = $controller
+                $controller = $functionParts
+            }
+
+            $subParts = [SubParts]::new();
+            if($subParts.isstart($line)){
+                $controller.addChild($subParts)
+                $subParts.mother = $controller
+                $controller = $subParts
+            }
+            
+            $controller.code_list.Add($line)
+            if($controller.isend($line)){
+                $controller = $controller.mother;
+            }
+        }
     }
 }
-
 
 
 
@@ -141,6 +185,7 @@ class ContextParts : Parts {
 }
 
 
+
 class FunctionParts : ContextParts {
     [string]$type = "function";
     [string]$start_regex = "Function (?<match_name>.+?)\("
@@ -148,11 +193,13 @@ class FunctionParts : ContextParts {
 }
 
 
+
 class SubParts : ContextParts {
     [string]$type = "sub";
     [string]$start_regex = "Sub (?<match_name>.+?)\("
     [string]$end_regex = ".*End.*Sub.*"
 }
+
 
 
 class CommentParts : ContextParts {
@@ -169,62 +216,11 @@ class CommentParts : ContextParts {
 }
 
 
-############################################
-##ContextFactory:###########################
-############################################
-##:TODO:FolderPartsと同一にしたい
-class ContextFactory : ContextParts{
-    ##なぜか使われない
-    [bool]isend($line){
-        return $false
-    }
-    [bool]isstart($line){
-        return $True
-    }
-    [void]setName($name){
-        $this.name = $name
-    }
-    ##mainmethod
-    [System.Collections.ArrayList]run($filepath){
-        $this.mother = $this
-        $controller = $this;
-        $contents = (Get-Content $filepath)
-        foreach ($line in $contents) {
-            $commentParts = [CommentParts]::new();
-            if($commentParts.isstart($line)){
-                #$controller.addChild($commentParts)
-                #$commentParts.mother = $controller
-                #$controller = $commentParts
-                continue
-            }
-
-            $functionParts = [FunctionParts]::new();
-            if($functionParts.isstart($line)){
-                $controller.addChild($functionParts)
-                $functionParts.mother = $controller
-                $controller = $functionParts
-            }
-
-            $subParts = [SubParts]::new();
-            if($subParts.isstart($line)){
-                $controller.addChild($subParts)
-                $subParts.mother = $controller
-                $controller = $subParts
-            }
-            
-            $controller.code_list.Add($line)
-            if($controller.isend($line)){
-                $controller = $controller.mother;
-            }
-        }
-        return $this.children
-    }
-}
 
 
 
 
-##:TODO綺麗に
+##TODO:なくす⇨Partsに移植。
 class UMLFactory{
     $umltext = ""
     $src_text = ""
@@ -281,8 +277,8 @@ class UMLFactory{
 $factory = [FolderParts]::new()
 [void]$factory.run( "/Users/minegishirei/myworking/VBAToolKit/Source/ConfProd/vtkReferenceManager.cls")
 $Global:NAMESPACE = $Global:NAMESPACE | Select-Object -Unique 
-[void]$factory.buildXML("/Users/minegishirei/myworking/ReadableChart/src.xml")
-$factory.buildUML("/Users/minegishirei/myworking/ReadableChart/src.xml", "test.uml") > src.uml
+[void]$factory.buildXML("./src.xml")
+$factory.buildUML("./src.xml") > src.uml
 
 Read-Host "Exit"
 
