@@ -37,7 +37,6 @@ class Parts{
 }
 
 
-
 ##TODO:綺麗に
 class FolderParts : Parts{
     $children = [System.Collections.ArrayList]::new()
@@ -68,13 +67,6 @@ class FolderParts : Parts{
         $Global:XMLDOC.AppendChild($container)
         ##ここまで中身
         $Global:XMLDOC.Save($xmlFile) | Out-Null
-    }
-
-    [string]buildUML([string]$inputXmlFile){
-        $XmlObj = [System.Xml.XmlDocument](Get-Content $inputXmlFile) 
-        [UMLFactory]$umlFactory = [UMLFactory]::new();
-        $umlFactory.buildFileXMLloop($XmlObj.container);
-        return "@startuml`n" + $umlFactory.umltext + "@enduml`n"
     }
 }
 
@@ -221,16 +213,27 @@ class CommentParts : ContextParts {
 class UMLFactory{
     $umltext = ""
     $src_text = ""
+    
+    AddUmlConfig([string]$src_text){
+        $this.src_text += $src_text
+    }
+
+    [string]buildUML([string]$inputXmlFile){
+        $XmlObj = [System.Xml.XmlDocument](Get-Content $inputXmlFile)
+        $this.buildFileXMLloop($XmlObj.container);
+        return "@startuml`n" + $this.umltext + "@enduml`n"
+    }
+
     buildFileXMLloop([System.Xml.XmlElement]$XmlObj){
         #file単位
         foreach ($fileitem in $XmlObj.ChildNodes) {
             $this.src_text = ""
             $filename = $fileitem.name
             #xmlタグ単位
-            foreach ($item in $fileitem) {
-                if( ($item.LocalName -eq "child")){
+            foreach ($item in $fileitem.ChildNodes) {
+                if( $item.LocalName -eq "child" ){
                     $this.buildXMLloop($item)
-                }elseif(($item.LocalName -eq "type")){
+                }elseif( $item.LocalName -eq "type" ){
                     continue
                 }
             }
@@ -268,12 +271,17 @@ class UMLFactory{
 
 
 
+## variable
+$target_file_path   = "./test/testsrc1/vtkReferenceManager.cls"
+$xml_file_path      = "./material/material.xml"
+
+## building xml
 $factory = [FolderParts]::new()
-[void]$factory.run( "./test/testsrc1/vtkReferenceManager.cls")
+[void]$factory.run($target_file_path)
 $Global:NAMESPACE = $Global:NAMESPACE | Select-Object -Unique 
-[void]$factory.buildXML("./material/material.xml")
-$factory.buildUML("./material/material.xml") > src.uml
+[void]$factory.buildXML($xml_file_path)
 
-
-
+## building uml
+[UMLFactory]$umlFactory = [UMLFactory]::new();
+$umlFactory.buildUML($xml_file_path) > src.uml
 

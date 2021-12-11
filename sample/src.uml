@@ -1,8 +1,5 @@
 @startuml
 file vtkReferenceManager.cls{
-class vtkReferenceManager.cls {
-- file
-}
 class Class_Terminate {
 - sub
 }
