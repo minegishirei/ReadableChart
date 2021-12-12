@@ -19,6 +19,56 @@ function is_safe_string([string]$inspect_str){
 
 
 
+class UMLLib{
+    [string]startUML(){
+        return "@startuml`n"
+    }
+
+    [string]endUML(){
+        return "@enduml`n"
+    }
+    
+    [string]getConfig($config_text){
+        return ($config_text + "`n")
+    }
+
+    [string]getFile($filename, $inside){
+        $src_text = ( "file " + $filename)
+        $src_text += ("{`n")
+            $src_text += $inside
+        $src_text += ("}`n")
+        return $src_text
+    }
+
+    [string]getClass($name, $type){
+        $src_text += ( "class " + $name + " {`n")
+            $src_text += ( "- " + $type +"`n")
+        $src_text += ("}`n") 
+        return $src_text
+    }
+
+    [string]getClassAndDraw($name, $type, $color){
+        $src_text += ( "class " + $name + " " + $color +" {`n")
+            $src_text += ( "- " + $type +"`n")
+        $src_text += ("}`n") 
+        return $src_text
+    }
+
+    [string]getArrow($from, $dest){
+        return ($from + " -down-|> " + $dest + "`n")
+    }
+
+    [string]getNote($name, $note){
+        $src_text += "`n note top of $name `n"
+            $src_text += ($note) + "`n"
+        $src_text += "end note`n"
+        return $src_text
+    }
+
+}
+
+
+
 class Parts{
     ##param
     $children = [System.Collections.ArrayList]::new()
@@ -211,81 +261,89 @@ class CommentParts : ContextParts {
 
 ##TODO:なくす⇨Partsに移植。
 class UMLFactory{
-    $umltext = ""
-    $src_text = ""
+    $uml = [UMLLib]::new()
+    $config_text = $this.uml.startUML()
     
-    AddUmlConfig([string]$src_text){
-        $this.src_text += $src_text
+    SetUMLConfig([string]$config_text){
+        $this.config_text += $this.uml.getConfig($config_text)
     }
 
     [string]buildUML([string]$inputXmlFile){
-        $XmlObj = [System.Xml.XmlDocument](Get-Content $inputXmlFile)
-        $this.buildFileXMLloop($XmlObj.container);
-        return "@startuml`n" + $this.umltext + "@enduml`n"
+        $XmlObj = [System.Xml.XmlDocument](Get-Content $inputXmlFile);
+        $umltext = $this.buildFileXMLloop($XmlObj.container);
+        $umltext = ($this.config_text + $umltext)
+        return $umltext;
     }
 
-    buildFileXMLloop([System.Xml.XmlElement]$XmlObj){
+    [string]buildFileXMLloop([System.Xml.XmlElement]$XmlObj){
         #file単位
+        $umltext = ""
         foreach ($fileitem in $XmlObj.ChildNodes) {
-            $this.src_text = ""
             $filename = $fileitem.name
             #xmlタグ単位
+            $context_src = ""
             foreach ($item in $fileitem.ChildNodes) {
                 if( $item.LocalName -eq "child" ){
-                    $this.buildXMLloop($item)
-                }elseif( $item.LocalName -eq "type" ){
-                    continue
+                    $context_src += $this.buildXMLloop($item)
                 }
             }
-            $this.umltext += ( "file " + $filename)
-            $this.umltext += ("{`n")
-                $this.umltext += $this.src_text
-            $this.umltext += ("}`n")
+            $umltext += $this.uml.getFile($filename, $context_src)
         }
+        return  $umltext + $this.uml.endUML()
     }
 
-    buildXMLloop([System.Xml.XmlElement]$XmlObj){
+    [string]buildXMLloop([System.Xml.XmlElement]$ContextPartsXml){
         ##definition
-        $this.src_text += ( "class " + $XmlObj.Name + " {`n")
-            $this.src_text += ( "- " + $XmlObj.type +"`n")
-        $this.src_text += ("}`n") 
-        #$this.src_text += "`n note top`n"
-        #    $src = $XmlObj.code_list -join "`n"
-        #    $this.src_text += ($src)
-        #$this.src_text += "`n end note`n"
+        $src_text = ""
+        foreach ($item in $ContextPartsXml.ChildNodes) {
 
-        foreach ($item in $XmlObj.ChildNodes) {
-            if( ($item.LocalName -eq "child")){
+            if( ($item.LocalName -eq "child")){ #関数内関数定義
                 $this.buildXMLloop($item)
-            }elseif(($item.LocalName -eq "type")){
-                continue
-            }elseif($item.LocalName -eq "call"){
-                if($XmlObj.Name  -eq  $item.InnerText){
+            }
+            elseif($item.LocalName -eq "code_list"){
+                if($item.InnerText.Contains("m_referenceSheet")){
+                    $src_text += $this.uml.getClassAndDraw($ContextPartsXml.Name, $ContextPartsXml.type, "#1e90ff")
+                }else{
+                    $src_text += $this.uml.getClass($ContextPartsXml.Name, $ContextPartsXml.type)
+                }
+                #$src_text += $this.uml.getNote($ContextPartsXml.Name, $item.InnerText)
+            }
+            elseif($item.LocalName -eq "call"){
+                if($ContextPartsXml.Name  -eq  $item.InnerText){
                     continue
                 }
-                $this.src_text += ( $XmlObj.Name + " -down-|> " + $item.InnerText ) +"`n"
+                $src_text += $this.uml.getArrow( $ContextPartsXml.Name ,$item.InnerText )
             }
         }
+        return $src_text
     }
 }
 
 
 
-## variable
+
+
+
+## variable.
 $target_file_path   = "./test/testsrc1/vtkReferenceManager.cls"
 $xml_file_path      = "./material/material.xml"
 
-##test
-$target_file_path   = ".test/testsrc2/ConfProd"
+## adbance ver.
+#$target_file_path   = "./test/testsrc2/"
+#$xml_file_path      = "./material/material.xml"
 
-
-## building xml
+## building xml.
 $factory = [FolderParts]::new()
 [void]$factory.run($target_file_path)
 $Global:NAMESPACE = $Global:NAMESPACE | Select-Object -Unique 
 [void]$factory.buildXML($xml_file_path)
 
-## building uml
+## reading  xml and building uml.
 [UMLFactory]$umlFactory = [UMLFactory]::new();
+$umlFactory.SetUMLConfig("!define DARKBLUE")
+$umlFactory.SetUMLConfig("!include https://raw.githubusercontent.com/Drakemor/RedDress-PlantUML/master/style.puml")
+
 $umlFactory.buildUML($xml_file_path) > src.uml
+#Set-Clipboard | $umlFactory.buildUML($xml_file_path)
+
 
