@@ -152,14 +152,16 @@ class FileParts : Parts{
         $this.mother = $this; 
         $controller = $this;
         $contents = (Get-Content $filepath)
+
+        $i = 0;
         foreach ($line in $contents) {
+            $i += 1;
             ## TODO:loop instance and find appropriate one
             $commentParts = [CommentParts]::new();
             if($commentParts.isstart($line)){
-                #$controller.addChild($commentParts)
-                #$commentParts.mother = $controller
-                #$controller = $commentParts
-                continue
+                $controller.addChild($commentParts)
+                $commentParts.mother = $controller
+                $controller = $commentParts
             }
 
             $functionParts = [FunctionParts]::new();
@@ -198,7 +200,7 @@ class ContextParts : Parts {
             return $false
         }
     }
-
+    
     [bool]isend([string]$line){
         return $line -match $this.end_regex
     }
@@ -208,6 +210,7 @@ class ContextParts : Parts {
         $child_xml.AppendChild( $this.create_element("type", $this.type)  )
         $child_xml.AppendChild( $this.create_element("name", $this.name)  )
         $child_xml.AppendChild( $this.create_element("code_list", $this.code_list -join "`n")  )
+        #$child_xml.AppendChild( $this.create_element("comment", $this.)  )
         ##check call namespace
         foreach ($line in $this.code_list) {
             foreach ($callablename in $Global:NAMESPACE) {
@@ -252,8 +255,9 @@ class CommentParts : ContextParts {
         return ($line -match $this.start_regex)
     }
 
-    [bool]isend([string]$line){
-        return -not ($line -match $this.start_regex)
+    [bool]isend($line){
+        return $True
+        #return -not ($line -match $this.start_regex)
     }
 }
 
@@ -301,7 +305,7 @@ class UMLFactory{
                 $this.buildXMLloop($item)
             }
             elseif($item.LocalName -eq "code_list"){
-                if($item.InnerText.Contains("m_referenceSheet")){
+                if($item.InnerText.Contains("sql")){
                     $src_text += $this.uml.getClassAndDraw($ContextPartsXml.Name, $ContextPartsXml.type, "#1e90ff")
                 }else{
                     $src_text += $this.uml.getClass($ContextPartsXml.Name, $ContextPartsXml.type)

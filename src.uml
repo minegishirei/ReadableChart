@@ -2,16 +2,25 @@
 !define DARKBLUE
 !include https://raw.githubusercontent.com/Drakemor/RedDress-PlantUML/master/style.puml
 file vtkReferenceManager.cls{
-class Class_Terminate #1e90ff {
+class Class_Terminate {
 - sub
 }
-class init #1e90ff {
+class Class_Terminate {
+- sub
+}
+class init {
+- sub
+}
+class init {
 - sub
 }
 init -down-|> references
 init -down-|> setReferenceSheet
 init -down-|> references
-class setReferenceSheet #1e90ff {
+class setReferenceSheet {
+- sub
+}
+class setReferenceSheet {
 - sub
 }
 setReferenceSheet -down-|> references
@@ -20,7 +29,13 @@ setReferenceSheet -down-|> alignConfigurationCount
 class selfReference {
 - function
 }
-class initializeReferenceSheet #1e90ff {
+class selfReference {
+- function
+}
+class initializeReferenceSheet {
+- sub
+}
+class initializeReferenceSheet {
 - sub
 }
 initializeReferenceSheet -down-|> references
@@ -31,32 +46,59 @@ initializeReferenceSheet -down-|> addOneReference
 class alignConfigurationCount {
 - sub
 }
-alignConfigurationCount -down-|> configurationCount
-alignConfigurationCount -down-|> configurationCount
-class configurationCount #1e90ff {
-- function
-}
-class referenceCount #1e90ff {
-- function
-}
-class addConfiguration #1e90ff {
+class alignConfigurationCount {
 - sub
 }
-class addReferences #1e90ff {
+alignConfigurationCount -down-|> configurationCount
+alignConfigurationCount -down-|> configurationCount
+class configurationCount {
+- function
+}
+class configurationCount {
+- function
+}
+class referenceCount {
+- function
+}
+class referenceCount {
+- function
+}
+class addConfiguration {
+- sub
+}
+class addConfiguration {
+- sub
+}
+class addReferences {
+- sub
+}
+class addReferences {
 - sub
 }
 addReferences -down-|> addOneReference
-class addOneReference #1e90ff {
+class addOneReference {
+- sub
+}
+class addOneReference {
 - sub
 }
 class allReferences {
 - function
 }
-class references #1e90ff {
+class allReferences {
+- function
+}
+class references {
+- function
+}
+class references {
 - function
 }
 references -down-|> configurationCount
-class setReferenceWihNumber #1e90ff {
+class setReferenceWihNumber {
+- sub
+}
+class setReferenceWihNumber {
 - sub
 }
 setReferenceWihNumber -down-|> referenceCount
